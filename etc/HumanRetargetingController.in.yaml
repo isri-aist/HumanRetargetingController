@@ -1,0 +1,286 @@
+---
+# If true, the FSM transitions are managed by an external tool
+Managed: false
+# If true and the FSM is self-managed, transitions should be triggered
+StepByStep: true
+# Change idle behaviour, if true the state is kept until transition,
+# otherwise the FSM holds the last state until transition
+IdleKeepState: true
+# Where to look for state libraries
+StatesLibraries:
+  - "@MC_STATES_DEFAULT_INSTALL_PREFIX@"
+  - "@BWC_STATES_LIBRARIES@"
+  - "@STATES_INSTALL_PREFIX@/@PROJECT_NAME@/states"
+# Where to look for state files
+StatesFiles:
+  - "@MC_STATES_DEFAULT_INSTALL_PREFIX@/data"
+  - "@BWC_STATES_FILES@"
+  - "@STATES_INSTALL_PREFIX@/@PROJECT_NAME@/states/data"
+# If true, state factory will be more verbose
+VerboseStateFactory: false
+# General constraints, always on
+constraints:
+  - type: contact
+  - type: kinematics
+    damper: [0.1, 0.01, 0.5]
+  - type: compoundJoint
+# Collision constraint
+collisions:
+  - type: collision
+    useMinimal: true
+# Initial set of contacts
+contacts: []
+
+# Implement some additional text states
+states:
+  HRC::Initial_:
+    base: HRC::Initial
+
+  HRC::GuiWalk_:
+    base: BWC::GuiWalk
+
+  HRC::Main_:
+    base: Parallel
+    states: [HRC::GuiWalk_]
+
+# Transitions map
+transitions:
+  - [HRC::Initial_, OK, HRC::Main_, Auto]
+# Initial state
+init: HRC::Initial_
+
+ObserverPipelines:
+  name: MainObserverPipeline
+  gui: true
+  observers:
+    - type: Encoder
+    - type: Attitude
+      config:
+        KalmanFilter:
+          gyr_cov: 1e-6
+    - type: KinematicInertial
+      config:
+        anchorFrame:
+          maxAnchorFrameDiscontinuity: 0.05 # [m]
+
+controllerName: HRC
+
+PostureTask:
+  stiffness: 10
+
+CoMTask:
+  type: com
+  stiffness: [1000.0, 1000.0, 1000.0]
+  weight: 1000.0
+
+BaseOrientationTask:
+  type: orientation
+  stiffness: 300.0
+  weight: 500.0
+
+FootTaskList:
+  - type: firstOrderImpedance
+    foot: Left
+    frame: LeftFootCenter
+    cutoffPeriod: 0.01
+    stiffness: 1000.0
+    weight: 1000.0
+  - type: firstOrderImpedance
+    foot: Right
+    frame: RightFootCenter
+    cutoffPeriod: 0.01
+    stiffness: 1000.0
+    weight: 1000.0
+
+RetargetingTaskList:
+  - bodyPart: LeftElbow
+    bodyGroups: [LeftArm, Elbow]
+    type: impedance
+    frame: LeftElbowFrame # L_ELBOW_P_LINK
+    stiffness: 1000.0
+    weight: 1000.0
+    dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+
+FootManager:
+  name: FootManager
+  footstepDuration: 0.8 # [sec]
+  doubleSupportRatio: 0.125 # []
+  deltaTransLimit: [0.15, 0.1, 12.5] # (x [m], y [m], theta [deg])
+  midToFootTranss:
+    Left:
+      translation: [0, 0.105, 0] # [m]
+    Right:
+      translation: [0, -0.105, 0] # [m]
+  zmpHorizon: 3.0 # [sec]
+  zmpOffset: [0, -0.02, 0] # (positive for x-forward, y-outside, z-upward) [m]
+  defaultSwingTrajType: IndHorizontalVertical
+  overwriteLandingPose: false
+  stopSwingTrajForTouchDownFoot: true
+  keepPoseForTouchDownFoot: false
+  enableWrenchDistForTouchDownFoot: true
+  enableArmSwing: false
+  fricCoeff: 0.5
+  touchDownRemainingDuration: 0.2 # [sec]
+  touchDownPosError: 0.02 # [m]
+  touchDownForceZ: 100 # [N]
+  impedanceGains:
+    SingleSupport:
+      damper:
+        linear: [300, 300, 300]
+        angular: [100, 100, 100]
+      spring:
+        linear: [2250, 2250, 2250]
+        angular: [0, 0, 2000]
+      wrench:
+        linear: [0, 0, 0]
+        angular: [1, 1, 0]
+    DoubleSupport:
+      damper:
+        linear: [300, 300, 1e4]
+        angular: [100, 100, 100]
+      spring:
+        linear: [2250, 2250, 0]
+        angular: [0, 0, 2000]
+      wrench:
+        linear: [0, 0, 1]
+        angular: [1, 1, 0]
+    Swing:
+      damper:
+        linear: [300, 300, 300]
+        angular: [40, 40, 40]
+      spring:
+        linear: [2250, 2250, 2250]
+        angular: [400, 400, 400]
+      wrench:
+        linear: [0, 0, 0]
+        angular: [0, 0, 0]
+  VelMode:
+    footstepQueueSize: 3
+    enableOnlineFootstepUpdate: false
+  SwingTraj:
+    CubicSplineSimple:
+      withdrawDurationRatio: 0.25
+      withdrawOffset: [0, 0, 0.123] # [m]
+      approachDurationRatio: 0.25
+      approachOffset: [0, 0, 0.987] # [m]
+      swingOffset: [0, 0, 0.05] # [m]
+    IndHorizontalVertical:
+      withdrawDurationRatio: 0.25
+      approachDurationRatio: 0.25
+      verticalTopDurationRatio: 0.5
+      verticalTopOffset: [0, 0, 0.05] # [m]
+      tiltAngleWithdraw: 0 # [deg]
+      tiltAngleApproach: 0 # [deg]
+      tiltAngleWithdrawDurationRatio: 0.25
+      tiltAngleApproachDurationRatio: 0.25
+      tiltCenterWithdrawDurationRatio: 0.25
+      tiltCenterApproachDurationRatio: 0.25
+      tiltDistThre: 0.1 # [m]
+      tiltForwardAngleThre: 100 # [deg]
+
+CentroidalManager:
+  name: CentroidalManager
+  useActualStateForMpc: false
+  enableZmpFeedback: true
+  enableComZFeedback: true
+  dcmGainP: 2.0 # It must be greater than 1 to be stable
+  zmpVelGain: 0.02
+  comZGainP: 2000.0
+  comZGainD: 500.0
+  refComZ: 0.825 # [m]
+  useTargetPoseForControlRobotAnchorFrame: true
+  useActualComForWrenchDist: false
+  wrenchDistConfig:
+    wrenchWeight:
+      linear: [1.0, 1.0, 1.0]
+      angular: [1.0, 1.0, 1.0]
+    regularWeight: 1e-8
+    ridgeForceMinMax: [3, 1000] # [N]
+
+  # PreviewControlExtZmp
+  method: PreviewControlExtZmp
+  horizonDuration: 2.0 # [sec]
+  horizonDt: 0.005 # [sec]
+
+  # PreviewControlZmp
+  method: PreviewControlZmp
+  horizonDuration: 2.0 # [sec]
+  horizonDt: 0.005 # [sec]
+  reinitForRefComZ: true
+
+RetargetingManagerSet:
+  name: RetargetingManagerSet
+  RetargetingManagerList:
+    - bodyPart: LeftElbow
+      poseTopicName: /hoge
+
+# OverwriteConfigKeys: [NoSensors]
+
+OverwriteConfigList:
+  NoSensors:
+    FootManager:
+      impedanceGains:
+        SingleSupport:
+          damper:
+            linear: [300, 300, 300]
+            angular: [40, 40, 40]
+          spring:
+            linear: [2250, 2250, 2250]
+            angular: [400, 400, 400]
+          wrench:
+            linear: [0, 0, 0]
+            angular: [0, 0, 0]
+        DoubleSupport:
+          damper:
+            linear: [300, 300, 300]
+            angular: [40, 40, 40]
+          spring:
+            linear: [2250, 2250, 2250]
+            angular: [400, 400, 400]
+          wrench:
+            linear: [0, 0, 0]
+            angular: [0, 0, 0]
+        Swing:
+          damper:
+            linear: [300, 300, 300]
+            angular: [40, 40, 40]
+          spring:
+            linear: [2250, 2250, 2250]
+            angular: [400, 400, 400]
+          wrench:
+            linear: [0, 0, 0]
+            angular: [0, 0, 0]
+
+    CentroidalManager:
+      useActualStateForMpc: false
+      enableZmpFeedback: false
+      useActualComForWrenchDist: false
+
+robots:
+  # Environment models
+  ground:
+    module: env/ground
+
+  # Robot-specific configurations
+  jvrc1:
+    PostureTask:
+      target:
+        R_SHOULDER_P: [0.3490658503988659] # 20
+        R_SHOULDER_R: [-0.4363323129985824] # -25
+        R_ELBOW_P: [-1.5707963267948966] # -90
+        L_SHOULDER_P: [0.3490658503988659] # 20
+        L_SHOULDER_R: [0.4363323129985824] # 25
+        L_ELBOW_P: [-1.5707963267948966] # -90
+      jointWeights:
+        WAIST_R: 100
+        WAIST_P: 100
+        WAIST_Y: 100
+
+    CoMTask:
+      activeJoints: [
+      "Root",
+      "R_HIP_Y", "R_HIP_R", "R_HIP_P", "R_KNEE", "R_ANKLE_P", "R_ANKLE_R",
+      "L_HIP_Y", "L_HIP_R", "L_HIP_P", "L_KNEE", "L_ANKLE_P", "L_ANKLE_R"]
+
+    BaseOrientationTask:
+      frame: WAIST_R_S
