@@ -5,7 +5,7 @@
 #include <BaselineWalkingController/CentroidalManager.h>
 
 #include <HumanRetargetingController/HumanRetargetingController.h>
-#include <HumanRetargetingController/RetargetManager.h>
+#include <HumanRetargetingController/RetargetingManager.h>
 
 using namespace HRC;
 
@@ -16,29 +16,29 @@ HumanRetargetingController::HumanRetargetingController(mc_rbdyn::RobotModulePtr 
 : BWC::BaselineWalkingController(rm, dt, _config, true)
 {
   // Setup tasks
-  if(config().has("RetargetTaskList"))
+  if(config().has("RetargetingTaskList"))
   {
-    for(const auto & retargetTaskConfig : config()("RetargetTaskList"))
+    for(const auto & retargetingTaskConfig : config()("RetargetingTaskList"))
     {
-      std::string bodyPartName = retargetTaskConfig("bodyPart");
-      retargetTasks_.emplace(bodyPartName,
-                             mc_tasks::MetaTaskLoader::load<mc_tasks::force::ImpedanceTask>(solver(), retargetTaskConfig));
-      retargetTasks_.at(bodyPartName)->name("RetargetTask_" + bodyPartName);
+      std::string bodyPartName = retargetingTaskConfig("bodyPart");
+      retargetingTasks_.emplace(bodyPartName,
+                             mc_tasks::MetaTaskLoader::load<mc_tasks::force::ImpedanceTask>(solver(), retargetingTaskConfig));
+      retargetingTasks_.at(bodyPartName)->name("RetargetingTask_" + bodyPartName);
     }
   }
   else
   {
-    mc_rtc::log::warning("[HumanRetargetingController] RetargetTaskList configuration is missing.");
+    mc_rtc::log::warning("[HumanRetargetingController] RetargetingTaskList configuration is missing.");
   }
 
   // Setup managers
-  if(config().has("RetargetManager"))
+  if(config().has("RetargetingManager"))
   {
-    retargetManager_ = std::make_shared<RetargetManager>(this, config()("RetargetManager"));
+    retargetingManager_ = std::make_shared<RetargetingManager>(this, config()("RetargetingManager"));
   }
   else
   {
-    mc_rtc::log::warning("[HumanRetargetingController] RetargetManager configuration is missing.");
+    mc_rtc::log::warning("[HumanRetargetingController] RetargetingManager configuration is missing.");
   }
 
   mc_rtc::log::success("[HumanRetargetingController] Constructed.");
@@ -59,7 +59,7 @@ bool HumanRetargetingController::run()
   {
     // Update managers
     footManager_->update();
-    retargetManager_->update();
+    retargetingManager_->update();
     centroidalManager_->update();
   }
 
@@ -69,13 +69,13 @@ bool HumanRetargetingController::run()
 void HumanRetargetingController::stop()
 {
   // Clean up tasks
-  for (const auto & [bodyPart, retargetTask] : retargetTasks_)
+  for (const auto & [bodyPart, retargetingTask] : retargetingTasks_)
   {
-    solver().removeTask(retargetTask);
+    solver().removeTask(retargetingTask);
   }
 
   // Clean up managers
-  retargetManager_->stop();
+  retargetingManager_->stop();
 
   BaselineWalkingController::stop();
 }
