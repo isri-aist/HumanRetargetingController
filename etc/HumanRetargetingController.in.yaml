@@ -36,12 +36,12 @@ states:
   HRC::Initial_:
     base: HRC::Initial
 
-  HRC::GuiWalk_:
+  BWC::GuiWalk_:
     base: BWC::GuiWalk
 
   HRC::Main_:
     base: Parallel
-    states: [HRC::GuiWalk_]
+    states: [BWC::GuiWalk_]
 
 # Transitions map
 transitions:
@@ -94,7 +94,6 @@ FootTaskList:
 
 RetargetingTaskList:
   - bodyPart: LeftElbow
-    bodyGroups: [LeftArm, Elbow]
     type: impedance
     frame: LeftElbowFrame # L_ELBOW_P_LINK
     stiffness: 1000.0
@@ -212,6 +211,7 @@ RetargetingManagerSet:
   name: RetargetingManagerSet
   RetargetingManagerList:
     - bodyPart: LeftElbow
+      bodyGroups: [LeftArm, Elbow]
       poseTopicName: /hoge
 
 # OverwriteConfigKeys: [NoSensors]

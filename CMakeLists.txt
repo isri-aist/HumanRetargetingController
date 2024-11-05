@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 
 set(PROJECT_NAME human_retargeting_controller)
 set(PROJECT_GENERATED_HEADERS_SKIP_DEPRECATED ON)
@@ -69,12 +69,6 @@ install(FILES ${CONFIG_OUT} DESTINATION ${MC_RTC_LIBDIR}/mc_controller/etc/)
 add_subdirectory(src)
 
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/HumanRetargetingController DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING PATTERN "*.h")
-
-add_subdirectory(description)
-
-if(BUILD_TESTING OR CATKIN_ENABLE_TESTING)
-  add_subdirectory(tests)
-endif()
 
 if(INSTALL_DOCUMENTATION)
   add_subdirectory(doc)
