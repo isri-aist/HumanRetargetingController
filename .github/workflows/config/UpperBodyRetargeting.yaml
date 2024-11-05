@@ -1,0 +1,10 @@
+OverwriteConfigKeys: [NoSensors]
+
+transitions:
+  - [HRC::Initial_, OK, HRC::Main_, Auto]
+
+states:
+  HRC::Initial_:
+    base: HRC::Initial
+    configs:
+      autoStartTime: 2.0

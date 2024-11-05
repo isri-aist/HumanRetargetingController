@@ -212,7 +212,7 @@ RetargetingManagerSet:
   RetargetingManagerList:
     - bodyPart: LeftElbow
       bodyGroups: [LeftArm, Elbow]
-      poseTopicName: /hoge
+      poseTopicName: /hrc/left_elbow
 
 # OverwriteConfigKeys: [NoSensors]
 
