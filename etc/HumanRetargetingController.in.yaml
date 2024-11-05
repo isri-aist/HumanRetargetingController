@@ -95,7 +95,7 @@ FootTaskList:
 RetargetingTaskList:
   - bodyPart: LeftElbow
     type: impedance
-    frame: LeftElbowFrame # L_ELBOW_P_LINK
+    frame: L_ELBOW_P_S
     stiffness: 1000.0
     weight: 1000.0
     dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]

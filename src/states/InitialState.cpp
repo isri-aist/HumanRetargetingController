@@ -7,7 +7,7 @@
 #include <BaselineWalkingController/FootManager.h>
 #include <HumanRetargetingController/HumanRetargetingController.h>
 #include <HumanRetargetingController/FootTypes.h>
-#include <HumanRetargetingController/RetargetingManager.h>
+#include <HumanRetargetingController/RetargetingManagerSet.h>
 #include <HumanRetargetingController/states/InitialState.h>
 
 using namespace HRC;
@@ -65,7 +65,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
         std::map<double, double>{{ctl().t(), 0.0}, {ctl().t() + stiffnessInterpDuration, 1.0}});
 
     // Reset managers
-    ctl().retargetingManager_->reset();
+    ctl().retargetingManagerSet_->reset();
     ctl().footManager_->reset();
     ctl().centroidalManager_->reset();
     ctl().enableManagerUpdate_ = true;
@@ -83,7 +83,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     }
 
     // Add GUI of managers
-    ctl().retargetingManager_->addToGUI(*ctl().gui());
+    ctl().retargetingManagerSet_->addToGUI(*ctl().gui());
     ctl().footManager_->addToGUI(*ctl().gui());
     ctl().centroidalManager_->addToGUI(*ctl().gui());
   }
@@ -94,7 +94,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     // Add logger of managers
     // Considering the possibility that logger entries assume that variables are set in the manager's update method,
     // it is safe to call the update method once and then add the logger
-    ctl().retargetingManager_->addToLogger(ctl().logger());
+    ctl().retargetingManagerSet_->addToLogger(ctl().logger());
     ctl().footManager_->addToLogger(ctl().logger());
     ctl().centroidalManager_->addToLogger(ctl().logger());
   }

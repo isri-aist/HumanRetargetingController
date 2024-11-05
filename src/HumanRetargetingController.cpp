@@ -5,7 +5,7 @@
 #include <BaselineWalkingController/CentroidalManager.h>
 
 #include <HumanRetargetingController/HumanRetargetingController.h>
-#include <HumanRetargetingController/RetargetingManager.h>
+#include <HumanRetargetingController/RetargetingManagerSet.h>
 
 using namespace HRC;
 
@@ -32,13 +32,13 @@ HumanRetargetingController::HumanRetargetingController(mc_rbdyn::RobotModulePtr 
   }
 
   // Setup managers
-  if(config().has("RetargetingManager"))
+  if(config().has("RetargetingManagerSet"))
   {
-    retargetingManager_ = std::make_shared<RetargetingManager>(this, config()("RetargetingManager"));
+    retargetingManagerSet_ = std::make_shared<RetargetingManagerSet>(this, config()("RetargetingManagerSet"));
   }
   else
   {
-    mc_rtc::log::warning("[HumanRetargetingController] RetargetingManager configuration is missing.");
+    mc_rtc::log::warning("[HumanRetargetingController] RetargetingManagerSet configuration is missing.");
   }
 
   mc_rtc::log::success("[HumanRetargetingController] Constructed.");
@@ -59,7 +59,7 @@ bool HumanRetargetingController::run()
   {
     // Update managers
     footManager_->update();
-    retargetingManager_->update();
+    retargetingManagerSet_->update();
     centroidalManager_->update();
   }
 
@@ -75,7 +75,7 @@ void HumanRetargetingController::stop()
   }
 
   // Clean up managers
-  retargetingManager_->stop();
+  retargetingManagerSet_->stop();
 
   BaselineWalkingController::stop();
 }

@@ -12,7 +12,7 @@ struct ImpedanceTask;
 
 namespace HRC
 {
-class RetargetingManager;
+class RetargetingManagerSet;
 
 /** \brief Humanoid loco-manipulation controller. */
 struct HumanRetargetingController : public BWC::BaselineWalkingController
@@ -52,6 +52,6 @@ public:
   std::unordered_map<std::string, std::shared_ptr<mc_tasks::force::ImpedanceTask>> retargetingTasks_;
 
   //! Manipulation manager
-  std::shared_ptr<RetargetingManager> retargetingManager_;
+  std::shared_ptr<RetargetingManagerSet> retargetingManagerSet_;
 };
 } // namespace HRC
