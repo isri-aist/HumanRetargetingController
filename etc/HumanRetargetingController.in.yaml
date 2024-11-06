@@ -99,6 +99,9 @@ RetargetingTaskList:
     stiffness: 1000.0
     weight: 1000.0
     dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+    activeJoints: [
+    "WAIST_Y", "WAIST_P", "WAIST_R",
+    "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y", "L_ELBOW_P"]
 
 FootManager:
   name: FootManager
@@ -209,10 +212,14 @@ CentroidalManager:
 
 RetargetingManagerSet:
   name: RetargetingManagerSet
+  baseFrame: PELVIS_S
+  basePoseTopicName: /hrc/poses/waist
   RetargetingManagerList:
-    - bodyPart: LeftElbow
+    - name: RetargetingManager
+      bodyPart: LeftElbow
       bodyGroups: [LeftArm, Elbow]
-      poseTopicName: /hrc/left_elbow
+      targetPoseTopicName: /hrc/poses/left_elbow
+      stiffness: 100.0
 
 # OverwriteConfigKeys: [NoSensors]
 

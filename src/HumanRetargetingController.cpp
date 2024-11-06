@@ -12,7 +12,8 @@ using namespace HRC;
 HumanRetargetingController::HumanRetargetingController(mc_rbdyn::RobotModulePtr rm,
                                          double dt,
                                          const mc_rtc::Configuration & _config,
-                                         bool allowEmptyManager)
+                                                       bool // allowEmptyManager
+                                                       )
 : BWC::BaselineWalkingController(rm, dt, _config, true)
 {
   // Setup tasks

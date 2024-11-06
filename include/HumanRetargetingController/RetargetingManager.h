@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include <TrajColl/CubicInterpolator.h>
 
 #include <mc_rtc/constants.h>
@@ -28,7 +30,7 @@ class HumanRetargetingController;
 */
 class RetargetingManager
 {
-  // Allow access to RetargetingManager config_ from RetargetingManagerSet
+  // Allow access to config_ in RetargetingManager from RetargetingManagerSet
   friend class RetargetingManagerSet;
 
 public:
@@ -39,13 +41,13 @@ public:
     std::string name = "RetargetingManager";
 
     //! Body part
-    std::string bodyPart = "";
+    std::string bodyPart = "body_part";
 
     //! Body groups to which the body part belongs
     std::vector<std::string> bodyGroups = {};
 
-    //! Pose topic name
-    std::string poseTopicName = "/pose";
+    //! Topic name of target pose
+    std::string targetPoseTopicName = "";
 
     //! Limb task stiffness
     Eigen::Vector6d stiffness = Eigen::Vector6d::Constant(1000);
@@ -99,12 +101,6 @@ public:
   /** \brief Remove entries from the logger. */
   void removeFromLogger(mc_rtc::Logger & logger);
 
-  /** \brief Whether the first pose message is obtained. */
-  inline bool isFirstMsgObtained() const noexcept
-  {
-    return isFirstMsgObtained_;
-  }
-
   /** \brief Enable the retargeting task. */
   void enableTask();
 
@@ -124,6 +120,15 @@ protected:
     return *ctlPtr_;
   }
 
+  /** \brief Accessor to the ROS node handle. */
+  std::shared_ptr<ros::NodeHandle> nh() const;
+
+  /** \brief Accessor to the human base pose. */
+  const std::optional<sva::PTransformd> & humanBasePose() const;
+
+  /** \brief Accessor to the robot base pose. */
+  const sva::PTransformd & robotBasePose() const;
+
   /** \brief Accessor to the limb task. */
   const std::shared_ptr<mc_tasks::force::ImpedanceTask> & retargetingTask() const;
 
@@ -137,23 +142,16 @@ protected:
   //! Pointer to controller
   HumanRetargetingController * ctlPtr_ = nullptr;
 
-  //! Whether the first pose message is obtained
-  bool isFirstMsgObtained_ = false;
-
   //! Whether the retargeting task is enabled
   bool isTaskEnabled_ = false;
 
-  //! Target pose represented in world frame
-  sva::PTransformd targetPose_ = sva::PTransformd::Identity();
+  //! Pose of human target body part represented in world frame
+  std::optional<sva::PTransformd> humanTargetPose_ = std::nullopt;
 
   //! Function to interpolate task stiffness
   std::shared_ptr<TrajColl::CubicInterpolator<double>> stiffnessRatioFunc_;
 
-  //! ROS variables
-  //! @{
-  std::shared_ptr<ros::NodeHandle> nh_;
-  ros::CallbackQueue callbackQueue_;
-  ros::Subscriber poseSub_;
-  //! @}
+  //! ROS subscriber of target body part
+  ros::Subscriber targetPoseSub_;
 };
 } // namespace HRC

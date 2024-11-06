@@ -10,7 +10,7 @@ from interactive_markers.interactive_marker_server import InteractiveMarkerServe
 class PublishManager(object):
     def __init__(self, body_part):
         self.body_part = body_part
-        self.pub = rospy.Publisher("hrc/{}".format(body_part), PoseStamped, queue_size=1)
+        self.pub = rospy.Publisher("hrc/poses/{}".format(body_part), PoseStamped, queue_size=1)
         self.pose_msg = None
 
     def setPoseMsg(self, _pose_msg):

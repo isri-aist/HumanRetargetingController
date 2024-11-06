@@ -12,8 +12,22 @@ void RetargetingManager::Configuration::load(const mc_rtc::Configuration & mcRtc
   mcRtcConfig("name", name);
   mcRtcConfig("bodyPart", bodyPart);
   mcRtcConfig("bodyGroups", bodyGroups);
-  mcRtcConfig("poseTopicName", poseTopicName);
-  mcRtcConfig("stiffness", stiffness);
+  mcRtcConfig("targetPoseTopicName", targetPoseTopicName);
+  if(targetPoseTopicName.empty())
+  {
+    targetPoseTopicName = "/hrc/poses/" + bodyPart;
+  }
+  if(mcRtcConfig.has("stiffness"))
+  {
+    if(mcRtcConfig("stiffness").isNumeric())
+    {
+      stiffness = Eigen::Vector6d::Constant(mcRtcConfig("stiffness"));
+    }
+    else
+    {
+      stiffness = mcRtcConfig("stiffness");
+    }
+  }
 }
 
 RetargetingManager::RetargetingManager(HumanRetargetingController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
@@ -24,35 +38,23 @@ RetargetingManager::RetargetingManager(HumanRetargetingController * ctlPtr, cons
 
 void RetargetingManager::reset()
 {
-  isFirstMsgObtained_ = false;
   isTaskEnabled_ = false;
+  humanTargetPose_ = std::nullopt;
+  stiffnessRatioFunc_ = nullptr;
 
   // Setup ROS
-  if(nh_)
-  {
-    mc_rtc::log::error("[RetargetingManager({})] ROS node handle is already instantiated.", config_.bodyPart);
-  }
-  else
-  {
-    nh_ = std::make_shared<ros::NodeHandle>();
-  }
-
-  // Use a dedicated queue so as not to call callbacks of other modules
-  nh_->setCallbackQueue(&callbackQueue_);
-  poseSub_ = nh_->subscribe<geometry_msgs::PoseStamped>(config_.poseTopicName, 1, &RetargetingManager::poseCallback, this);
+  targetPoseSub_ = nh()->subscribe<geometry_msgs::PoseStamped>(config_.targetPoseTopicName, 1, &RetargetingManager::poseCallback, this);
 }
 
 void RetargetingManager::update()
 {
-  // Call ROS callback
-  callbackQueue_.callAvailable(ros::WallDuration());
-
   if(!isTaskEnabled_)
   {
     return;
   }
 
-  retargetingTask()->targetPose(targetPose_);
+  sva::PTransformd robotTargetPose = humanTargetPose_.value() * humanBasePose().value().inv() * robotBasePose();
+  retargetingTask()->targetPose(robotTargetPose);
   retargetingTask()->targetVel(sva::MotionVecd::Zero());
   retargetingTask()->targetAccel(sva::MotionVecd::Zero());
 
@@ -74,8 +76,7 @@ void RetargetingManager::update()
 
 void RetargetingManager::stop()
 {
-  poseSub_.shutdown();
-  nh_.reset();
+  targetPoseSub_.shutdown();
 
   ctl().solver().removeTask(retargetingTask());
 
@@ -107,7 +108,7 @@ void RetargetingManager::enableTask()
 {
   if(isTaskEnabled_)
   {
-    mc_rtc::log::warning("[RetargetingManager({})] Task is already enabled.");
+    mc_rtc::log::warning("[RetargetingManager({})] Task is already enabled.", config_.bodyPart);
     return;
   }
 
@@ -117,7 +118,7 @@ void RetargetingManager::enableTask()
   ctl().solver().addTask(retargetingTask());
   retargetingTask()->stiffness(0.0);
 
-  constexpr double stiffnessInterpDuration = 10.0; // [sec]
+  constexpr double stiffnessInterpDuration = 2.0; // [sec]
   stiffnessRatioFunc_ = std::make_shared<TrajColl::CubicInterpolator<double>>(
       std::map<double, double>{{ctl().t(), 0.0}, {ctl().t() + stiffnessInterpDuration, 1.0}});
 }
@@ -126,7 +127,7 @@ void RetargetingManager::disableTask()
 {
   if(!isTaskEnabled_)
   {
-    mc_rtc::log::warning("[RetargetingManager({})] Task is already disabled.");
+    mc_rtc::log::warning("[RetargetingManager({})] Task is already disabled.", config_.bodyPart);
     return;
   }
 
@@ -136,6 +137,21 @@ void RetargetingManager::disableTask()
   retargetingTask()->stiffness(0.0);
 }
 
+std::shared_ptr<ros::NodeHandle> RetargetingManager::nh() const
+{
+  return ctl().retargetingManagerSet_->nh_;
+}
+
+const std::optional<sva::PTransformd> & RetargetingManager::humanBasePose() const
+{
+  return ctl().retargetingManagerSet_->humanBasePose_;
+}
+
+const sva::PTransformd & RetargetingManager::robotBasePose() const
+{
+  return ctl().retargetingManagerSet_->robotBasePose_;
+}
+
 const std::shared_ptr<mc_tasks::force::ImpedanceTask> & RetargetingManager::retargetingTask() const
 {
   return ctl().retargetingTasks_.at(config_.bodyPart);
@@ -143,13 +159,8 @@ const std::shared_ptr<mc_tasks::force::ImpedanceTask> & RetargetingManager::reta
 
 void RetargetingManager::poseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg)
 {
-  if(!isFirstMsgObtained_)
-  {
-    isFirstMsgObtained_ = true;
-  }
-
   const auto & poseMsg = poseStMsg->pose;
-  targetPose_ = sva::PTransformd(
+  humanTargetPose_ = sva::PTransformd(
       Eigen::Quaterniond(poseMsg.orientation.w, poseMsg.orientation.x, poseMsg.orientation.y, poseMsg.orientation.z)
       .normalized()
       .toRotationMatrix()
