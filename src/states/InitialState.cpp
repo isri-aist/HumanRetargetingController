@@ -5,8 +5,8 @@
 
 #include <BaselineWalkingController/CentroidalManager.h>
 #include <BaselineWalkingController/FootManager.h>
-#include <HumanRetargetingController/HumanRetargetingController.h>
 #include <HumanRetargetingController/FootTypes.h>
+#include <HumanRetargetingController/HumanRetargetingController.h>
 #include <HumanRetargetingController/RetargetingManagerSet.h>
 #include <HumanRetargetingController/states/InitialState.h>
 

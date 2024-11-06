@@ -1,8 +1,8 @@
 #include <mc_rtc/gui/ArrayInput.h>
 #include <mc_rtc/gui/Label.h>
 
-#include <HumanRetargetingController/RetargetingManagerSet.h>
 #include <HumanRetargetingController/HumanRetargetingController.h>
+#include <HumanRetargetingController/RetargetingManagerSet.h>
 
 using namespace HRC;
 
@@ -13,14 +13,17 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
   mcRtcConfig("basePoseTopicName", basePoseTopicName);
 }
 
-RetargetingManagerSet::RetargetingManagerSet(HumanRetargetingController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
+RetargetingManagerSet::RetargetingManagerSet(HumanRetargetingController * ctlPtr,
+                                             const mc_rtc::Configuration & mcRtcConfig)
 : ctlPtr_(ctlPtr)
 {
   config_.load(mcRtcConfig);
 
-  for(const mc_rtc::Configuration & retargetingManagerConfig : mcRtcConfig("RetargetingManagerList", mc_rtc::Configuration()))
+  for(const mc_rtc::Configuration & retargetingManagerConfig :
+      mcRtcConfig("RetargetingManagerList", mc_rtc::Configuration()))
   {
-    this->emplace(retargetingManagerConfig("bodyPart"), std::make_shared<RetargetingManager>(ctlPtr, retargetingManagerConfig));
+    this->emplace(retargetingManagerConfig("bodyPart"),
+                  std::make_shared<RetargetingManager>(ctlPtr, retargetingManagerConfig));
   }
 }
 
@@ -42,7 +45,8 @@ void RetargetingManagerSet::reset()
 
   // Use a dedicated queue so as not to call callbacks of other modules
   nh_->setCallbackQueue(&callbackQueue_);
-  basePoseSub_ = nh_->subscribe<geometry_msgs::PoseStamped>(config_.basePoseTopicName, 1, &RetargetingManagerSet::basePoseCallback, this);
+  basePoseSub_ = nh_->subscribe<geometry_msgs::PoseStamped>(config_.basePoseTopicName, 1,
+                                                            &RetargetingManagerSet::basePoseCallback, this);
 
   for(const auto & limbManagerKV : *this)
   {
@@ -142,8 +146,8 @@ void RetargetingManagerSet::basePoseCallback(const geometry_msgs::PoseStamped::C
   const auto & poseMsg = poseStMsg->pose;
   humanBasePose_ = sva::PTransformd(
       Eigen::Quaterniond(poseMsg.orientation.w, poseMsg.orientation.x, poseMsg.orientation.y, poseMsg.orientation.z)
-      .normalized()
-      .toRotationMatrix()
-      .transpose(),
+          .normalized()
+          .toRotationMatrix()
+          .transpose(),
       Eigen::Vector3d(poseMsg.position.x, poseMsg.position.y, poseMsg.position.z));
 }

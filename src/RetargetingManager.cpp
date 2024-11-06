@@ -2,8 +2,8 @@
 
 #include <mc_tasks/ImpedanceTask.h>
 
-#include <HumanRetargetingController/RetargetingManagerSet.h>
 #include <HumanRetargetingController/HumanRetargetingController.h>
+#include <HumanRetargetingController/RetargetingManagerSet.h>
 
 using namespace HRC;
 
@@ -43,7 +43,8 @@ void RetargetingManager::reset()
   stiffnessRatioFunc_ = nullptr;
 
   // Setup ROS
-  targetPoseSub_ = nh()->subscribe<geometry_msgs::PoseStamped>(config_.targetPoseTopicName, 1, &RetargetingManager::poseCallback, this);
+  targetPoseSub_ = nh()->subscribe<geometry_msgs::PoseStamped>(config_.targetPoseTopicName, 1,
+                                                               &RetargetingManager::poseCallback, this);
 }
 
 void RetargetingManager::update()
@@ -162,8 +163,8 @@ void RetargetingManager::poseCallback(const geometry_msgs::PoseStamped::ConstPtr
   const auto & poseMsg = poseStMsg->pose;
   humanTargetPose_ = sva::PTransformd(
       Eigen::Quaterniond(poseMsg.orientation.w, poseMsg.orientation.x, poseMsg.orientation.y, poseMsg.orientation.z)
-      .normalized()
-      .toRotationMatrix()
-      .transpose(),
+          .normalized()
+          .toRotationMatrix()
+          .transpose(),
       Eigen::Vector3d(poseMsg.position.x, poseMsg.position.y, poseMsg.position.z));
 }

@@ -1,8 +1,8 @@
 #include <mc_tasks/ImpedanceTask.h>
 #include <mc_tasks/MetaTaskLoader.h>
 
-#include <BaselineWalkingController/FootManager.h>
 #include <BaselineWalkingController/CentroidalManager.h>
+#include <BaselineWalkingController/FootManager.h>
 
 #include <HumanRetargetingController/HumanRetargetingController.h>
 #include <HumanRetargetingController/RetargetingManagerSet.h>
@@ -10,8 +10,8 @@
 using namespace HRC;
 
 HumanRetargetingController::HumanRetargetingController(mc_rbdyn::RobotModulePtr rm,
-                                         double dt,
-                                         const mc_rtc::Configuration & _config,
+                                                       double dt,
+                                                       const mc_rtc::Configuration & _config,
                                                        bool // allowEmptyManager
                                                        )
 : BWC::BaselineWalkingController(rm, dt, _config, true)
@@ -22,8 +22,8 @@ HumanRetargetingController::HumanRetargetingController(mc_rbdyn::RobotModulePtr 
     for(const auto & retargetingTaskConfig : config()("RetargetingTaskList"))
     {
       std::string bodyPartName = retargetingTaskConfig("bodyPart");
-      retargetingTasks_.emplace(bodyPartName,
-                             mc_tasks::MetaTaskLoader::load<mc_tasks::force::ImpedanceTask>(solver(), retargetingTaskConfig));
+      retargetingTasks_.emplace(bodyPartName, mc_tasks::MetaTaskLoader::load<mc_tasks::force::ImpedanceTask>(
+                                                  solver(), retargetingTaskConfig));
       retargetingTasks_.at(bodyPartName)->name("RetargetingTask_" + bodyPartName);
     }
   }
@@ -70,7 +70,7 @@ bool HumanRetargetingController::run()
 void HumanRetargetingController::stop()
 {
   // Clean up tasks
-  for (const auto & [bodyPart, retargetingTask] : retargetingTasks_)
+  for(const auto & [bodyPart, retargetingTask] : retargetingTasks_)
   {
     solver().removeTask(retargetingTask);
   }

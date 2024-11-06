@@ -25,9 +25,9 @@ public:
       \param allowEmptyManager whether to allow the managers to be empty (assuming initialized in the parent class)
    */
   HumanRetargetingController(mc_rbdyn::RobotModulePtr rm,
-                      double dt,
-                      const mc_rtc::Configuration & config,
-                      bool allowEmptyManager = false);
+                             double dt,
+                             const mc_rtc::Configuration & config,
+                             bool allowEmptyManager = false);
 
   /** \brief Reset a controller.
 
