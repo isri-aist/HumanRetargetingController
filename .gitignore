@@ -7,3 +7,5 @@ GSYMS
 GTAGS
 
 etc/mc_rtc.yaml
+
+venv-*
