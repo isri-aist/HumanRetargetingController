@@ -1,7 +1,6 @@
 #pragma once
 
 #include <optional>
-#include <unordered_set>
 
 #include <HumanRetargetingController/RetargetingManager.h>
 
@@ -14,7 +13,7 @@ namespace HRC
 /** \brief Set of RetargetingManager. */
 class RetargetingManagerSet : public std::unordered_map<std::string, std::shared_ptr<RetargetingManager>>
 {
-  // Allow access to nh_ in RetargetingManagerSet from RetargetingManager
+  // Allow access to protected members in RetargetingManagerSet from RetargetingManager
   friend class RetargetingManager;
 
   /** \brief Configuration. */
@@ -116,7 +115,7 @@ protected:
   //! ROS callback queue
   ros::CallbackQueue callbackQueue_;
 
-  //! ROS subscriber of base body part
+  //! ROS subscriber of base pose
   ros::Subscriber basePoseSub_;
 };
 } // namespace HRC

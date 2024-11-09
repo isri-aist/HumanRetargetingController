@@ -92,26 +92,6 @@ FootTaskList:
     stiffness: 1000.0
     weight: 1000.0
 
-RetargetingTaskList:
-  - bodyPart: LeftElbow
-    type: impedance
-    frame: LeftElbowFrame
-    cutoffPeriod: 0.01
-    weight: 1000.0
-    dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
-    activeJoints: [
-    "WAIST_Y", "WAIST_P", "WAIST_R",
-    "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y"]
-  - bodyPart: LeftHand
-    type: impedance
-    frame: LeftHandFrame
-    cutoffPeriod: 0.01
-    weight: 1000.0
-    dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
-    activeJoints: [
-    "WAIST_Y", "WAIST_P", "WAIST_R",
-    "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y", "L_ELBOW_P"]
-
 FootManager:
   name: FootManager
   footstepDuration: 0.8 # [sec]
@@ -208,11 +188,6 @@ CentroidalManager:
     regularWeight: 1e-8
     ridgeForceMinMax: [3, 1000] # [N]
 
-  # PreviewControlExtZmp
-  method: PreviewControlExtZmp
-  horizonDuration: 2.0 # [sec]
-  horizonDt: 0.005 # [sec]
-
   # PreviewControlZmp
   method: PreviewControlZmp
   horizonDuration: 2.0 # [sec]
@@ -221,17 +196,14 @@ CentroidalManager:
 
 RetargetingManagerSet:
   name: RetargetingManagerSet
-  baseFrame: PELVIS_S
   basePoseTopicName: /hrc/poses/waist
   RetargetingManagerList:
     - name: RetargetingManager
       bodyPart: LeftElbow
-      bodyGroups: [LeftArm, Elbow]
       targetPoseTopicName: /hrc/poses/left_elbow
       stiffness: 100.0
     - name: RetargetingManager
       bodyPart: LeftHand
-      bodyGroups: [LeftArm, Hand]
       targetPoseTopicName: /hrc/poses/left_hand
       stiffness: 100.0
 
@@ -305,6 +277,29 @@ robots:
 
     BaseOrientationTask:
       frame: WAIST_R_S
+
+    RetargetingTaskList:
+      - bodyPart: LeftElbow
+        type: transform
+        frame: LeftElbowFrame
+        weight: 500.0
+        dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+        activeJoints: [
+        "Root",
+        "WAIST_Y", # "WAIST_P", "WAIST_R",
+        "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y"]
+      - bodyPart: LeftHand
+        type: transform
+        frame: LeftHandFrame
+        weight: 500.0
+        dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+        activeJoints: [
+        "Root",
+        "WAIST_Y", # "WAIST_P", "WAIST_R",
+        "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y", "L_ELBOW_P"]
+
+    RetargetingManagerSet:
+      baseFrame: PELVIS_S
 
     frames:
       - name: LeftElbowFrame

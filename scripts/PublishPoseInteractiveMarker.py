@@ -11,10 +11,7 @@ from PublishManager import PublishManager
 
 class PublishPoseInteractiveMarker(object):
     def __init__(self):
-        self.pub_managers = {}
-
-        self.body_part_list = ["waist", "left_elbow", "left_hand"]
-        init_pos_map = {
+        body_part_init_pos_map = {
             "waist": [0.0, 0.0, 0.86],
             "left_elbow": [0.0, 0.4, 1.0],
             "left_hand": [0.2, 0.4, 0.95],
@@ -22,8 +19,10 @@ class PublishPoseInteractiveMarker(object):
 
         self.im_server = InteractiveMarkerServer("im_server")
 
-        for body_part in self.body_part_list:
-            self.addInteractiveMarker(body_part, init_pos_map[body_part])
+        self.pub_managers = {}
+
+        for body_part in body_part_init_pos_map.keys():
+            self.addInteractiveMarker(body_part, body_part_init_pos_map[body_part])
             self.pub_managers[body_part] = PublishManager(body_part)
 
         self.im_server.applyChanges()
@@ -111,7 +110,7 @@ class PublishPoseInteractiveMarker(object):
     def run(self):
         rate = rospy.Rate(30)
         while not rospy.is_shutdown():
-            for body_part in self.body_part_list:
+            for body_part in self.pub_managers.keys():
                 self.pub_managers[body_part].publishPoseMsg()
 
             rate.sleep()

@@ -31,12 +31,12 @@ class PublishPoseViveTracker(object):
     def run(self):
         rate = rospy.Rate(30)
         while not rospy.is_shutdown():
+            self.current_stamp = rospy.Time.now()
+
             self.device_data_list = self.vr_system.getDeviceToAbsoluteTrackingPose(
                 openvr.TrackingUniverseStanding,
                 0,
                 openvr.k_unMaxTrackedDeviceCount)
-
-            self.current_stamp = rospy.Time.now()
 
             for device_idx in range(openvr.k_unMaxTrackedDeviceCount):
                 self.processSingleDeviceData(device_idx)
@@ -54,6 +54,10 @@ class PublishPoseViveTracker(object):
 
         if device_sn not in self.device_sn_to_body_part_map:
             return
+
+        if not is_device_pose_valid:
+            return
+
         body_part = self.device_sn_to_body_part_map[device_sn]
 
         pose_mat = np.zeros((4, 4))

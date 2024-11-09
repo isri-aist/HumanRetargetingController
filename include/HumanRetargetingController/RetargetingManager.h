@@ -4,7 +4,6 @@
 
 #include <TrajColl/CubicInterpolator.h>
 
-#include <mc_rtc/constants.h>
 #include <mc_rtc/gui/StateBuilder.h>
 #include <mc_rtc/log/Logger.h>
 
@@ -14,6 +13,8 @@
 
 namespace mc_tasks
 {
+struct TransformTask;
+
 namespace force
 {
 struct ImpedanceTask;
@@ -26,7 +27,7 @@ class HumanRetargetingController;
 
 /** \brief Retargeting manager.
 
-    Retargeting manager manages the retargeting tasks.
+    Retargeting manager manages the retargeting task.
 */
 class RetargetingManager
 {
@@ -43,13 +44,10 @@ public:
     //! Body part
     std::string bodyPart = "body_part";
 
-    //! Body groups to which the body part belongs
-    std::vector<std::string> bodyGroups = {};
-
     //! Topic name of target pose
     std::string targetPoseTopicName = "";
 
-    //! Limb task stiffness
+    //! Retargeting task stiffness
     Eigen::Vector6d stiffness = Eigen::Vector6d::Constant(1000);
 
     /** \brief Load mc_rtc configuration.
@@ -129,11 +127,17 @@ protected:
   /** \brief Accessor to the robot base pose. */
   const sva::PTransformd & robotBasePose() const;
 
-  /** \brief Accessor to the limb task. */
-  const std::shared_ptr<mc_tasks::force::ImpedanceTask> & retargetingTask() const;
+  /** \brief Accessor to the retargeting task. */
+  const std::shared_ptr<mc_tasks::TransformTask> & retargetingTask() const;
 
-  /** \brief ROS callback of pose topic. */
-  void poseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg);
+  /** \brief Accessor to the retargeting task as ImpedanceTask.
+
+      Returns nullptr if the retargeting task is not of type ImpedanceTask.
+   */
+  const std::shared_ptr<mc_tasks::force::ImpedanceTask> retargetingImpTask() const;
+
+  /** \brief ROS callback of target pose topic. */
+  void targetPoseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg);
 
 protected:
   //! Configuration
@@ -151,7 +155,7 @@ protected:
   //! Function to interpolate task stiffness
   std::shared_ptr<TrajColl::CubicInterpolator<double>> stiffnessRatioFunc_;
 
-  //! ROS subscriber of target body part
+  //! ROS subscriber of target pose
   ros::Subscriber targetPoseSub_;
 };
 } // namespace HRC

@@ -19,8 +19,7 @@ RetargetingManagerSet::RetargetingManagerSet(HumanRetargetingController * ctlPtr
 {
   config_.load(mcRtcConfig);
 
-  for(const mc_rtc::Configuration & retargetingManagerConfig :
-      mcRtcConfig("RetargetingManagerList", mc_rtc::Configuration()))
+  for(const mc_rtc::Configuration & retargetingManagerConfig : mcRtcConfig("RetargetingManagerList"))
   {
     this->emplace(retargetingManagerConfig("bodyPart"),
                   std::make_shared<RetargetingManager>(ctlPtr, retargetingManagerConfig));
@@ -66,6 +65,7 @@ void RetargetingManagerSet::update()
     limbManagerKV.second->update();
   }
 
+  // Trigger the task to be enabled
   if(!isTaskEnabled_)
   {
     bool isHumanPoseReady = humanBasePose_.has_value();
@@ -75,7 +75,7 @@ void RetargetingManagerSet::update()
       {
         break;
       }
-      if(isHumanPoseReady && !limbManagerKV.second->humanTargetPose_.has_value())
+      if(!limbManagerKV.second->humanTargetPose_.has_value())
       {
         isHumanPoseReady = false;
       }

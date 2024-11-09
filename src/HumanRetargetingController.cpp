@@ -1,5 +1,5 @@
-#include <mc_tasks/ImpedanceTask.h>
 #include <mc_tasks/MetaTaskLoader.h>
+#include <mc_tasks/TransformTask.h>
 
 #include <BaselineWalkingController/CentroidalManager.h>
 #include <BaselineWalkingController/FootManager.h>
@@ -22,8 +22,8 @@ HumanRetargetingController::HumanRetargetingController(mc_rbdyn::RobotModulePtr 
     for(const auto & retargetingTaskConfig : config()("RetargetingTaskList"))
     {
       std::string bodyPartName = retargetingTaskConfig("bodyPart");
-      retargetingTasks_.emplace(bodyPartName, mc_tasks::MetaTaskLoader::load<mc_tasks::force::ImpedanceTask>(
-                                                  solver(), retargetingTaskConfig));
+      retargetingTasks_.emplace(
+          bodyPartName, mc_tasks::MetaTaskLoader::load<mc_tasks::TransformTask>(solver(), retargetingTaskConfig));
       retargetingTasks_.at(bodyPartName)->name("RetargetingTask_" + bodyPartName);
     }
   }
@@ -70,9 +70,9 @@ bool HumanRetargetingController::run()
 void HumanRetargetingController::stop()
 {
   // Clean up tasks
-  for(const auto & [bodyPart, retargetingTask] : retargetingTasks_)
+  for(const auto & retargetingTaskKV : retargetingTasks_)
   {
-    solver().removeTask(retargetingTask);
+    solver().removeTask(retargetingTaskKV.second);
   }
 
   // Clean up managers

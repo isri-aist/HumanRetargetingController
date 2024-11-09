@@ -4,17 +4,14 @@
 
 namespace mc_tasks
 {
-namespace force
-{
-struct ImpedanceTask;
-} // namespace force
+struct TransformTask;
 } // namespace mc_tasks
 
 namespace HRC
 {
 class RetargetingManagerSet;
 
-/** \brief Humanoid loco-manipulation controller. */
+/** \brief Controller for retargeting the motion from human to humanoid robot. */
 struct HumanRetargetingController : public BWC::BaselineWalkingController
 {
 public:
@@ -48,8 +45,8 @@ public:
   void stop() override;
 
 public:
-  //! Hand tasks
-  std::unordered_map<std::string, std::shared_ptr<mc_tasks::force::ImpedanceTask>> retargetingTasks_;
+  //! Retargeting tasks
+  std::unordered_map<std::string, std::shared_ptr<mc_tasks::TransformTask>> retargetingTasks_;
 
   //! Manipulation manager
   std::shared_ptr<RetargetingManagerSet> retargetingManagerSet_;
