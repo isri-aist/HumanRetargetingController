@@ -1,4 +1,4 @@
-OverwriteConfigKeys: [NoSensors]
+# OverwriteConfigKeys: [NoSensors]
 
 transitions:
   - [HRC::Initial_, OK, HRC::Main_, Auto]
