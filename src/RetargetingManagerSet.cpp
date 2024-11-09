@@ -1,7 +1,13 @@
 #include <mc_rtc/gui/ArrayInput.h>
 #include <mc_rtc/gui/Label.h>
 
+#include <state-observation/tools/rigid-body-kinematics.hpp>
+
+#include <BaselineWalkingController/FootManager.h>
+
+#include <HumanRetargetingController/FootTypes.h>
 #include <HumanRetargetingController/HumanRetargetingController.h>
+#include <HumanRetargetingController/MathUtils.h>
 #include <HumanRetargetingController/RetargetingManagerSet.h>
 
 using namespace HRC;
@@ -59,6 +65,10 @@ void RetargetingManagerSet::update()
   callbackQueue_.callAvailable(ros::WallDuration());
 
   robotBasePose_ = ctl().robot().frame(config_.baseFrame).position();
+  // Assume robot base pose is parallel to foot middle pose
+  robotBasePose_.rotation() = projGround(sva::interpolate(ctl().footManager_->targetFootPose(Foot::Left),
+                                                          ctl().footManager_->targetFootPose(Foot::Right), 0.5))
+                                  .rotation();
 
   for(const auto & limbManagerKV : *this)
   {
@@ -150,4 +160,7 @@ void RetargetingManagerSet::basePoseCallback(const geometry_msgs::PoseStamped::C
           .toRotationMatrix()
           .transpose(),
       Eigen::Vector3d(poseMsg.position.x, poseMsg.position.y, poseMsg.position.z));
+  // Assume human base pose is always horizontal (only yaw angle can be changed)
+  humanBasePose_.value().rotation() = stateObservation::kine::mergeRoll1Pitch1WithYaw2AxisAgnostic(
+      Eigen::Matrix3d::Identity(), humanBasePose_.value().rotation());
 }
