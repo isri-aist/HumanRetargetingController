@@ -429,6 +429,7 @@ Visualization Manager:
       Marker Topic: /mc_rtc_rviz
       Name: mc_rtc GUI markers
       Namespaces:
+        Collisions/jvrc1/jvrc1/Arrows/L_WRIST_Y_S::L_HIP_Y_S_arrow_arrow: true
         Collisions/jvrc1/jvrc1/Arrows/PELVIS_S::L_ELBOW_P_S_arrow_arrow: true
         Collisions/jvrc1/jvrc1/Arrows/WAIST_R_S::L_SHOULDER_Y_S_arrow_arrow: true
         HRC/CentroidalManager/ForceMarker/Left_Force0_arrow_arrow: true
@@ -449,6 +450,7 @@ Visualization Manager:
         HRC/CentroidalManager/ForceMarker/Right_FricPyramid2_edges: true
         HRC/CentroidalManager/ForceMarker/Right_FricPyramid3_edges: true
         HRC/CentroidalManager/ForceMarker/Right_SurfaceRegion: true
+        HRC/FootManager/FootstepMarker/Footstep: true
       Queue Size: 100
       Value: true
     - Class: rviz/TF
@@ -476,13 +478,13 @@ Visualization Manager:
       Value: false
     - Class: rviz/InteractiveMarkers
       Enable Transparency: true
-      Enabled: false
+      Enabled: true
       Name: InteractiveMarkers
       Show Axes: false
       Show Descriptions: true
       Show Visual Aids: false
       Update Topic: /im_server/update
-      Value: false
+      Value: true
     - Class: rviz/Group
       Displays:
         - Alpha: 1
@@ -533,7 +535,7 @@ Visualization Manager:
           Topic: /hrc/poses/left_hand
           Unreliable: false
           Value: true
-      Enabled: true
+      Enabled: false
       Name: Vive
   Enabled: true
   Global Options:
@@ -563,7 +565,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.250943660736084
+      Distance: 2.1760592460632324
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -571,17 +573,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.11827981472015381
-        Y: 0.07943689823150635
-        Z: 0.9180805683135986
+        X: 0.0636751651763916
+        Y: 0.08721494674682617
+        Z: 1.0353597402572632
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4121723175048828
+      Pitch: 0.5080465078353882
       Target Frame: <Fixed Frame>
-      Yaw: 6.251832485198975
+      Yaw: 0.19825105369091034
     Saved: ~
 Window Geometry:
   Displays:
