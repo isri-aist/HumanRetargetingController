@@ -152,6 +152,9 @@ protected:
   //! Pose of human target body part represented in world frame
   std::optional<sva::PTransformd> humanTargetPose_ = std::nullopt;
 
+  //! Pose of robot target body part represented in world frame
+  std::optional<sva::PTransformd> robotTargetPose_ = std::nullopt;
+
   //! Function to interpolate task stiffness
   std::shared_ptr<TrajColl::CubicInterpolator<double>> stiffnessRatioFunc_;
 

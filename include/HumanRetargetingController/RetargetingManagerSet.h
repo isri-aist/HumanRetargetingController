@@ -28,6 +28,9 @@ class RetargetingManagerSet : public std::unordered_map<std::string, std::shared
     //! Topic name of base pose
     std::string basePoseTopicName = "/hrc/poses/base";
 
+    //! Base marker size (width, height) [m]
+    Eigen::Vector2d baseMarkerSize = Eigen::Vector2d(0.4, 0.5);
+
     /** \brief Load mc_rtc configuration.
         \param mcRtcConfig mc_rtc configuration
     */

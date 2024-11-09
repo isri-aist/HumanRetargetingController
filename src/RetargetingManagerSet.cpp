@@ -1,5 +1,6 @@
-#include <mc_rtc/gui/ArrayInput.h>
+#include <mc_rtc/gui/Arrow.h>
 #include <mc_rtc/gui/Label.h>
+#include <mc_rtc/gui/Point3D.h>
 
 #include <state-observation/tools/rigid-body-kinematics.hpp>
 
@@ -17,6 +18,7 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
   mcRtcConfig("name", name);
   mcRtcConfig("baseFrame", baseFrame);
   mcRtcConfig("basePoseTopicName", basePoseTopicName);
+  mcRtcConfig("baseMarkerSize", baseMarkerSize);
 }
 
 RetargetingManagerSet::RetargetingManagerSet(HumanRetargetingController * ctlPtr,
@@ -102,6 +104,67 @@ void RetargetingManagerSet::update()
       }
     }
   }
+
+  // Update GUI marker
+  {
+    mc_rtc::gui::Color pointColor = mc_rtc::gui::Color(0.0, 1.0, 0.0, 0.5);
+    mc_rtc::gui::Color arrowColor = mc_rtc::gui::Color(0.0, 0.4, 0.2, 0.6);
+
+    ctl().gui()->removeCategory({ctl().name(), config_.name, "Marker"});
+
+    ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
+                            mc_rtc::gui::Point3D("BasePoint", mc_rtc::gui::PointConfig(pointColor, 0.15),
+                                                 [this]() { return robotBasePose_.translation(); }));
+
+    for(const auto & side : std::vector<std::string>{"Left", "Right"})
+    {
+      ctl().gui()->addElement(
+          {ctl().name(), config_.name, "Marker"},
+          mc_rtc::gui::Point3D(side + "ShoulderPoint", mc_rtc::gui::PointConfig(pointColor, 0.15),
+                               [this, side]() {
+                                 double sign = (side == "Left" ? 1.0 : -1.0);
+                                 return (sva::PTransformd(Eigen::Vector3d(0.0, sign * 0.5 * config_.baseMarkerSize[0],
+                                                                          config_.baseMarkerSize[1]))
+                                         * robotBasePose_)
+                                     .translation();
+                               }),
+          mc_rtc::gui::Arrow(
+              "BaseTo" + side + "ShoulderArrow", arrowColor, [this]() { return robotBasePose_.translation(); },
+              [this, side]() {
+                double sign = (side == "Left" ? 1.0 : -1.0);
+                return (sva::PTransformd(
+                            Eigen::Vector3d(0.0, sign * 0.5 * config_.baseMarkerSize[0], config_.baseMarkerSize[1]))
+                        * robotBasePose_)
+                    .translation();
+              }));
+
+      if(this->count(side + "Elbow") > 0 && this->at(side + "Elbow")->robotTargetPose_.has_value())
+      {
+        ctl().gui()->addElement(
+            {ctl().name(), config_.name, "Marker"},
+            mc_rtc::gui::Arrow(
+                side + "ShoulderToElbowArrow", arrowColor,
+                [this, side]() {
+                  double sign = (side == "Left" ? 1.0 : -1.0);
+                  return (sva::PTransformd(
+                              Eigen::Vector3d(0.0, sign * 0.5 * config_.baseMarkerSize[0], config_.baseMarkerSize[1]))
+                          * robotBasePose_)
+                      .translation();
+                },
+                [this, side]() { return this->at(side + "Elbow")->robotTargetPose_.value().translation(); }));
+
+        if(this->count(side + "Hand") > 0 && this->at(side + "Hand")->robotTargetPose_.has_value())
+        {
+          ctl().gui()->addElement(
+              {ctl().name(), config_.name, "Marker"},
+              mc_rtc::gui::Arrow(
+                  side + "ElbowToHandArrow", arrowColor,
+                  [this, side]() { return this->at(side + "Elbow")->robotTargetPose_.value().translation(); },
+                  [this, side]() { return this->at(side + "Hand")->robotTargetPose_.value().translation(); }));
+        }
+      }
+    }
+  }
 }
 
 void RetargetingManagerSet::stop()
@@ -125,7 +188,8 @@ void RetargetingManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
     limbManagerKV.second->addToGUI(gui);
   }
 
-  // TODO
+  gui.addElement({ctl().name(), config_.name, "Status"},
+                 mc_rtc::gui::Label("isTaskEnabled", [this]() { return isTaskEnabled_; }));
 }
 
 void RetargetingManagerSet::removeFromGUI(mc_rtc::gui::StateBuilder & gui)

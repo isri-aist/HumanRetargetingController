@@ -1,3 +1,5 @@
+#include <mc_rtc/gui/Label.h>
+#include <mc_rtc/gui/Point3D.h>
 #include <mc_tasks/ImpedanceTask.h>
 #include <mc_tasks/TransformTask.h>
 
@@ -38,6 +40,7 @@ void RetargetingManager::reset()
 {
   isTaskEnabled_ = false;
   humanTargetPose_ = std::nullopt;
+  robotTargetPose_ = std::nullopt;
   stiffnessRatioFunc_ = nullptr;
 
   // Setup ROS
@@ -47,21 +50,26 @@ void RetargetingManager::reset()
 
 void RetargetingManager::update()
 {
+  // Clear GUI marker
+  ctl().gui()->removeCategory({ctl().name(), config_.name, config_.bodyPart, "Marker"});
+
+  // Break if task is not enabled
   if(!isTaskEnabled_)
   {
     return;
   }
 
-  sva::PTransformd robotTargetPose = humanTargetPose_.value() * humanBasePose().value().inv() * robotBasePose();
+  // Update task target
+  robotTargetPose_ = humanTargetPose_.value() * humanBasePose().value().inv() * robotBasePose();
   if(retargetingImpTask())
   {
-    retargetingImpTask()->targetPose(robotTargetPose);
+    retargetingImpTask()->targetPose(robotTargetPose_.value());
     retargetingImpTask()->targetVel(sva::MotionVecd::Zero());
     retargetingImpTask()->targetAccel(sva::MotionVecd::Zero());
   }
   else
   {
-    retargetingTask()->target(robotTargetPose);
+    retargetingTask()->target(robotTargetPose_.value());
     retargetingTask()->targetVel(sva::MotionVecd::Zero());
   }
 
@@ -79,6 +87,12 @@ void RetargetingManager::update()
       stiffnessRatioFunc_.reset();
     }
   }
+
+  // Update GUI marker
+  ctl().gui()->addElement({ctl().name(), config_.name, config_.bodyPart, "Marker"},
+                          mc_rtc::gui::Point3D("TargetPoint",
+                                               mc_rtc::gui::PointConfig(mc_rtc::gui::Color(0, 1, 0, 0.5), 0.15),
+                                               [this]() { return robotTargetPose_.value().translation(); }));
 }
 
 void RetargetingManager::stop()
@@ -93,7 +107,8 @@ void RetargetingManager::stop()
 
 void RetargetingManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
-  // TODO
+  gui.addElement({ctl().name(), config_.name, config_.bodyPart, "Status"},
+                 mc_rtc::gui::Label("isTaskEnabled", [this]() { return isTaskEnabled_; }));
 }
 
 void RetargetingManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)

@@ -197,6 +197,7 @@ CentroidalManager:
 RetargetingManagerSet:
   name: RetargetingManagerSet
   basePoseTopicName: /hrc/poses/waist
+  baseMarkerSize: [0.4, 0.5] # [m]
   RetargetingManagerList:
     - name: RetargetingManager
       bodyPart: LeftElbow
