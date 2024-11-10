@@ -30,8 +30,8 @@ class RetargetingManagerSet : public std::unordered_map<std::string, std::shared
     //! Topic name of base pose
     std::string basePoseTopicName = "/hrc/poses/base";
 
-    //! Expiration duration of base pose [s]
-    double basePoseExpirationDuration = 3.0;
+    //! Expiration duration of pose [s]
+    double poseExpirationDuration = 3.0;
 
     //! Distance threshold from base to target body part [m]
     double targetDistThre = 2.0;

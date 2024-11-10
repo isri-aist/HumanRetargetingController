@@ -19,7 +19,7 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
   mcRtcConfig("name", name);
   mcRtcConfig("baseFrame", baseFrame);
   mcRtcConfig("basePoseTopicName", basePoseTopicName);
-  mcRtcConfig("basePoseExpirationDuration", basePoseExpirationDuration);
+  mcRtcConfig("poseExpirationDuration", poseExpirationDuration);
   mcRtcConfig("targetDistThre", targetDistThre);
   mcRtcConfig("targetVelThre", targetVelThre);
   mcRtcConfig("baseMarkerSize", baseMarkerSize);
@@ -160,7 +160,7 @@ void RetargetingManagerSet::updateValidity()
       poseValid = false;
     }
 
-    if(poseValid && (basePoseLatestTime_ < ctl().t() - config_.basePoseExpirationDuration))
+    if(poseValid && (basePoseLatestTime_ < ctl().t() - config_.poseExpirationDuration))
     {
       poseValid = false;
     }

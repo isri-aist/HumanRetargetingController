@@ -52,9 +52,6 @@ public:
     //! Retargeting task stiffness
     Eigen::Vector6d stiffness = Eigen::Vector6d::Constant(1000);
 
-    //! Expiration duration of target pose [s]
-    double targetPoseExpirationDuration = 3.0;
-
     /** \brief Load mc_rtc configuration.
         \param mcRtcConfig mc_rtc configuration
     */

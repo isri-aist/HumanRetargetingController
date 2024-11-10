@@ -28,7 +28,6 @@ void RetargetingManager::Configuration::load(const mc_rtc::Configuration & mcRtc
       stiffness = mcRtcConfig("stiffness");
     }
   }
-  mcRtcConfig("targetPoseExpirationDuration", targetPoseExpirationDuration);
 }
 
 RetargetingManager::RetargetingManager(HumanRetargetingController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
@@ -225,7 +224,7 @@ void RetargetingManager::updateValidity()
     poseValid = false;
   }
 
-  if(poseValid && (targetPoseLatestTime_ < ctl().t() - config_.targetPoseExpirationDuration))
+  if(poseValid && (targetPoseLatestTime_ < ctl().t() - ctl().retargetingManagerSet_->config_.poseExpirationDuration))
   {
     poseValid = false;
   }
