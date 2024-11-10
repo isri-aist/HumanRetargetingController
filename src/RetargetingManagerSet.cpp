@@ -85,7 +85,7 @@ void RetargetingManagerSet::update()
                                     .rotation();
   }
 
-  // Common update
+  // Update validity
   updateValidity();
 
   // Update each RetargetingManager
@@ -149,21 +149,21 @@ void RetargetingManagerSet::removeFromLogger(mc_rtc::Logger & // logger
 
 void RetargetingManagerSet::updateValidity()
 {
-  // Check pose validity
+  // Check base pose validity
   {
-    bool isValid = true;
+    bool poseValid = true;
 
-    if(isValid && !humanBasePose_.has_value())
+    if(poseValid && !humanBasePose_.has_value())
     {
-      isValid = false;
+      poseValid = false;
     }
 
-    if(isValid && (basePoseLatestTime_ < ctl().t() - config_.basePoseExpirationDuration))
+    if(poseValid && (basePoseLatestTime_ < ctl().t() - config_.basePoseExpirationDuration))
     {
-      isValid = false;
+      poseValid = false;
     }
 
-    if(!isValid)
+    if(!poseValid)
     {
       humanBasePose_ = std::nullopt;
     }

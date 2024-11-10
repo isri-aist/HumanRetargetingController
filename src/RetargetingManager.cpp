@@ -217,19 +217,19 @@ const std::shared_ptr<mc_tasks::force::ImpedanceTask> RetargetingManager::retarg
 
 void RetargetingManager::updateValidity()
 {
-  bool isValid = true;
+  bool poseValid = true;
 
-  if(isValid && !humanTargetPose_.has_value())
+  if(poseValid && !humanTargetPose_.has_value())
   {
-    isValid = false;
+    poseValid = false;
   }
 
-  if(isValid && (targetPoseLatestTime_ < ctl().t() - config_.targetPoseExpirationDuration))
+  if(poseValid && (targetPoseLatestTime_ < ctl().t() - config_.targetPoseExpirationDuration))
   {
-    isValid = false;
+    poseValid = false;
   }
 
-  if(!isValid)
+  if(!poseValid)
   {
     humanTargetPose_ = std::nullopt;
     robotTargetPose_ = std::nullopt;
