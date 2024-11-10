@@ -197,16 +197,19 @@ CentroidalManager:
 RetargetingManagerSet:
   name: RetargetingManagerSet
   basePoseTopicName: /hrc/poses/waist
+  basePoseExpirationDuration: 3.0 # [s]
   baseMarkerSize: [0.4, 0.5] # [m]
   RetargetingManagerList:
     - name: RetargetingManager
       bodyPart: LeftElbow
       targetPoseTopicName: /hrc/poses/left_elbow
       stiffness: 100.0
+      targetPoseExpirationDuration: 3.0 # [s]
     - name: RetargetingManager
       bodyPart: LeftHand
       targetPoseTopicName: /hrc/poses/left_hand
       stiffness: 100.0
+      targetPoseExpirationDuration: 3.0 # [s]
 
 # OverwriteConfigKeys: [NoSensors]
 

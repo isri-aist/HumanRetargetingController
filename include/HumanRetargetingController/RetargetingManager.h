@@ -50,6 +50,9 @@ public:
     //! Retargeting task stiffness
     Eigen::Vector6d stiffness = Eigen::Vector6d::Constant(1000);
 
+    //! Expiration duration of target pose [s]
+    double targetPoseExpirationDuration = 3.0;
+
     /** \brief Load mc_rtc configuration.
         \param mcRtcConfig mc_rtc configuration
     */
@@ -69,11 +72,17 @@ public:
   */
   void reset();
 
-  /** \brief Update.
+  /** \brief Pre-update.
 
       This method should be called once every control cycle.
   */
-  void update();
+  void preUpdate();
+
+  /** \brief Post-update.
+
+      This method should be called once every control cycle.
+  */
+  void postUpdate();
 
   /** \brief Stop.
 
@@ -136,6 +145,9 @@ protected:
    */
   const std::shared_ptr<mc_tasks::force::ImpedanceTask> retargetingImpTask() const;
 
+  /** \brief Update the validity of target pose. */
+  void updateValidity();
+
   /** \brief ROS callback of target pose topic. */
   void targetPoseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg);
 
@@ -154,6 +166,9 @@ protected:
 
   //! Pose of robot target body part represented in world frame
   std::optional<sva::PTransformd> robotTargetPose_ = std::nullopt;
+
+  //! Time when the latest target pose was obtained
+  double targetPoseLatestTime_ = -1;
 
   //! Function to interpolate task stiffness
   std::shared_ptr<TrajColl::CubicInterpolator<double>> stiffnessRatioFunc_;

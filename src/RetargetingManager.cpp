@@ -28,6 +28,7 @@ void RetargetingManager::Configuration::load(const mc_rtc::Configuration & mcRtc
       stiffness = mcRtcConfig("stiffness");
     }
   }
+  mcRtcConfig("targetPoseExpirationDuration", targetPoseExpirationDuration);
 }
 
 RetargetingManager::RetargetingManager(HumanRetargetingController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
@@ -41,6 +42,7 @@ void RetargetingManager::reset()
   isTaskEnabled_ = false;
   humanTargetPose_ = std::nullopt;
   robotTargetPose_ = std::nullopt;
+  targetPoseLatestTime_ = -1;
   stiffnessRatioFunc_ = nullptr;
 
   // Setup ROS
@@ -48,51 +50,61 @@ void RetargetingManager::reset()
                                                                &RetargetingManager::targetPoseCallback, this);
 }
 
-void RetargetingManager::update()
+void RetargetingManager::preUpdate()
 {
-  // Clear GUI marker
-  ctl().gui()->removeCategory({ctl().name(), config_.name, config_.bodyPart, "Marker"});
+  // Update validity
+  updateValidity();
+}
 
-  // Break if task is not enabled
-  if(!isTaskEnabled_)
+void RetargetingManager::postUpdate()
+{
+  // Update target pose
+  if(humanTargetPose_.has_value())
   {
-    return;
+    robotTargetPose_ = humanTargetPose_.value() * humanBasePose().value().inv() * robotBasePose();
   }
 
-  // Update task target
-  robotTargetPose_ = humanTargetPose_.value() * humanBasePose().value().inv() * robotBasePose();
-  if(retargetingImpTask())
+  // Update task
+  if(isTaskEnabled_)
   {
-    retargetingImpTask()->targetPose(robotTargetPose_.value());
-    retargetingImpTask()->targetVel(sva::MotionVecd::Zero());
-    retargetingImpTask()->targetAccel(sva::MotionVecd::Zero());
-  }
-  else
-  {
-    retargetingTask()->target(robotTargetPose_.value());
-    retargetingTask()->targetVel(sva::MotionVecd::Zero());
-  }
-
-  // Interpolate task stiffness
-  if(stiffnessRatioFunc_)
-  {
-    if(ctl().t() < stiffnessRatioFunc_->endTime())
+    // Update task target
+    if(retargetingImpTask())
     {
-      double stiffnessRatio = (*stiffnessRatioFunc_)(ctl().t());
-      retargetingTask()->stiffness(stiffnessRatio * config_.stiffness);
+      retargetingImpTask()->targetPose(robotTargetPose_.value());
+      retargetingImpTask()->targetVel(sva::MotionVecd::Zero());
+      retargetingImpTask()->targetAccel(sva::MotionVecd::Zero());
     }
     else
     {
-      retargetingTask()->stiffness(Eigen::VectorXd(config_.stiffness));
-      stiffnessRatioFunc_.reset();
+      retargetingTask()->target(robotTargetPose_.value());
+      retargetingTask()->targetVel(sva::MotionVecd::Zero());
+    }
+
+    // Interpolate task stiffness
+    if(stiffnessRatioFunc_)
+    {
+      if(ctl().t() < stiffnessRatioFunc_->endTime())
+      {
+        double stiffnessRatio = (*stiffnessRatioFunc_)(ctl().t());
+        retargetingTask()->stiffness(stiffnessRatio * config_.stiffness);
+      }
+      else
+      {
+        retargetingTask()->stiffness(Eigen::VectorXd(config_.stiffness));
+        stiffnessRatioFunc_.reset();
+      }
     }
   }
 
   // Update GUI marker
-  ctl().gui()->addElement({ctl().name(), config_.name, config_.bodyPart, "Marker"},
-                          mc_rtc::gui::Point3D("TargetPoint",
-                                               mc_rtc::gui::PointConfig(mc_rtc::gui::Color(0, 1, 0, 0.5), 0.15),
-                                               [this]() { return robotTargetPose_.value().translation(); }));
+  ctl().gui()->removeCategory({ctl().name(), config_.name, config_.bodyPart, "Marker"});
+  if(robotTargetPose_.has_value())
+  {
+    ctl().gui()->addElement({ctl().name(), config_.name, config_.bodyPart, "Marker"},
+                            mc_rtc::gui::Point3D("TargetPoint",
+                                                 mc_rtc::gui::PointConfig(mc_rtc::gui::Color(0, 1, 0, 0.5), 0.15),
+                                                 [this]() { return robotTargetPose_.value().translation(); }));
+  }
 }
 
 void RetargetingManager::stop()
@@ -183,6 +195,27 @@ const std::shared_ptr<mc_tasks::force::ImpedanceTask> RetargetingManager::retarg
   return std::dynamic_pointer_cast<mc_tasks::force::ImpedanceTask>(retargetingTask());
 }
 
+void RetargetingManager::updateValidity()
+{
+  bool isValid = true;
+
+  if(isValid && !humanTargetPose_.has_value())
+  {
+    isValid = false;
+  }
+
+  if(isValid && (targetPoseLatestTime_ < ctl().t() - config_.targetPoseExpirationDuration))
+  {
+    isValid = false;
+  }
+
+  if(!isValid)
+  {
+    humanTargetPose_ = std::nullopt;
+    robotTargetPose_ = std::nullopt;
+  }
+}
+
 void RetargetingManager::targetPoseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg)
 {
   const auto & poseMsg = poseStMsg->pose;
@@ -192,4 +225,5 @@ void RetargetingManager::targetPoseCallback(const geometry_msgs::PoseStamped::Co
           .toRotationMatrix()
           .transpose(),
       Eigen::Vector3d(poseMsg.position.x, poseMsg.position.y, poseMsg.position.z));
+  targetPoseLatestTime_ = ctl().t();
 }

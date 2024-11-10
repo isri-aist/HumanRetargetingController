@@ -28,6 +28,9 @@ class RetargetingManagerSet : public std::unordered_map<std::string, std::shared
     //! Topic name of base pose
     std::string basePoseTopicName = "/hrc/poses/base";
 
+    //! Expiration duration of base pose [s]
+    double basePoseExpirationDuration = 3.0;
+
     //! Base marker size (width, height) [m]
     Eigen::Vector2d baseMarkerSize = Eigen::Vector2d(0.4, 0.5);
 
@@ -93,6 +96,15 @@ protected:
     return *ctlPtr_;
   }
 
+  /** \brief Update the validity of base pose. */
+  void updateValidity();
+
+  /** \brief Update the task enablement. */
+  void updateTaskEnablement();
+
+  /** \brief Update GUI. */
+  void updateGUI();
+
   /** \brief ROS callback of base pose topic. */
   void basePoseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg);
 
@@ -111,6 +123,9 @@ protected:
 
   //! Robot base pose represented in world frame
   sva::PTransformd robotBasePose_ = sva::PTransformd::Identity();
+
+  //! Time when the latest base pose was obtained
+  double basePoseLatestTime_ = -1;
 
   //! ROS node handle
   std::shared_ptr<ros::NodeHandle> nh_;
