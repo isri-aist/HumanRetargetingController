@@ -11,6 +11,8 @@
 #include <ros/callback_queue.h>
 #include <ros/ros.h>
 
+#include <HumanRetargetingController/RetargetingPhase.h>
+
 namespace mc_tasks
 {
 struct TransformTask;
@@ -114,6 +116,9 @@ public:
   /** \brief Disable the retargeting task. */
   void disableTask();
 
+  /** \brief Freeze the retargeting task. */
+  void freezeTask();
+
 protected:
   /** \brief Const accessor to the controller. */
   inline const HumanRetargetingController & ctl() const
@@ -158,8 +163,8 @@ protected:
   //! Pointer to controller
   HumanRetargetingController * ctlPtr_ = nullptr;
 
-  //! Whether the retargeting task is enabled
-  bool isTaskEnabled_ = false;
+  //! Retargeting phase
+  RetargetingPhase retargetingPhase_ = RetargetingPhase::Disabled;
 
   //! Pose of human target body part represented in world frame
   std::optional<sva::PTransformd> humanTargetPose_ = std::nullopt;

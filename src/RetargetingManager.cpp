@@ -39,7 +39,7 @@ RetargetingManager::RetargetingManager(HumanRetargetingController * ctlPtr, cons
 
 void RetargetingManager::reset()
 {
-  isTaskEnabled_ = false;
+  retargetingPhase_ = RetargetingPhase::Disabled;
   humanTargetPose_ = std::nullopt;
   robotTargetPose_ = std::nullopt;
   targetPoseLatestTime_ = -1;
@@ -59,15 +59,14 @@ void RetargetingManager::preUpdate()
 void RetargetingManager::postUpdate()
 {
   // Update target pose
-  if(humanTargetPose_.has_value())
+  if(humanTargetPose_.has_value() && humanBasePose().has_value())
   {
     robotTargetPose_ = humanTargetPose_.value() * humanBasePose().value().inv() * robotBasePose();
   }
 
-  // Update task
-  if(isTaskEnabled_)
+  // Update task target
+  if(retargetingPhase_ == RetargetingPhase::Enabled)
   {
-    // Update task target
     if(retargetingImpTask())
     {
       retargetingImpTask()->targetPose(robotTargetPose_.value());
@@ -79,20 +78,20 @@ void RetargetingManager::postUpdate()
       retargetingTask()->target(robotTargetPose_.value());
       retargetingTask()->targetVel(sva::MotionVecd::Zero());
     }
+  }
 
-    // Interpolate task stiffness
-    if(stiffnessRatioFunc_)
+  // Interpolate task stiffness
+  if(stiffnessRatioFunc_)
+  {
+    if(ctl().t() < stiffnessRatioFunc_->endTime())
     {
-      if(ctl().t() < stiffnessRatioFunc_->endTime())
-      {
-        double stiffnessRatio = (*stiffnessRatioFunc_)(ctl().t());
-        retargetingTask()->stiffness(stiffnessRatio * config_.stiffness);
-      }
-      else
-      {
-        retargetingTask()->stiffness(Eigen::VectorXd(config_.stiffness));
-        stiffnessRatioFunc_.reset();
-      }
+      double stiffnessRatio = (*stiffnessRatioFunc_)(ctl().t());
+      retargetingTask()->stiffness(stiffnessRatio * config_.stiffness);
+    }
+    else
+    {
+      retargetingTask()->stiffness(Eigen::VectorXd(config_.stiffness));
+      stiffnessRatioFunc_.reset();
     }
   }
 
@@ -120,7 +119,7 @@ void RetargetingManager::stop()
 void RetargetingManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
   gui.addElement({ctl().name(), config_.name, config_.bodyPart, "Status"},
-                 mc_rtc::gui::Label("isTaskEnabled", [this]() { return isTaskEnabled_; }));
+                 mc_rtc::gui::Label("RetargetingPhase", [this]() { return std::to_string(retargetingPhase_); }));
 }
 
 void RetargetingManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
@@ -140,34 +139,55 @@ void RetargetingManager::removeFromLogger(mc_rtc::Logger & logger)
 
 void RetargetingManager::enableTask()
 {
-  if(isTaskEnabled_)
+  if(retargetingPhase_ == RetargetingPhase::Enabled)
   {
-    mc_rtc::log::warning("[RetargetingManager({})] Task is already enabled.", config_.bodyPart);
+    mc_rtc::log::error("[RetargetingManager({})] Task is already enabled.", config_.bodyPart);
     return;
   }
 
-  isTaskEnabled_ = true;
+  if(retargetingPhase_ == RetargetingPhase::Disabled)
+  {
+    retargetingTask()->reset();
+    ctl().solver().addTask(retargetingTask());
+    retargetingTask()->stiffness(0.0);
 
-  retargetingTask()->reset();
-  ctl().solver().addTask(retargetingTask());
-  retargetingTask()->stiffness(0.0);
+    constexpr double stiffnessInterpDuration = 2.0; // [sec]
+    stiffnessRatioFunc_ = std::make_shared<TrajColl::CubicInterpolator<double>>(
+        std::map<double, double>{{ctl().t(), 0.0}, {ctl().t() + stiffnessInterpDuration, 1.0}});
+  }
 
-  constexpr double stiffnessInterpDuration = 2.0; // [sec]
-  stiffnessRatioFunc_ = std::make_shared<TrajColl::CubicInterpolator<double>>(
-      std::map<double, double>{{ctl().t(), 0.0}, {ctl().t() + stiffnessInterpDuration, 1.0}});
+  retargetingPhase_ = RetargetingPhase::Enabled;
 }
 
 void RetargetingManager::disableTask()
 {
-  if(!isTaskEnabled_)
+  if(retargetingPhase_ == RetargetingPhase::Disabled)
   {
-    mc_rtc::log::warning("[RetargetingManager({})] Task is already disabled.", config_.bodyPart);
+    mc_rtc::log::error("[RetargetingManager({})] Task is already disabled.", config_.bodyPart);
     return;
   }
 
-  isTaskEnabled_ = false;
-
   ctl().solver().removeTask(retargetingTask());
+
+  stiffnessRatioFunc_ = nullptr;
+
+  retargetingPhase_ = RetargetingPhase::Disabled;
+}
+
+void RetargetingManager::freezeTask()
+{
+  if(retargetingPhase_ == RetargetingPhase::Frozen)
+  {
+    mc_rtc::log::error("[RetargetingManager({})] Task is already frozen.", config_.bodyPart);
+    return;
+  }
+  else if(retargetingPhase_ == RetargetingPhase::Disabled)
+  {
+    mc_rtc::log::error("[RetargetingManager({})] Task cannot be frozen from the disabled phase.", config_.bodyPart);
+    return;
+  }
+
+  retargetingPhase_ = RetargetingPhase::Frozen;
 }
 
 std::shared_ptr<ros::NodeHandle> RetargetingManager::nh() const

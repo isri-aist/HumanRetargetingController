@@ -8,6 +8,8 @@
 #include <ros/callback_queue.h>
 #include <ros/ros.h>
 
+#include <HumanRetargetingController/RetargetingPhase.h>
+
 namespace HRC
 {
 /** \brief Set of RetargetingManager. */
@@ -115,8 +117,8 @@ protected:
   //! Pointer to controller
   HumanRetargetingController * ctlPtr_ = nullptr;
 
-  //! Whether the retargeting task is enabled
-  bool isTaskEnabled_ = false;
+  //! Retargeting phase
+  RetargetingPhase retargetingPhase_ = RetargetingPhase::Disabled;
 
   //! Human base pose represented in world frame
   std::optional<sva::PTransformd> humanBasePose_ = std::nullopt;

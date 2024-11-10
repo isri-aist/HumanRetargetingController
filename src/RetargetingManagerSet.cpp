@@ -37,7 +37,7 @@ RetargetingManagerSet::RetargetingManagerSet(HumanRetargetingController * ctlPtr
 
 void RetargetingManagerSet::reset()
 {
-  isTaskEnabled_ = false;
+  retargetingPhase_ = RetargetingPhase::Disabled;
   humanBasePose_ = std::nullopt;
   robotBasePose_ = sva::PTransformd::Identity();
   basePoseLatestTime_ = -1;
@@ -119,7 +119,7 @@ void RetargetingManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
   }
 
   gui.addElement({ctl().name(), config_.name, "Status"},
-                 mc_rtc::gui::Label("isTaskEnabled", [this]() { return isTaskEnabled_; }));
+                 mc_rtc::gui::Label("RetargetingPhase", [this]() { return std::to_string(retargetingPhase_); }));
 }
 
 void RetargetingManagerSet::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
@@ -186,16 +186,16 @@ void RetargetingManagerSet::updateTaskEnablement()
     }
   }
 
-  if(isTaskEnabled_)
+  if(retargetingPhase_ == RetargetingPhase::Enabled)
   {
     if(!isReady)
     {
-      isTaskEnabled_ = false;
-      mc_rtc::log::error("[RetargetingManagerSet] Disable retargeting tasks.");
+      retargetingPhase_ = RetargetingPhase::Frozen;
+      mc_rtc::log::warning("[RetargetingManagerSet] Freeze retargeting tasks.");
 
       for(const auto & limbManagerKV : *this)
       {
-        limbManagerKV.second->disableTask();
+        limbManagerKV.second->freezeTask();
       }
     }
   }
@@ -203,7 +203,7 @@ void RetargetingManagerSet::updateTaskEnablement()
   {
     if(isReady)
     {
-      isTaskEnabled_ = true;
+      retargetingPhase_ = RetargetingPhase::Enabled;
       mc_rtc::log::success("[RetargetingManagerSet] Enable retargeting tasks.");
 
       for(const auto & limbManagerKV : *this)
