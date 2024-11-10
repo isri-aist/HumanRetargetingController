@@ -21,6 +21,7 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
   mcRtcConfig("basePoseTopicName", basePoseTopicName);
   mcRtcConfig("basePoseExpirationDuration", basePoseExpirationDuration);
   mcRtcConfig("targetDistThre", targetDistThre);
+  mcRtcConfig("targetVelThre", targetVelThre);
   mcRtcConfig("baseMarkerSize", baseMarkerSize);
 }
 
@@ -187,10 +188,21 @@ void RetargetingManagerSet::updateValidity()
       }
       if(limbManagerKV.second->humanTargetPose_.has_value())
       {
-        if((limbManagerKV.second->humanTargetPose_.value() * humanBasePose_.value().inv()).translation().norm()
-           > config_.targetDistThre)
+        // Check target pose distance for safety
+        double targetDist =
+            (limbManagerKV.second->humanTargetPose_.value() * humanBasePose_.value().inv()).translation().norm();
+        if(targetDist > config_.targetDistThre)
         {
           isReady_ = false;
+          continue;
+        }
+
+        // Check target pose velocity for safety
+        const auto & targetVel = limbManagerKV.second->humanTargetPoseVel();
+        if(targetVel.has_value() && targetVel.value().linear().norm() > config_.targetVelThre)
+        {
+          isReady_ = false;
+          continue;
         }
       }
       else

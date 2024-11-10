@@ -41,6 +41,7 @@ void RetargetingManager::reset()
 {
   retargetingPhase_ = RetargetingPhase::Disabled;
   humanTargetPose_ = std::nullopt;
+  humanTargetPosePrev_ = std::nullopt;
   robotTargetPose_ = std::nullopt;
   targetPoseLatestTime_ = -1;
   stiffnessRatioFunc_ = nullptr;
@@ -232,12 +233,25 @@ void RetargetingManager::updateValidity()
   if(!poseValid)
   {
     humanTargetPose_ = std::nullopt;
+    humanTargetPosePrev_ = std::nullopt;
     robotTargetPose_ = std::nullopt;
   }
 }
 
+std::optional<sva::MotionVecd> RetargetingManager::humanTargetPoseVel() const
+{
+  if(!(humanTargetPose_.has_value() && humanTargetPosePrev_.has_value()))
+  {
+    return std::nullopt;
+  }
+
+  return sva::transformVelocity(humanTargetPose_.value() * humanTargetPosePrev_.value().inv());
+}
+
 void RetargetingManager::targetPoseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg)
 {
+  humanTargetPosePrev_ = humanTargetPose_;
+
   const auto & poseMsg = poseStMsg->pose;
   humanTargetPose_ = sva::PTransformd(
       Eigen::Quaterniond(poseMsg.orientation.w, poseMsg.orientation.x, poseMsg.orientation.y, poseMsg.orientation.z)

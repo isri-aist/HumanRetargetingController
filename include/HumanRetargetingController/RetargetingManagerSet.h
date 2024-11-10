@@ -36,6 +36,9 @@ class RetargetingManagerSet : public std::unordered_map<std::string, std::shared
     //! Distance threshold from base to target body part [m]
     double targetDistThre = 2.0;
 
+    //! Velocity (difference from last pose) threshold of target body part
+    double targetVelThre = 0.5;
+
     //! Base marker size (width, height) [m]
     Eigen::Vector2d baseMarkerSize = Eigen::Vector2d(0.4, 0.5);
 

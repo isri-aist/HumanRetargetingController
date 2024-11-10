@@ -153,6 +153,9 @@ protected:
   /** \brief Update the validity. */
   void updateValidity();
 
+  /** \brief Calculate velocity (difference from last pose) of human target body part. */
+  std::optional<sva::MotionVecd> humanTargetPoseVel() const;
+
   /** \brief ROS callback of target pose topic. */
   void targetPoseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg);
 
@@ -168,6 +171,9 @@ protected:
 
   //! Pose of human target body part represented in world frame
   std::optional<sva::PTransformd> humanTargetPose_ = std::nullopt;
+
+  //! Previous pose of human target body part represented in world frame
+  std::optional<sva::PTransformd> humanTargetPosePrev_ = std::nullopt;
 
   //! Pose of robot target body part represented in world frame
   std::optional<sva::PTransformd> robotTargetPose_ = std::nullopt;
