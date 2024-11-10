@@ -140,7 +140,12 @@ void RetargetingManagerSet::addToLogger(mc_rtc::Logger & logger)
     limbManagerKV.second->addToLogger(logger);
   }
 
-  // TODO
+  logger.addLogEntry(config_.name + "_retargetingPhase", this, [this]() { return std::to_string(retargetingPhase_); });
+  MC_RTC_LOG_HELPER(config_.name + "_isReady", isReady_);
+
+  logger.addLogEntry(config_.name + "_humanBasePose", this,
+                     [this]() { return humanBasePose_.value_or(sva::PTransformd::Identity()); });
+  MC_RTC_LOG_HELPER(config_.name + "_robotBasePose", robotBasePose_);
 }
 
 void RetargetingManagerSet::removeFromLogger(mc_rtc::Logger & // logger

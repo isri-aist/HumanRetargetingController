@@ -119,7 +119,7 @@ void RetargetingManager::stop()
 void RetargetingManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
   gui.addElement({ctl().name(), config_.name, config_.bodyPart, "Status"},
-                 mc_rtc::gui::Label("RetargetingPhase", [this]() { return std::to_string(retargetingPhase_); }));
+                 mc_rtc::gui::Label("retargetingPhase", [this]() { return std::to_string(retargetingPhase_); }));
 }
 
 void RetargetingManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
@@ -129,7 +129,14 @@ void RetargetingManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
 
 void RetargetingManager::addToLogger(mc_rtc::Logger & logger)
 {
-  // TODO
+  std::string name = config_.name + "_" + config_.bodyPart;
+
+  logger.addLogEntry(name + "_retargetingPhase", this, [this]() { return std::to_string(retargetingPhase_); });
+
+  logger.addLogEntry(name + "_humanTargetPose", this,
+                     [this]() { return humanTargetPose_.value_or(sva::PTransformd::Identity()); });
+  logger.addLogEntry(name + "_robotTargetPose", this,
+                     [this]() { return robotTargetPose_.value_or(sva::PTransformd::Identity()); });
 }
 
 void RetargetingManager::removeFromLogger(mc_rtc::Logger & logger)
