@@ -1,4 +1,5 @@
 #include <mc_rtc/gui/Arrow.h>
+#include <mc_rtc/gui/Button.h>
 #include <mc_rtc/gui/Label.h>
 #include <mc_rtc/gui/Point3D.h>
 
@@ -37,6 +38,7 @@ RetargetingManagerSet::RetargetingManagerSet(HumanRetargetingController * ctlPtr
 
 void RetargetingManagerSet::reset()
 {
+  isReady_ = false;
   retargetingPhase_ = RetargetingPhase::Disabled;
   humanBasePose_ = std::nullopt;
   robotBasePose_ = sva::PTransformd::Identity();
@@ -85,7 +87,6 @@ void RetargetingManagerSet::update()
 
   // Common update
   updateValidity();
-  updateTaskEnablement();
 
   // Update each RetargetingManager
   for(const auto & limbManagerKV : *this)
@@ -119,7 +120,8 @@ void RetargetingManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
   }
 
   gui.addElement({ctl().name(), config_.name, "Status"},
-                 mc_rtc::gui::Label("RetargetingPhase", [this]() { return std::to_string(retargetingPhase_); }));
+                 mc_rtc::gui::Label("retargetingPhase", [this]() { return std::to_string(retargetingPhase_); }),
+                 mc_rtc::gui::Label("isReady", [this]() { return isReady_ ? "Yes" : "No"; }));
 }
 
 void RetargetingManagerSet::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
@@ -147,77 +149,107 @@ void RetargetingManagerSet::removeFromLogger(mc_rtc::Logger & // logger
 
 void RetargetingManagerSet::updateValidity()
 {
-  bool isValid = true;
-
-  if(isValid && !humanBasePose_.has_value())
+  // Check pose validity
   {
-    isValid = false;
-  }
+    bool isValid = true;
 
-  if(isValid && (basePoseLatestTime_ < ctl().t() - config_.basePoseExpirationDuration))
-  {
-    isValid = false;
-  }
-
-  if(!isValid)
-  {
-    humanBasePose_ = std::nullopt;
-  }
-}
-
-void RetargetingManagerSet::updateTaskEnablement()
-{
-  bool isReady = true;
-
-  if(isReady && !humanBasePose_.has_value())
-  {
-    isReady = false;
-  }
-
-  for(const auto & limbManagerKV : *this)
-  {
-    if(!isReady)
+    if(isValid && !humanBasePose_.has_value())
     {
-      break;
+      isValid = false;
     }
-    if(!limbManagerKV.second->humanTargetPose_.has_value())
+
+    if(isValid && (basePoseLatestTime_ < ctl().t() - config_.basePoseExpirationDuration))
     {
-      isReady = false;
+      isValid = false;
+    }
+
+    if(!isValid)
+    {
+      humanBasePose_ = std::nullopt;
     }
   }
 
-  if(retargetingPhase_ == RetargetingPhase::Enabled)
+  // Check readiness
   {
-    if(!isReady)
-    {
-      retargetingPhase_ = RetargetingPhase::Frozen;
-      mc_rtc::log::warning("[RetargetingManagerSet] Freeze retargeting tasks.");
+    isReady_ = true;
 
-      for(const auto & limbManagerKV : *this)
+    if(isReady_ && !humanBasePose_.has_value())
+    {
+      isReady_ = false;
+    }
+
+    for(const auto & limbManagerKV : *this)
+    {
+      if(!isReady_)
       {
-        limbManagerKV.second->freezeTask();
+        break;
+      }
+      if(!limbManagerKV.second->humanTargetPose_.has_value())
+      {
+        isReady_ = false;
       }
     }
   }
-  else
-  {
-    if(isReady)
-    {
-      retargetingPhase_ = RetargetingPhase::Enabled;
-      mc_rtc::log::success("[RetargetingManagerSet] Enable retargeting tasks.");
 
-      for(const auto & limbManagerKV : *this)
-      {
-        limbManagerKV.second->enableTask();
-      }
+  // Freeze retargeting if not ready
+  if(retargetingPhase_ == RetargetingPhase::Enabled && !isReady_)
+  {
+    retargetingPhase_ = RetargetingPhase::Frozen;
+    mc_rtc::log::warning("[RetargetingManagerSet] Freeze retargeting.");
+
+    for(const auto & limbManagerKV : *this)
+    {
+      limbManagerKV.second->freeze();
     }
   }
 }
 
 void RetargetingManagerSet::updateGUI()
 {
+  // Add buttons
+  ctl().gui()->removeElement({ctl().name(), config_.name}, "EnableRetargeting");
+  ctl().gui()->removeElement({ctl().name(), config_.name}, "DisableRetargeting");
+  ctl().gui()->removeElement({ctl().name(), config_.name}, "FreezeRetargeting");
+  if(isReady_ && retargetingPhase_ != RetargetingPhase::Enabled)
+  {
+    ctl().gui()->addElement({ctl().name(), config_.name}, mc_rtc::gui::Button("EnableRetargeting", [this]() {
+                              retargetingPhase_ = RetargetingPhase::Enabled;
+                              mc_rtc::log::success("[RetargetingManagerSet] Enable retargeting.");
+
+                              for(const auto & limbManagerKV : *this)
+                              {
+                                limbManagerKV.second->enable();
+                              }
+                            }));
+  }
+  if(retargetingPhase_ != RetargetingPhase::Disabled)
+  {
+    ctl().gui()->addElement({ctl().name(), config_.name}, mc_rtc::gui::Button("DisableRetargeting", [this]() {
+                              retargetingPhase_ = RetargetingPhase::Disabled;
+                              mc_rtc::log::success("[RetargetingManagerSet] Disable retargeting.");
+
+                              for(const auto & limbManagerKV : *this)
+                              {
+                                limbManagerKV.second->disable();
+                              }
+                            }));
+  }
+  if(retargetingPhase_ == RetargetingPhase::Enabled)
+  {
+    ctl().gui()->addElement({ctl().name(), config_.name}, mc_rtc::gui::Button("FreezeRetargeting", [this]() {
+                              retargetingPhase_ = RetargetingPhase::Frozen;
+                              mc_rtc::log::success("[RetargetingManagerSet] Freeze retargeting.");
+
+                              for(const auto & limbManagerKV : *this)
+                              {
+                                limbManagerKV.second->freeze();
+                              }
+                            }));
+  }
+
+  // Add markers
   mc_rtc::gui::Color pointColor = mc_rtc::gui::Color(0.0, 1.0, 0.0, 0.5);
-  mc_rtc::gui::Color arrowColor = mc_rtc::gui::Color(0.0, 0.4, 0.2, 0.6);
+  mc_rtc::gui::Color arrowColor = mc_rtc::gui::Color(0.2, 0.4, 0.2, 0.6);
 
   ctl().gui()->removeCategory({ctl().name(), config_.name, "Marker"});
 

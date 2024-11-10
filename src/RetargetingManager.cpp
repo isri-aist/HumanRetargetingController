@@ -137,7 +137,7 @@ void RetargetingManager::removeFromLogger(mc_rtc::Logger & logger)
   logger.removeLogEntries(this);
 }
 
-void RetargetingManager::enableTask()
+void RetargetingManager::enable()
 {
   if(retargetingPhase_ == RetargetingPhase::Enabled)
   {
@@ -159,7 +159,7 @@ void RetargetingManager::enableTask()
   retargetingPhase_ = RetargetingPhase::Enabled;
 }
 
-void RetargetingManager::disableTask()
+void RetargetingManager::disable()
 {
   if(retargetingPhase_ == RetargetingPhase::Disabled)
   {
@@ -174,7 +174,7 @@ void RetargetingManager::disableTask()
   retargetingPhase_ = RetargetingPhase::Disabled;
 }
 
-void RetargetingManager::freezeTask()
+void RetargetingManager::freeze()
 {
   if(retargetingPhase_ == RetargetingPhase::Frozen)
   {

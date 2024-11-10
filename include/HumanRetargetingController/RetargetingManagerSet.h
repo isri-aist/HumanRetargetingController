@@ -98,11 +98,8 @@ protected:
     return *ctlPtr_;
   }
 
-  /** \brief Update the validity of base pose. */
+  /** \brief Update the validity. */
   void updateValidity();
-
-  /** \brief Update the task enablement. */
-  void updateTaskEnablement();
 
   /** \brief Update GUI. */
   void updateGUI();
@@ -116,6 +113,9 @@ protected:
 
   //! Pointer to controller
   HumanRetargetingController * ctlPtr_ = nullptr;
+
+  //! Whether it is ready for retargeting
+  bool isReady_ = false;
 
   //! Retargeting phase
   RetargetingPhase retargetingPhase_ = RetargetingPhase::Disabled;

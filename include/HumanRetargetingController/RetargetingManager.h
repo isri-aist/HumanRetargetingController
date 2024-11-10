@@ -110,14 +110,14 @@ public:
   /** \brief Remove entries from the logger. */
   void removeFromLogger(mc_rtc::Logger & logger);
 
-  /** \brief Enable the retargeting task. */
-  void enableTask();
+  /** \brief Enable retargeting. */
+  void enable();
 
-  /** \brief Disable the retargeting task. */
-  void disableTask();
+  /** \brief Disable retargeting. */
+  void disable();
 
-  /** \brief Freeze the retargeting task. */
-  void freezeTask();
+  /** \brief Freeze retargeting. */
+  void freeze();
 
 protected:
   /** \brief Const accessor to the controller. */
@@ -150,7 +150,7 @@ protected:
    */
   const std::shared_ptr<mc_tasks::force::ImpedanceTask> retargetingImpTask() const;
 
-  /** \brief Update the validity of target pose. */
+  /** \brief Update the validity. */
   void updateValidity();
 
   /** \brief ROS callback of target pose topic. */
