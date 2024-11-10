@@ -33,6 +33,9 @@ class RetargetingManagerSet : public std::unordered_map<std::string, std::shared
     //! Expiration duration of base pose [s]
     double basePoseExpirationDuration = 3.0;
 
+    //! Distance threshold from base to target body part [m]
+    double targetDistThre = 2.0;
+
     //! Base marker size (width, height) [m]
     Eigen::Vector2d baseMarkerSize = Eigen::Vector2d(0.4, 0.5);
 

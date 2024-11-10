@@ -20,6 +20,7 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
   mcRtcConfig("baseFrame", baseFrame);
   mcRtcConfig("basePoseTopicName", basePoseTopicName);
   mcRtcConfig("basePoseExpirationDuration", basePoseExpirationDuration);
+  mcRtcConfig("targetDistThre", targetDistThre);
   mcRtcConfig("baseMarkerSize", baseMarkerSize);
 }
 
@@ -184,7 +185,15 @@ void RetargetingManagerSet::updateValidity()
       {
         break;
       }
-      if(!limbManagerKV.second->humanTargetPose_.has_value())
+      if(limbManagerKV.second->humanTargetPose_.has_value())
+      {
+        if((limbManagerKV.second->humanTargetPose_.value() * humanBasePose_.value().inv()).translation().norm()
+           > config_.targetDistThre)
+        {
+          isReady_ = false;
+        }
+      }
+      else
       {
         isReady_ = false;
       }

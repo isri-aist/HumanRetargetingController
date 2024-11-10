@@ -198,6 +198,7 @@ RetargetingManagerSet:
   name: RetargetingManagerSet
   basePoseTopicName: /hrc/poses/waist
   basePoseExpirationDuration: 3.0 # [s]
+  targetDistThre: 2.0 # [m]
   baseMarkerSize: [0.4, 0.5] # [m]
   RetargetingManagerList:
     - name: RetargetingManager
