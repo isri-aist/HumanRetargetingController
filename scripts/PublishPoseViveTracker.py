@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 
+import sys
 import numpy as np
+import json
 import rospy
 from tf import transformations
 from geometry_msgs.msg import PoseStamped
@@ -20,6 +22,12 @@ class PublishPoseViveTracker(object):
             "LHR-1FB29FC6": "left_elbow",
             "LHR-301CBF17": "left_hand",
         }
+        if len(sys.argv) >= 2:
+            import yaml
+            from pathlib import Path
+            self.device_sn_to_body_part_map = yaml.safe_load(Path(sys.argv[1]).read_text())
+
+        rospy.loginfo("Map from device SN to body part:\n{}".format(json.dumps(self.device_sn_to_body_part_map, indent=4)))
 
         self.pub_managers = {}
         for body_part in self.device_sn_to_body_part_map.values():
@@ -30,6 +38,8 @@ class PublishPoseViveTracker(object):
 
     def run(self):
         rate = rospy.Rate(30)
+        print_info = True
+
         while not rospy.is_shutdown():
             self.current_stamp = rospy.Time.now()
 
@@ -38,12 +48,17 @@ class PublishPoseViveTracker(object):
                 0,
                 openvr.k_unMaxTrackedDeviceCount)
 
+            if print_info:
+                rospy.loginfo("Device info:")
             for device_idx in range(openvr.k_unMaxTrackedDeviceCount):
-                self.processSingleDeviceData(device_idx)
+                self.processSingleDeviceData(device_idx, print_info)
+
+            if print_info:
+                print_info = False
 
             rate.sleep()
 
-    def processSingleDeviceData(self, device_idx):
+    def processSingleDeviceData(self, device_idx, print_info=False):
         if not self.device_data_list[device_idx].bDeviceIsConnected:
             return
 
@@ -51,6 +66,17 @@ class PublishPoseViveTracker(object):
         device_sn = self.vr_system.getStringTrackedDeviceProperty(device_idx, openvr.Prop_SerialNumber_String)
         is_device_pose_valid = self.device_data_list[device_idx].bPoseIsValid
         device_pose_matrix = self.device_data_list[device_idx].mDeviceToAbsoluteTracking
+
+        if print_info:
+            if device_type == openvr.TrackedDeviceClass_GenericTracker:
+                device_type_str = "Tracker"
+            elif device_type == openvr.TrackedDeviceClass_Controller:
+                device_type_str = "Controller"
+            elif device_type == openvr.TrackedDeviceClass_TrackingReference:
+                device_type_str = "BaseStation"
+            elif device_type == openvr.TrackedDeviceClass_HMD:
+                device_type_str = "HMD"
+            rospy.loginfo("  - {}: {}".format(device_type_str, device_sn))
 
         if device_sn not in self.device_sn_to_body_part_map:
             return
