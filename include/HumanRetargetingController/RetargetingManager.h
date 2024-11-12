@@ -107,15 +107,6 @@ public:
   /** \brief Remove entries from the logger. */
   void removeFromLogger(mc_rtc::Logger & logger);
 
-  /** \brief Enable retargeting. */
-  void enable();
-
-  /** \brief Disable retargeting. */
-  void disable();
-
-  /** \brief Freeze retargeting. */
-  void freeze();
-
 protected:
   /** \brief Const accessor to the controller. */
   inline const HumanRetargetingController & ctl() const
@@ -128,6 +119,15 @@ protected:
   {
     return *ctlPtr_;
   }
+
+  /** \brief Enable retargeting. */
+  void enable();
+
+  /** \brief Disable retargeting. */
+  void disable();
+
+  /** \brief Freeze retargeting. */
+  void freeze();
 
   /** \brief Accessor to the ROS node handle. */
   std::shared_ptr<ros::NodeHandle> nh() const;

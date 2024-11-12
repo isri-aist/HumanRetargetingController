@@ -104,8 +104,20 @@ protected:
     return *ctlPtr_;
   }
 
+  /** \brief Enable retargeting. */
+  void enable();
+
+  /** \brief Disable retargeting. */
+  void disable();
+
+  /** \brief Freeze retargeting. */
+  void freeze();
+
   /** \brief Update the validity. */
   void updateValidity();
+
+  /** \brief Update the phase. */
+  void updatePhase();
 
   /** \brief Update GUI. */
   void updateGUI();

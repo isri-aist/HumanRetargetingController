@@ -12,6 +12,8 @@
 #include <HumanRetargetingController/MathUtils.h>
 #include <HumanRetargetingController/RetargetingManagerSet.h>
 
+#include <sensor_msgs/Joy.h>
+
 using namespace HRC;
 
 void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mcRtcConfig)
@@ -87,8 +89,9 @@ void RetargetingManagerSet::update()
                                     .rotation();
   }
 
-  // Update validity
+  // Common update
   updateValidity();
+  updatePhase();
 
   // Update each RetargetingManager
   for(const auto & limbManagerKV : *this)
@@ -152,6 +155,39 @@ void RetargetingManagerSet::removeFromLogger(mc_rtc::Logger & // logger
 )
 {
   // Log of each RetargetingManager is not removed here (removed via stop method)
+}
+
+void RetargetingManagerSet::enable()
+{
+  retargetingPhase_ = RetargetingPhase::Enabled;
+  mc_rtc::log::success("[RetargetingManagerSet] Enable retargeting.");
+
+  for(const auto & limbManagerKV : *this)
+  {
+    limbManagerKV.second->enable();
+  }
+}
+
+void RetargetingManagerSet::disable()
+{
+  retargetingPhase_ = RetargetingPhase::Disabled;
+  mc_rtc::log::success("[RetargetingManagerSet] Disable retargeting.");
+
+  for(const auto & limbManagerKV : *this)
+  {
+    limbManagerKV.second->disable();
+  }
+}
+
+void RetargetingManagerSet::freeze()
+{
+  retargetingPhase_ = RetargetingPhase::Frozen;
+  mc_rtc::log::success("[RetargetingManagerSet] Freeze retargeting.");
+
+  for(const auto & limbManagerKV : *this)
+  {
+    limbManagerKV.second->freeze();
+  }
 }
 
 void RetargetingManagerSet::updateValidity()
@@ -220,12 +256,64 @@ void RetargetingManagerSet::updateValidity()
   // Freeze retargeting if not ready
   if(retargetingPhase_ == RetargetingPhase::Enabled && !isReady_)
   {
-    retargetingPhase_ = RetargetingPhase::Frozen;
-    mc_rtc::log::warning("[RetargetingManagerSet] Freeze retargeting.");
+    freeze();
+  }
+}
 
-    for(const auto & limbManagerKV : *this)
+void RetargetingManagerSet::updatePhase()
+{
+  bool advanceFlag = false;
+  bool backwardFlag = false;
+  bool suspendFlag = false;
+
+  if(ctl().datastore().has("HRC::ViveRos::LeftHandJoyMsg"))
+  {
+    sensor_msgs::Joy leftHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::LeftHandJoyMsg");
+    if(leftHandJoyMsg.buttons[0])
     {
-      limbManagerKV.second->freeze();
+      backwardFlag = true;
+    }
+    if(leftHandJoyMsg.buttons[1])
+    {
+      suspendFlag = true;
+    }
+
+    ctl().datastore().remove("HRC::ViveRos::LeftHandJoyMsg");
+  }
+  if(ctl().datastore().has("HRC::ViveRos::RightHandJoyMsg"))
+  {
+    sensor_msgs::Joy rightHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::RightHandJoyMsg");
+    if(rightHandJoyMsg.buttons[0])
+    {
+      advanceFlag = true;
+    }
+    if(rightHandJoyMsg.buttons[1])
+    {
+      suspendFlag = true;
+    }
+
+    ctl().datastore().remove("HRC::ViveRos::RightHandJoyMsg");
+  }
+
+  if(isReady_ && retargetingPhase_ != RetargetingPhase::Enabled)
+  {
+    if(advanceFlag)
+    {
+      enable();
+    }
+  }
+  if(retargetingPhase_ != RetargetingPhase::Disabled)
+  {
+    if(backwardFlag)
+    {
+      disable();
+    }
+  }
+  if(retargetingPhase_ == RetargetingPhase::Enabled)
+  {
+    if(suspendFlag)
+    {
+      freeze();
     }
   }
 }
@@ -238,39 +326,18 @@ void RetargetingManagerSet::updateGUI()
   ctl().gui()->removeElement({ctl().name(), config_.name}, "FreezeRetargeting");
   if(isReady_ && retargetingPhase_ != RetargetingPhase::Enabled)
   {
-    ctl().gui()->addElement({ctl().name(), config_.name}, mc_rtc::gui::Button("EnableRetargeting", [this]() {
-                              retargetingPhase_ = RetargetingPhase::Enabled;
-                              mc_rtc::log::success("[RetargetingManagerSet] Enable retargeting.");
-
-                              for(const auto & limbManagerKV : *this)
-                              {
-                                limbManagerKV.second->enable();
-                              }
-                            }));
+    ctl().gui()->addElement({ctl().name(), config_.name},
+                            mc_rtc::gui::Button("EnableRetargeting", [this]() { enable(); }));
   }
   if(retargetingPhase_ != RetargetingPhase::Disabled)
   {
-    ctl().gui()->addElement({ctl().name(), config_.name}, mc_rtc::gui::Button("DisableRetargeting", [this]() {
-                              retargetingPhase_ = RetargetingPhase::Disabled;
-                              mc_rtc::log::success("[RetargetingManagerSet] Disable retargeting.");
-
-                              for(const auto & limbManagerKV : *this)
-                              {
-                                limbManagerKV.second->disable();
-                              }
-                            }));
+    ctl().gui()->addElement({ctl().name(), config_.name},
+                            mc_rtc::gui::Button("DisableRetargeting", [this]() { disable(); }));
   }
   if(retargetingPhase_ == RetargetingPhase::Enabled)
   {
-    ctl().gui()->addElement({ctl().name(), config_.name}, mc_rtc::gui::Button("FreezeRetargeting", [this]() {
-                              retargetingPhase_ = RetargetingPhase::Frozen;
-                              mc_rtc::log::success("[RetargetingManagerSet] Freeze retargeting.");
-
-                              for(const auto & limbManagerKV : *this)
-                              {
-                                limbManagerKV.second->freeze();
-                              }
-                            }));
+    ctl().gui()->addElement({ctl().name(), config_.name},
+                            mc_rtc::gui::Button("FreezeRetargeting", [this]() { freeze(); }));
   }
 
   // Add markers
