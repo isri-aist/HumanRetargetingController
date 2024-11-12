@@ -6,6 +6,7 @@ import json
 import rospy
 from tf import transformations
 from geometry_msgs.msg import PoseStamped
+from sensor_msgs.msg import Joy
 import openvr
 
 from PublishManager import PublishManager
@@ -29,9 +30,10 @@ class PublishPoseViveTracker(object):
 
         rospy.loginfo("Map from device SN to body part:\n{}".format(json.dumps(self.device_sn_to_body_part_map, indent=4)))
 
-        self.pub_managers = {}
+        self.pose_pub_managers = {}
+        self.joy_pub_managers = {}
         for body_part in self.device_sn_to_body_part_map.values():
-            self.pub_managers[body_part] = PublishManager(body_part)
+            self.pose_pub_managers[body_part] = PublishManager(body_part)
 
     def __del__(self):
         openvr.shutdown()
@@ -106,8 +108,29 @@ class PublishPoseViveTracker(object):
         pose_msg.pose.orientation.z = quat[2]
         pose_msg.pose.orientation.w = quat[3]
 
-        self.pub_managers[body_part].setPoseMsg(pose_msg)
-        self.pub_managers[body_part].publishPoseMsg()
+        self.pose_pub_managers[body_part].setMsg(pose_msg)
+        self.pose_pub_managers[body_part].publishMsg()
+
+        if device_type == openvr.TrackedDeviceClass_Controller:
+            if body_part not in self.joy_pub_managers:
+                self.joy_pub_managers[body_part] = PublishManager(body_part, msg_type=Joy, topic_prefix="hrc/joys")
+
+            device_state = self.vr_system.getControllerState(device_idx)[1]
+            trackpad_x = device_state.rAxis[0].x # -1.0 to 1.0
+            trackpad_y = device_state.rAxis[0].y # -1.0 to 1.0
+            trigger = device_state.rAxis[1].x # 0.0 to 1.0, where 0.0 is fully released
+            menu_button = bool(device_state.ulButtonPressed >> openvr.k_EButton_ApplicationMenu & 1)
+            grip_button = bool(device_state.ulButtonPressed >> openvr.k_EButton_Grip & 1)
+            trackpad_pressed = bool(device_state.ulButtonPressed >> openvr.k_EButton_SteamVR_Touchpad & 1)
+            trackpad_touched = bool(device_state.ulButtonTouched >> openvr.k_EButton_SteamVR_Touchpad & 1)
+
+            joy_msg = Joy()
+            joy_msg.header = pose_msg.header
+            joy_msg.axes = [trackpad_x, trackpad_y, trigger]
+            joy_msg.buttons = [menu_button, grip_button, trackpad_pressed, trackpad_touched]
+
+            self.joy_pub_managers[body_part].setMsg(joy_msg)
+            self.joy_pub_managers[body_part].publishMsg()
 
 if __name__ == "__main__":
     rospy.init_node("publish_pose_vive_tracker", anonymous=True)

@@ -105,13 +105,13 @@ class PublishPoseInteractiveMarker(object):
         pose_msg.pose = feedback.pose
 
         body_part = feedback.marker_name[len("hrc/"):]
-        self.pub_managers[body_part].setPoseMsg(pose_msg)
+        self.pub_managers[body_part].setMsg(pose_msg)
 
     def run(self):
         rate = rospy.Rate(30)
         while not rospy.is_shutdown():
             for body_part in self.pub_managers.keys():
-                self.pub_managers[body_part].publishPoseMsg()
+                self.pub_managers[body_part].publishMsg()
 
             rate.sleep()
 
