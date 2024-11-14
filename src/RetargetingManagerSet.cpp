@@ -24,6 +24,7 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
   mcRtcConfig("poseExpirationDuration", poseExpirationDuration);
   mcRtcConfig("targetDistThre", targetDistThre);
   mcRtcConfig("targetVelThre", targetVelThre);
+  mcRtcConfig("markerPointSize", markerPointSize);
   mcRtcConfig("baseMarkerSize", baseMarkerSize);
 }
 
@@ -347,14 +348,15 @@ void RetargetingManagerSet::updateGUI()
   ctl().gui()->removeCategory({ctl().name(), config_.name, "Marker"});
 
   ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
-                          mc_rtc::gui::Point3D("BasePoint", mc_rtc::gui::PointConfig(pointColor, 0.15),
+                          mc_rtc::gui::Point3D("BasePoint",
+                                               mc_rtc::gui::PointConfig(pointColor, config_.markerPointSize),
                                                [this]() { return robotBasePose_.translation(); }));
 
   for(const auto & side : std::vector<std::string>{"Left", "Right"})
   {
     ctl().gui()->addElement(
         {ctl().name(), config_.name, "Marker"},
-        mc_rtc::gui::Point3D(side + "ShoulderPoint", mc_rtc::gui::PointConfig(pointColor, 0.15),
+        mc_rtc::gui::Point3D(side + "ShoulderPoint", mc_rtc::gui::PointConfig(pointColor, config_.markerPointSize),
                              [this, side]() {
                                double sign = (side == "Left" ? 1.0 : -1.0);
                                return (sva::PTransformd(Eigen::Vector3d(0.0, sign * 0.5 * config_.baseMarkerSize[0],

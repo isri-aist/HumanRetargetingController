@@ -28,6 +28,7 @@ void RetargetingManager::Configuration::load(const mc_rtc::Configuration & mcRtc
       stiffness = mcRtcConfig("stiffness");
     }
   }
+  mcRtcConfig("markerPointSize", markerPointSize);
 }
 
 RetargetingManager::RetargetingManager(HumanRetargetingController * ctlPtr, const mc_rtc::Configuration & mcRtcConfig)
@@ -99,10 +100,11 @@ void RetargetingManager::postUpdate()
   ctl().gui()->removeCategory({ctl().name(), config_.name, config_.bodyPart, "Marker"});
   if(robotTargetPose_.has_value())
   {
-    ctl().gui()->addElement({ctl().name(), config_.name, config_.bodyPart, "Marker"},
-                            mc_rtc::gui::Point3D("TargetPoint",
-                                                 mc_rtc::gui::PointConfig(mc_rtc::gui::Color(0, 1, 0, 0.5), 0.15),
-                                                 [this]() { return robotTargetPose_.value().translation(); }));
+    ctl().gui()->addElement(
+        {ctl().name(), config_.name, config_.bodyPart, "Marker"},
+        mc_rtc::gui::Point3D("TargetPoint",
+                             mc_rtc::gui::PointConfig(mc_rtc::gui::Color(0, 1, 0, 0.5), config_.markerPointSize),
+                             [this]() { return robotTargetPose_.value().translation(); }));
   }
 }
 
