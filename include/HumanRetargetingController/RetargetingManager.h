@@ -53,7 +53,7 @@ public:
     Eigen::Vector6d stiffness = Eigen::Vector6d::Constant(1000);
 
     //! Marker point size
-    double markerPointSize = 0.15;
+    double pointMarkerSize = 0.15;
 
     /** \brief Load mc_rtc configuration.
         \param mcRtcConfig mc_rtc configuration

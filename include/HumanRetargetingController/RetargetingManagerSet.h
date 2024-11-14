@@ -39,11 +39,14 @@ class RetargetingManagerSet : public std::unordered_map<std::string, std::shared
     //! Velocity (difference from last pose) threshold of target body part
     double targetVelThre = 0.5;
 
-    //! Marker point size
-    double markerPointSize = 0.15;
+    //! Point marker size
+    double pointMarkerSize = 0.15;
 
     //! Base marker size (width, height) [m]
     Eigen::Vector2d baseMarkerSize = Eigen::Vector2d(0.4, 0.5);
+
+    //! Pose offset of phase marker
+    sva::PTransformd phaseMarkerPoseOffset = sva::PTransformd(Eigen::Vector3d(0.0, 0.0, 1.0));
 
     /** \brief Load mc_rtc configuration.
         \param mcRtcConfig mc_rtc configuration
@@ -124,6 +127,9 @@ protected:
 
   /** \brief Update GUI. */
   void updateGUI();
+
+  /** \brief Get the marker color of retargeting phase. */
+  mc_rtc::gui::Color getRetargetingPhaseColor() const;
 
   /** \brief ROS callback of base pose topic. */
   void basePoseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg);

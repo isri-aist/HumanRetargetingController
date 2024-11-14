@@ -1,5 +1,7 @@
 #include <mc_rtc/gui/Arrow.h>
 #include <mc_rtc/gui/Button.h>
+#include <mc_rtc/gui/Cylinder.h>
+#include <mc_rtc/gui/Ellipsoid.h>
 #include <mc_rtc/gui/Label.h>
 #include <mc_rtc/gui/Point3D.h>
 
@@ -24,8 +26,9 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
   mcRtcConfig("poseExpirationDuration", poseExpirationDuration);
   mcRtcConfig("targetDistThre", targetDistThre);
   mcRtcConfig("targetVelThre", targetVelThre);
-  mcRtcConfig("markerPointSize", markerPointSize);
+  mcRtcConfig("pointMarkerSize", pointMarkerSize);
   mcRtcConfig("baseMarkerSize", baseMarkerSize);
+  mcRtcConfig("phaseMarkerPoseOffset", phaseMarkerPoseOffset);
 }
 
 RetargetingManagerSet::RetargetingManagerSet(HumanRetargetingController * ctlPtr,
@@ -341,7 +344,7 @@ void RetargetingManagerSet::updateGUI()
                             mc_rtc::gui::Button("FreezeRetargeting", [this]() { freeze(); }));
   }
 
-  // Add markers
+  // Add pose markers
   mc_rtc::gui::Color pointColor = mc_rtc::gui::Color(0.0, 1.0, 0.0, 0.5);
   mc_rtc::gui::Color arrowColor = mc_rtc::gui::Color(0.2, 0.4, 0.2, 0.6);
 
@@ -349,14 +352,14 @@ void RetargetingManagerSet::updateGUI()
 
   ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
                           mc_rtc::gui::Point3D("BasePoint",
-                                               mc_rtc::gui::PointConfig(pointColor, config_.markerPointSize),
+                                               mc_rtc::gui::PointConfig(pointColor, config_.pointMarkerSize),
                                                [this]() { return robotBasePose_.translation(); }));
 
   for(const auto & side : std::vector<std::string>{"Left", "Right"})
   {
     ctl().gui()->addElement(
         {ctl().name(), config_.name, "Marker"},
-        mc_rtc::gui::Point3D(side + "ShoulderPoint", mc_rtc::gui::PointConfig(pointColor, config_.markerPointSize),
+        mc_rtc::gui::Point3D(side + "ShoulderPoint", mc_rtc::gui::PointConfig(pointColor, config_.pointMarkerSize),
                              [this, side]() {
                                double sign = (side == "Left" ? 1.0 : -1.0);
                                return (sva::PTransformd(Eigen::Vector3d(0.0, sign * 0.5 * config_.baseMarkerSize[0],
@@ -399,6 +402,40 @@ void RetargetingManagerSet::updateGUI()
                 [this, side]() { return this->at(side + "Hand")->robotTargetPose_.value().translation(); }));
       }
     }
+  }
+
+  // Add phase marker
+  if(isReady_)
+  {
+    ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
+                            mc_rtc::gui::Ellipsoid(
+                                "retargetingPhase", {0.2, 0.2, 0.15},
+                                [this]() { return config_.phaseMarkerPoseOffset * robotBasePose_; },
+                                [this]() { return getRetargetingPhaseColor(); }));
+  }
+  else
+  {
+    ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
+                            mc_rtc::gui::Cylinder(
+                                "retargetingPhase", {0.1, 0.01},
+                                [this]() { return config_.phaseMarkerPoseOffset * robotBasePose_; },
+                                [this]() { return getRetargetingPhaseColor(); }));
+  }
+}
+
+mc_rtc::gui::Color RetargetingManagerSet::getRetargetingPhaseColor() const
+{
+  if(retargetingPhase_ == RetargetingPhase::Enabled)
+  {
+    return mc_rtc::gui::Color(1.0, 0.0, 1.0, 0.5);
+  }
+  else if(retargetingPhase_ == RetargetingPhase::Disabled)
+  {
+    return mc_rtc::gui::Color(1.0, 1.0, 0.0, 0.5);
+  }
+  else // if(retargetingPhase_ == RetargetingPhase::Frozen)
+  {
+    return mc_rtc::gui::Color(0.0, 1.0, 1.0, 0.5);
   }
 }
 
