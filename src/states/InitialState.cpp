@@ -62,7 +62,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     }
     constexpr double stiffnessInterpDuration = 1.0; // [sec]
     stiffnessRatioFunc_ = std::make_shared<TrajColl::CubicInterpolator<double>>(
-        std::map<double, double>{{ctl().t(), 0.0}, {ctl().t() + stiffnessInterpDuration, 10.0}});
+        std::map<double, double>{{ctl().t(), 0.0}, {ctl().t() + stiffnessInterpDuration, 2.0}});
 
     // Reset managers
     ctl().retargetingManagerSet_->reset();
