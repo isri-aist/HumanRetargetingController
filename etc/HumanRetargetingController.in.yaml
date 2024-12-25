@@ -208,12 +208,12 @@ RetargetingManagerSet:
     - name: RetargetingManager
       bodyPart: LeftElbow
       targetPoseTopicName: /hrc/poses/left_elbow
-      stiffness: 100.0
+      stiffness: 10.0
       pointMarkerSize: 0.15
     - name: RetargetingManager
       bodyPart: LeftHand
       targetPoseTopicName: /hrc/poses/left_hand
-      stiffness: 100.0
+      stiffness: 10.0
       pointMarkerSize: 0.15
 
 # OverwriteConfigKeys: [NoSensors]
