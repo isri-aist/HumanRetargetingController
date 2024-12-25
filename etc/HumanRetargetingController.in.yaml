@@ -309,6 +309,9 @@ robots:
 
     RetargetingManagerSet:
       baseFrame: PELVIS_S
+      syncJoints: [
+      "WAIST_Y", # "WAIST_P", "WAIST_R",
+      "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y", "L_ELBOW_P"]
 
     frames:
       - name: LeftElbowFrame

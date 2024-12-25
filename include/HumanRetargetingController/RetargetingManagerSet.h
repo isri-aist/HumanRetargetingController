@@ -39,6 +39,9 @@ class RetargetingManagerSet : public std::unordered_map<std::string, std::shared
     //! Velocity (difference from last pose) threshold of target body part
     double targetVelThre = 0.5;
 
+    //! Joints that update the target position at the end of retargeting
+    std::vector<std::string> syncJoints;
+
     //! Point marker size
     double pointMarkerSize = 0.15;
 

@@ -26,6 +26,7 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
   mcRtcConfig("poseExpirationDuration", poseExpirationDuration);
   mcRtcConfig("targetDistThre", targetDistThre);
   mcRtcConfig("targetVelThre", targetVelThre);
+  mcRtcConfig("syncJoints", syncJoints);
   mcRtcConfig("pointMarkerSize", pointMarkerSize);
   mcRtcConfig("baseMarkerSize", baseMarkerSize);
   mcRtcConfig("phaseMarkerPoseOffset", phaseMarkerPoseOffset);
@@ -180,6 +181,19 @@ void RetargetingManagerSet::disable()
   for(const auto & limbManagerKV : *this)
   {
     limbManagerKV.second->disable();
+  }
+
+  // Update target joints
+  {
+    std::map<std::string, std::vector<double>> targetPosture;
+    const auto & robotQ = ctl().robot().q();
+    for(const auto & jointName : config_.syncJoints)
+    {
+      targetPosture.emplace(jointName, robotQ[ctl().robot().jointIndexByName(jointName)]);
+    }
+
+    auto postureTask = ctl().getPostureTask(ctl().robot().name());
+    postureTask->target(targetPosture);
   }
 }
 
