@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['targetposecallback_140',['targetPoseCallback',['../classHRC_1_1RetargetingManager.html#a219803ce02c945683315eb05ba7ab892',1,'HRC::RetargetingManager']]],
-  ['teardown_141',['teardown',['../structHRC_1_1InitialState.html#a22b143c3cac5ce06c02e5d6e1900824c',1,'HRC::InitialState::teardown()'],['../structHRC_1_1ViveRosState.html#ac4526dfead78d66c1da9c56593ba3081',1,'HRC::ViveRosState::teardown()']]],
-  ['to_5fstring_142',['to_string',['../namespacestd.html#a2fb63817bb6cea2f7e758c9741f07713',1,'std']]]
+  ['update_140',['update',['../classHRC_1_1RetargetingManagerSet.html#a13af2848266f98380d4fb20432cac86b',1,'HRC::RetargetingManagerSet']]],
+  ['updategui_141',['updateGUI',['../classHRC_1_1RetargetingManagerSet.html#a76cdda0d89c91a2697a56614a19ce459',1,'HRC::RetargetingManagerSet']]],
+  ['updatephase_142',['updatePhase',['../classHRC_1_1RetargetingManagerSet.html#a8af32addaa293d8b94356df5c8ae672d',1,'HRC::RetargetingManagerSet']]],
+  ['updatevalidity_143',['updateValidity',['../classHRC_1_1RetargetingManager.html#a5ab6d67d63fd70adbf3982c30520d0fb',1,'HRC::RetargetingManager::updateValidity()'],['../classHRC_1_1RetargetingManagerSet.html#a25dcf554dc1211e3195153b9592fe3b8',1,'HRC::RetargetingManagerSet::updateValidity()']]]
 ];

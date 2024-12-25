@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['nh_125',['nh',['../classHRC_1_1RetargetingManager.html#a1ff77cde24f2977ff252038a979c7c18',1,'HRC::RetargetingManager']]]
+  ['postupdate_123',['postUpdate',['../classHRC_1_1RetargetingManager.html#a2a03b0e773a4a965cc9ebd013b5f32fe',1,'HRC::RetargetingManager']]],
+  ['preupdate_124',['preUpdate',['../classHRC_1_1RetargetingManager.html#a6f9d9809b3be1ec99a63ea766edf4d95',1,'HRC::RetargetingManager']]]
 ];
