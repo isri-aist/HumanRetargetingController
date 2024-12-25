@@ -116,9 +116,6 @@ protected:
   /** \brief Disable retargeting. */
   void disable();
 
-  /** \brief Freeze retargeting. */
-  void freeze();
-
   /** \brief Update the validity. */
   void updateValidity();
 

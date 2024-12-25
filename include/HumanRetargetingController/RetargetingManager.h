@@ -129,9 +129,6 @@ protected:
   /** \brief Disable retargeting. */
   void disable();
 
-  /** \brief Freeze retargeting. */
-  void freeze();
-
   /** \brief Accessor to the ROS node handle. */
   std::shared_ptr<ros::NodeHandle> nh() const;
 

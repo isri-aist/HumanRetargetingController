@@ -183,17 +183,6 @@ void RetargetingManagerSet::disable()
   }
 }
 
-void RetargetingManagerSet::freeze()
-{
-  retargetingPhase_ = RetargetingPhase::Frozen;
-  mc_rtc::log::success("[RetargetingManagerSet] Freeze retargeting.");
-
-  for(const auto & limbManagerKV : *this)
-  {
-    limbManagerKV.second->freeze();
-  }
-}
-
 void RetargetingManagerSet::updateValidity()
 {
   // Check base pose validity
@@ -257,10 +246,10 @@ void RetargetingManagerSet::updateValidity()
     }
   }
 
-  // Freeze retargeting if not ready
+  // Disable retargeting if not ready
   if(retargetingPhase_ == RetargetingPhase::Enabled && !isReady_)
   {
-    freeze();
+    disable();
   }
 }
 
@@ -268,7 +257,6 @@ void RetargetingManagerSet::updatePhase()
 {
   bool advanceFlag = false;
   bool backwardFlag = false;
-  bool suspendFlag = false;
 
   if(ctl().datastore().has("HRC::ViveRos::LeftHandJoyMsg"))
   {
@@ -276,10 +264,6 @@ void RetargetingManagerSet::updatePhase()
     if(leftHandJoyMsg.buttons[0])
     {
       backwardFlag = true;
-    }
-    if(leftHandJoyMsg.buttons[1])
-    {
-      suspendFlag = true;
     }
 
     ctl().datastore().remove("HRC::ViveRos::LeftHandJoyMsg");
@@ -290,10 +274,6 @@ void RetargetingManagerSet::updatePhase()
     if(rightHandJoyMsg.buttons[0])
     {
       advanceFlag = true;
-    }
-    if(rightHandJoyMsg.buttons[1])
-    {
-      suspendFlag = true;
     }
 
     ctl().datastore().remove("HRC::ViveRos::RightHandJoyMsg");
@@ -313,13 +293,6 @@ void RetargetingManagerSet::updatePhase()
       disable();
     }
   }
-  if(retargetingPhase_ == RetargetingPhase::Enabled)
-  {
-    if(suspendFlag)
-    {
-      freeze();
-    }
-  }
 }
 
 void RetargetingManagerSet::updateGUI()
@@ -327,7 +300,6 @@ void RetargetingManagerSet::updateGUI()
   // Add buttons
   ctl().gui()->removeElement({ctl().name(), config_.name}, "EnableRetargeting");
   ctl().gui()->removeElement({ctl().name(), config_.name}, "DisableRetargeting");
-  ctl().gui()->removeElement({ctl().name(), config_.name}, "FreezeRetargeting");
   if(isReady_ && retargetingPhase_ != RetargetingPhase::Enabled)
   {
     ctl().gui()->addElement({ctl().name(), config_.name},
@@ -337,11 +309,6 @@ void RetargetingManagerSet::updateGUI()
   {
     ctl().gui()->addElement({ctl().name(), config_.name},
                             mc_rtc::gui::Button("DisableRetargeting", [this]() { disable(); }));
-  }
-  if(retargetingPhase_ == RetargetingPhase::Enabled)
-  {
-    ctl().gui()->addElement({ctl().name(), config_.name},
-                            mc_rtc::gui::Button("FreezeRetargeting", [this]() { freeze(); }));
   }
 
   // Add pose markers
@@ -429,11 +396,7 @@ mc_rtc::gui::Color RetargetingManagerSet::getRetargetingPhaseColor() const
   {
     return mc_rtc::gui::Color(1.0, 0.0, 1.0, 0.5);
   }
-  else if(retargetingPhase_ == RetargetingPhase::Disabled)
-  {
-    return mc_rtc::gui::Color(1.0, 1.0, 0.0, 0.5);
-  }
-  else // if(retargetingPhase_ == RetargetingPhase::Frozen)
+  else // if(retargetingPhase_ == RetargetingPhase::Disabled)
   {
     return mc_rtc::gui::Color(0.0, 1.0, 1.0, 0.5);
   }

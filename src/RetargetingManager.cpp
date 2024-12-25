@@ -183,22 +183,6 @@ void RetargetingManager::disable()
   retargetingPhase_ = RetargetingPhase::Disabled;
 }
 
-void RetargetingManager::freeze()
-{
-  if(retargetingPhase_ == RetargetingPhase::Frozen)
-  {
-    mc_rtc::log::error("[RetargetingManager({})] Task is already frozen.", config_.bodyPart);
-    return;
-  }
-  else if(retargetingPhase_ == RetargetingPhase::Disabled)
-  {
-    mc_rtc::log::error("[RetargetingManager({})] Task cannot be frozen from the disabled phase.", config_.bodyPart);
-    return;
-  }
-
-  retargetingPhase_ = RetargetingPhase::Frozen;
-}
-
 std::shared_ptr<ros::NodeHandle> RetargetingManager::nh() const
 {
   return ctl().retargetingManagerSet_->nh_;

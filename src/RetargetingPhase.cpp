@@ -14,10 +14,6 @@ std::string std::to_string(const RetargetingPhase & phase)
   {
     return std::string("Enabled");
   }
-  else if(phase == RetargetingPhase::Frozen)
-  {
-    return std::string("Frozen");
-  }
   else
   {
     mc_rtc::log::error_and_throw("[to_string] Unsupported retargeting phase: {}",

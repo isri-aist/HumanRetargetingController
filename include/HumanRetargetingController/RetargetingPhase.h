@@ -12,9 +12,6 @@ enum class RetargetingPhase
 
   //! Retargeting task enabled
   Enabled,
-
-  //! Retargeting task enabled but with fixed target
-  Frozen,
 };
 } // namespace HRC
 
