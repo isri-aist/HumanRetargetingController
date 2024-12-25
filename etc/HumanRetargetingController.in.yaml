@@ -36,12 +36,12 @@ states:
   HRC::Initial_:
     base: HRC::Initial
 
-  BWC::GuiWalk_:
+  HRC::GuiWalk_:
     base: BWC::GuiWalk
 
   HRC::Main_:
     base: Parallel
-    states: [BWC::GuiWalk_]
+    states: [HRC::GuiWalk_]
 
 # Transitions map
 transitions:
