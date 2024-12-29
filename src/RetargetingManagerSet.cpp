@@ -5,14 +5,10 @@
 #include <mc_rtc/gui/Label.h>
 #include <mc_rtc/gui/Point3D.h>
 
-#include <state-observation/tools/rigid-body-kinematics.hpp>
-
-#include <BaselineWalkingController/FootManager.h>
-
-#include <HumanRetargetingController/FootTypes.h>
+#include <HumanRetargetingController/ArmRetargetingManager.h>
 #include <HumanRetargetingController/HumanRetargetingController.h>
-#include <HumanRetargetingController/MathUtils.h>
 #include <HumanRetargetingController/RetargetingManagerSet.h>
+#include <HumanRetargetingController/RosPoseManager.h>
 
 #include <sensor_msgs/Joy.h>
 
@@ -21,14 +17,14 @@ using namespace HRC;
 void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mcRtcConfig)
 {
   mcRtcConfig("name", name);
-  mcRtcConfig("baseFrame", baseFrame);
-  mcRtcConfig("basePoseTopicName", basePoseTopicName);
-  mcRtcConfig("poseExpirationDuration", poseExpirationDuration);
-  mcRtcConfig("targetDistThre", targetDistThre);
-  mcRtcConfig("targetVelThre", targetVelThre);
+
+  humanWaistPoseTopicName = static_cast<std::string>(mcRtcConfig("humanWaistPoseTopicName"));
+
+  robotBaseLinkName = static_cast<std::string>(mcRtcConfig("robotBaseLinkName"));
+
   mcRtcConfig("syncJoints", syncJoints);
+
   mcRtcConfig("pointMarkerSize", pointMarkerSize);
-  mcRtcConfig("baseMarkerSize", baseMarkerSize);
   mcRtcConfig("phaseMarkerPoseOffset", phaseMarkerPoseOffset);
 }
 
@@ -38,100 +34,74 @@ RetargetingManagerSet::RetargetingManagerSet(HumanRetargetingController * ctlPtr
 {
   config_.load(mcRtcConfig);
 
-  for(const mc_rtc::Configuration & retargetingManagerConfig : mcRtcConfig("RetargetingManagerList"))
+  for(auto [armSide, retargetingManagerConfig] :
+      static_cast<std::map<std::string, mc_rtc::Configuration>>(mcRtcConfig("ArmRetargetingManagerList")))
   {
-    this->emplace(retargetingManagerConfig("bodyPart"),
-                  std::make_shared<RetargetingManager>(ctlPtr, retargetingManagerConfig));
+    retargetingManagerConfig.add("armSide", armSide);
+    this->emplace(strToArmSide(armSide), std::make_shared<ArmRetargetingManager>(ctlPtr, retargetingManagerConfig));
   }
 }
 
 void RetargetingManagerSet::reset()
 {
-  isReady_ = false;
-  retargetingPhase_ = RetargetingPhase::Disabled;
-  humanBasePose_ = std::nullopt;
-  robotBasePose_ = sva::PTransformd::Identity();
-  basePoseLatestTime_ = -1;
-
   // Setup ROS
   if(nh_)
   {
     mc_rtc::log::error("[RetargetingManagerSet] ROS node handle is already instantiated.");
+    nh_.reset();
   }
-  else
-  {
-    nh_ = std::make_shared<ros::NodeHandle>();
-  }
-
+  nh_ = std::make_shared<ros::NodeHandle>();
   // Use a dedicated queue so as not to call callbacks of other modules
   nh_->setCallbackQueue(&callbackQueue_);
-  basePoseSub_ = nh_->subscribe<geometry_msgs::PoseStamped>(config_.basePoseTopicName, 1,
-                                                            &RetargetingManagerSet::basePoseCallback, this);
 
-  for(const auto & limbManagerKV : *this)
+  // Note: ROS node handle must be instantiated first
+  humanWaistPoseManager_ = std::make_shared<RosPoseManager>(ctlPtr_, config_.humanWaistPoseTopicName);
+
+  isReady_ = false;
+  isEnabled_ = false;
+
+  for(const auto & armManagerKV : *this)
   {
-    limbManagerKV.second->reset();
+    armManagerKV.second->reset();
   }
 }
 
 void RetargetingManagerSet::update()
 {
-  // Call ROS callback
   callbackQueue_.callAvailable(ros::WallDuration());
 
-  // Pre-update each RetargetingManager
-  for(const auto & limbManagerKV : *this)
+  updateReadiness();
+  updateEnablement();
+
+  for(const auto & armManagerKV : *this)
   {
-    limbManagerKV.second->preUpdate();
+    armManagerKV.second->update();
   }
 
-  // Update robot base pose
-  {
-    robotBasePose_ = ctl().robot().frame(config_.baseFrame).position();
-    // Assume robot base pose is parallel to foot middle pose
-    robotBasePose_.rotation() = projGround(sva::interpolate(ctl().footManager_->targetFootPose(Foot::Left),
-                                                            ctl().footManager_->targetFootPose(Foot::Right), 0.5))
-                                    .rotation();
-  }
-
-  // Common update
-  updateValidity();
-  updatePhase();
-
-  // Update each RetargetingManager
-  for(const auto & limbManagerKV : *this)
-  {
-    limbManagerKV.second->postUpdate();
-  }
-
-  // Update GUI marker
   updateGUI();
 }
 
 void RetargetingManagerSet::stop()
 {
-  basePoseSub_.shutdown();
-  nh_.reset();
-
   removeFromGUI(*ctl().gui());
   removeFromLogger(ctl().logger());
 
-  for(const auto & limbManagerKV : *this)
+  for(const auto & armManagerKV : *this)
   {
-    limbManagerKV.second->stop();
+    armManagerKV.second->stop();
   }
 }
 
 void RetargetingManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
-  for(const auto & limbManagerKV : *this)
-  {
-    limbManagerKV.second->addToGUI(gui);
-  }
-
   gui.addElement({ctl().name(), config_.name, "Status"},
-                 mc_rtc::gui::Label("retargetingPhase", [this]() { return std::to_string(retargetingPhase_); }),
-                 mc_rtc::gui::Label("isReady", [this]() { return isReady_ ? "Yes" : "No"; }));
+                 mc_rtc::gui::Label("isReady", [this]() { return isReady_ ? "Yes" : "No"; }),
+                 mc_rtc::gui::Label("isEnabled", [this]() { return isEnabled_ ? "Yes" : "No"; }));
+
+  for(const auto & armManagerKV : *this)
+  {
+    armManagerKV.second->addToGUI(gui);
+  }
 }
 
 void RetargetingManagerSet::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
@@ -143,47 +113,67 @@ void RetargetingManagerSet::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
 
 void RetargetingManagerSet::addToLogger(mc_rtc::Logger & logger)
 {
-  for(const auto & limbManagerKV : *this)
-  {
-    limbManagerKV.second->addToLogger(logger);
-  }
-
-  logger.addLogEntry(config_.name + "_retargetingPhase", this, [this]() { return std::to_string(retargetingPhase_); });
   MC_RTC_LOG_HELPER(config_.name + "_isReady", isReady_);
+  MC_RTC_LOG_HELPER(config_.name + "_isEnabled", isEnabled_);
 
-  logger.addLogEntry(config_.name + "_humanBasePose", this,
-                     [this]() { return humanBasePose_.value_or(sva::PTransformd::Identity()); });
-  MC_RTC_LOG_HELPER(config_.name + "_robotBasePose", robotBasePose_);
+  logger.addLogEntry(config_.name + "_humanWaistValid", this, [this]() { return humanWaistPoseManager_->isValid(); });
+  logger.addLogEntry(config_.name + "_humanWaistPose", this, [this]() {
+    return humanWaistPoseManager_->isValid() ? humanWaistPoseManager_->pose() : sva::PTransformd::Identity();
+  });
+
+  for(const auto & armManagerKV : *this)
+  {
+    armManagerKV.second->addToLogger(logger);
+  }
 }
 
-void RetargetingManagerSet::removeFromLogger(mc_rtc::Logger & // logger
-)
+void RetargetingManagerSet::removeFromLogger(mc_rtc::Logger & logger)
 {
+  logger.removeLogEntries(this);
+
   // Log of each RetargetingManager is not removed here (removed via stop method)
 }
 
 void RetargetingManagerSet::enable()
 {
-  retargetingPhase_ = RetargetingPhase::Enabled;
+  if(!isReady_)
+  {
+    mc_rtc::log::error("[RetargetingManagerSet] Retargeting is not ready.");
+    return;
+  }
+
+  if(isEnabled_)
+  {
+    mc_rtc::log::error("[RetargetingManagerSet] Retargeting is already enabled.");
+    return;
+  }
+
+  isEnabled_ = true;
   mc_rtc::log::success("[RetargetingManagerSet] Enable retargeting.");
 
-  for(const auto & limbManagerKV : *this)
+  for(const auto & armManagerKV : *this)
   {
-    limbManagerKV.second->enable();
+    armManagerKV.second->enable();
   }
 }
 
 void RetargetingManagerSet::disable()
 {
-  retargetingPhase_ = RetargetingPhase::Disabled;
-  mc_rtc::log::success("[RetargetingManagerSet] Disable retargeting.");
-
-  for(const auto & limbManagerKV : *this)
+  if(!isEnabled_)
   {
-    limbManagerKV.second->disable();
+    mc_rtc::log::error("[RetargetingManagerSet] Retargeting is already disabled.");
+    return;
   }
 
-  // Update target joints
+  isEnabled_ = false;
+  mc_rtc::log::success("[RetargetingManagerSet] Disable retargeting.");
+
+  for(const auto & armManagerKV : *this)
+  {
+    armManagerKV.second->disable();
+  }
+
+  // Update target position of joints
   {
     std::map<std::string, std::vector<double>> targetPosture;
     const auto & robotQ = ctl().robot().q();
@@ -197,115 +187,93 @@ void RetargetingManagerSet::disable()
   }
 }
 
-void RetargetingManagerSet::updateValidity()
+void RetargetingManagerSet::updateReadiness()
 {
-  // Check base pose validity
+  // Check readiness
+  isReady_ = true;
+  std::string invalidReasonStr = "";
+
+  if(!humanWaistPoseManager_->isValid())
   {
-    bool poseValid = true;
-
-    if(poseValid && !humanBasePose_.has_value())
-    {
-      poseValid = false;
-    }
-
-    if(poseValid && (basePoseLatestTime_ < ctl().t() - config_.poseExpirationDuration))
-    {
-      poseValid = false;
-    }
-
-    if(!poseValid)
-    {
-      humanBasePose_ = std::nullopt;
-    }
+    isReady_ = false;
+    invalidReasonStr += "[Waist] " + humanWaistPoseManager_->invalidReasonStr_;
   }
 
-  // Check readiness
+  for(const auto & armManagerKV : *this)
   {
-    isReady_ = true;
-
-    if(isReady_ && !humanBasePose_.has_value())
+    if(!armManagerKV.second->calibResult_.isInitialized)
     {
       isReady_ = false;
+      invalidReasonStr += "[" + std::to_string(armManagerKV.first) + "Arm] calib-uninitialized; ";
     }
 
-    for(const auto & limbManagerKV : *this)
-    {
-      if(!isReady_)
-      {
-        break;
-      }
-      if(limbManagerKV.second->humanTargetPose_.has_value())
-      {
-        // Check target pose distance for safety
-        double targetDist =
-            (limbManagerKV.second->humanTargetPose_.value() * humanBasePose_.value().inv()).translation().norm();
-        if(targetDist > config_.targetDistThre)
-        {
-          isReady_ = false;
-          continue;
-        }
+    std::map<std::string, std::shared_ptr<RosPoseManager>> poseManagerMap = {
+        {"Elbow", armManagerKV.second->humanElbowPoseManager_}, {"Wrist", armManagerKV.second->humanWristPoseManager_}};
 
-        // Check target pose velocity for safety
-        const auto & targetVel = limbManagerKV.second->humanTargetPoseVel();
-        if(targetVel.has_value() && targetVel.value().linear().norm() > config_.targetVelThre)
-        {
-          isReady_ = false;
-          continue;
-        }
+    for(const auto & [poseName, poseManager] : poseManagerMap)
+    {
+      if(humanWaistPoseManager_->isValid())
+      {
+        constexpr double distThre = 2.0; // [m]
+        poseManager->setDistValidityCheck(humanWaistPoseManager_->pose().translation(), distThre);
       }
       else
       {
+        poseManager->clearDistValidityCheck();
+      }
+
+      if(!poseManager->isValid())
+      {
         isReady_ = false;
+        invalidReasonStr +=
+            "[" + std::to_string(armManagerKV.first) + poseName + "] " + humanWaistPoseManager_->invalidReasonStr_;
       }
     }
   }
 
   // Disable retargeting if not ready
-  if(retargetingPhase_ == RetargetingPhase::Enabled && !isReady_)
+  if(!isReady_ && isEnabled_)
   {
+    mc_rtc::log::error("Disable retargeting because it is not ready: {}", invalidReasonStr);
     disable();
   }
 }
 
-void RetargetingManagerSet::updatePhase()
+void RetargetingManagerSet::updateEnablement()
 {
-  bool advanceFlag = false;
-  bool backwardFlag = false;
+  bool enableFlag = false;
+  bool disableFlag = false;
 
   if(ctl().datastore().has("HRC::ViveRos::LeftHandJoyMsg"))
   {
-    sensor_msgs::Joy leftHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::LeftHandJoyMsg");
+    const sensor_msgs::Joy & leftHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::LeftHandJoyMsg");
+
     if(leftHandJoyMsg.buttons[0])
     {
-      backwardFlag = true;
+      disableFlag = true;
     }
 
     ctl().datastore().remove("HRC::ViveRos::LeftHandJoyMsg");
   }
   if(ctl().datastore().has("HRC::ViveRos::RightHandJoyMsg"))
   {
-    sensor_msgs::Joy rightHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::RightHandJoyMsg");
+    const sensor_msgs::Joy & rightHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::RightHandJoyMsg");
+
     if(rightHandJoyMsg.buttons[0])
     {
-      advanceFlag = true;
+      enableFlag = true;
     }
 
     ctl().datastore().remove("HRC::ViveRos::RightHandJoyMsg");
   }
 
-  if(isReady_ && retargetingPhase_ != RetargetingPhase::Enabled)
+  if(disableFlag)
   {
-    if(advanceFlag)
-    {
-      enable();
-    }
+    disable();
   }
-  if(retargetingPhase_ != RetargetingPhase::Disabled)
+  else if(enableFlag)
   {
-    if(backwardFlag)
-    {
-      disable();
-    }
+    enable();
   }
 }
 
@@ -314,119 +282,89 @@ void RetargetingManagerSet::updateGUI()
   // Add buttons
   ctl().gui()->removeElement({ctl().name(), config_.name}, "EnableRetargeting");
   ctl().gui()->removeElement({ctl().name(), config_.name}, "DisableRetargeting");
-  if(isReady_ && retargetingPhase_ != RetargetingPhase::Enabled)
+  if(isReady_ && !isEnabled_)
   {
     ctl().gui()->addElement({ctl().name(), config_.name},
                             mc_rtc::gui::Button("EnableRetargeting", [this]() { enable(); }));
   }
-  if(retargetingPhase_ != RetargetingPhase::Disabled)
+  if(isEnabled_)
   {
     ctl().gui()->addElement({ctl().name(), config_.name},
                             mc_rtc::gui::Button("DisableRetargeting", [this]() { disable(); }));
   }
 
   // Add pose markers
+  auto getRobotPose = [](const std::shared_ptr<ArmRetargetingManager> & _armManager,
+                         const std::string & _poseName) -> std::optional<sva::PTransformd> {
+    if(_poseName == "Shoulder")
+    {
+      return _armManager->robotShoulderPose_;
+    }
+    else if(_poseName == "Elbow")
+    {
+      return _armManager->robotElbowPose_;
+    }
+    else if(_poseName == "Wrist")
+    {
+      return _armManager->robotWristPose_;
+    }
+    else
+    {
+      mc_rtc::log::error_and_throw("[RetargetingManagerSet] Invalid pose name: {}", _poseName);
+    }
+  };
   mc_rtc::gui::Color pointColor = mc_rtc::gui::Color(0.0, 1.0, 0.0, 0.5);
   mc_rtc::gui::Color arrowColor = mc_rtc::gui::Color(0.2, 0.4, 0.2, 0.6);
 
   ctl().gui()->removeCategory({ctl().name(), config_.name, "Marker"});
 
-  ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
-                          mc_rtc::gui::Point3D("BasePoint",
-                                               mc_rtc::gui::PointConfig(pointColor, config_.pointMarkerSize),
-                                               [this]() { return robotBasePose_.translation(); }));
-
-  for(const auto & side : std::vector<std::string>{"Left", "Right"})
+  for(const auto & [armSide, armManager] : *this)
   {
-    ctl().gui()->addElement(
-        {ctl().name(), config_.name, "Marker"},
-        mc_rtc::gui::Point3D(side + "ShoulderPoint", mc_rtc::gui::PointConfig(pointColor, config_.pointMarkerSize),
-                             [this, side]() {
-                               double sign = (side == "Left" ? 1.0 : -1.0);
-                               return (sva::PTransformd(Eigen::Vector3d(0.0, sign * 0.5 * config_.baseMarkerSize[0],
-                                                                        config_.baseMarkerSize[1]))
-                                       * robotBasePose_)
-                                   .translation();
-                             }),
-        mc_rtc::gui::Arrow(
-            "BaseTo" + side + "ShoulderArrow", arrowColor, [this]() { return robotBasePose_.translation(); },
-            [this, side]() {
-              double sign = (side == "Left" ? 1.0 : -1.0);
-              return (sva::PTransformd(
-                          Eigen::Vector3d(0.0, sign * 0.5 * config_.baseMarkerSize[0], config_.baseMarkerSize[1]))
-                      * robotBasePose_)
-                  .translation();
-            }));
-
-    if(this->count(side + "Elbow") > 0 && this->at(side + "Elbow")->robotTargetPose_.has_value())
+    for(const auto & poseName : {"Shoulder", "Elbow", "Wrist"})
     {
-      ctl().gui()->addElement(
-          {ctl().name(), config_.name, "Marker"},
-          mc_rtc::gui::Arrow(
-              side + "ShoulderToElbowArrow", arrowColor,
-              [this, side]() {
-                double sign = (side == "Left" ? 1.0 : -1.0);
-                return (sva::PTransformd(
-                            Eigen::Vector3d(0.0, sign * 0.5 * config_.baseMarkerSize[0], config_.baseMarkerSize[1]))
-                        * robotBasePose_)
-                    .translation();
-              },
-              [this, side]() { return this->at(side + "Elbow")->robotTargetPose_.value().translation(); }));
-
-      if(this->count(side + "Hand") > 0 && this->at(side + "Hand")->robotTargetPose_.has_value())
+      if(getRobotPose(armManager, poseName).has_value())
       {
         ctl().gui()->addElement(
             {ctl().name(), config_.name, "Marker"},
-            mc_rtc::gui::Arrow(
-                side + "ElbowToHandArrow", arrowColor,
-                [this, side]() { return this->at(side + "Elbow")->robotTargetPose_.value().translation(); },
-                [this, side]() { return this->at(side + "Hand")->robotTargetPose_.value().translation(); }));
+            mc_rtc::gui::Point3D(std::to_string(armSide) + poseName,
+                                 mc_rtc::gui::PointConfig(pointColor, config_.pointMarkerSize),
+                                 [=]() { return getRobotPose(armManager, poseName).value().translation(); }));
+      }
+    }
+
+    for(const auto & [poseName1, poseName2] :
+        std::vector<std::pair<std::string, std::string>>{{"Shoulder", "Elbow"}, {"Elbow", "Wrist"}})
+    {
+      if(getRobotPose(armManager, poseName1).has_value() && getRobotPose(armManager, poseName2).has_value())
+      {
+        ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
+                                mc_rtc::gui::Arrow(
+                                    std::to_string(armSide) + poseName1 + "To" + poseName2, arrowColor,
+                                    [=]() { return getRobotPose(armManager, poseName1).value().translation(); },
+                                    [=]() { return getRobotPose(armManager, poseName2).value().translation(); }));
       }
     }
   }
 
   // Add phase marker
+  auto getPhaseColor = [this]() -> mc_rtc::gui::Color {
+    return isEnabled_ ? mc_rtc::gui::Color(1.0, 0.0, 1.0, 0.5) : mc_rtc::gui::Color(0.0, 1.0, 1.0, 0.5);
+  };
+
   if(isReady_)
   {
     ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
                             mc_rtc::gui::Ellipsoid(
-                                "retargetingPhase", {0.2, 0.2, 0.15},
-                                [this]() { return config_.phaseMarkerPoseOffset * robotBasePose_; },
-                                [this]() { return getRetargetingPhaseColor(); }));
+                                "Phase", {0.2, 0.2, 0.15},
+                                [this]() { return config_.phaseMarkerPoseOffset * ctl().robot().posW(); },
+                                [=]() { return getPhaseColor(); }));
   }
   else
   {
     ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
                             mc_rtc::gui::Cylinder(
-                                "retargetingPhase", {0.1, 0.01},
-                                [this]() { return config_.phaseMarkerPoseOffset * robotBasePose_; },
-                                [this]() { return getRetargetingPhaseColor(); }));
+                                "Phase", {0.1, 0.01},
+                                [this]() { return config_.phaseMarkerPoseOffset * ctl().robot().posW(); },
+                                [=]() { return getPhaseColor(); }));
   }
-}
-
-mc_rtc::gui::Color RetargetingManagerSet::getRetargetingPhaseColor() const
-{
-  if(retargetingPhase_ == RetargetingPhase::Enabled)
-  {
-    return mc_rtc::gui::Color(1.0, 0.0, 1.0, 0.5);
-  }
-  else // if(retargetingPhase_ == RetargetingPhase::Disabled)
-  {
-    return mc_rtc::gui::Color(0.0, 1.0, 1.0, 0.5);
-  }
-}
-
-void RetargetingManagerSet::basePoseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg)
-{
-  const auto & poseMsg = poseStMsg->pose;
-  humanBasePose_ = sva::PTransformd(
-      Eigen::Quaterniond(poseMsg.orientation.w, poseMsg.orientation.x, poseMsg.orientation.y, poseMsg.orientation.z)
-          .normalized()
-          .toRotationMatrix()
-          .transpose(),
-      Eigen::Vector3d(poseMsg.position.x, poseMsg.position.y, poseMsg.position.z));
-  // Assume human base pose is always horizontal (only yaw angle can be changed)
-  humanBasePose_.value().rotation() = stateObservation::kine::mergeRoll1Pitch1WithYaw2AxisAgnostic(
-      Eigen::Matrix3d::Identity(), humanBasePose_.value().rotation());
-  basePoseLatestTime_ = ctl().t();
 }

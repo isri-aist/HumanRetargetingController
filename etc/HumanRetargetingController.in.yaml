@@ -3,6 +3,8 @@
 Managed: false
 # If true and the FSM is self-managed, transitions should be triggered
 StepByStep: true
+# When true reset the posture tasks to the current posture before transitioning to the next state
+ResetPostures: false
 # Change idle behaviour, if true the state is kept until transition,
 # otherwise the FSM holds the last state until transition
 IdleKeepState: true
@@ -196,25 +198,23 @@ CentroidalManager:
 
 RetargetingManagerSet:
   name: RetargetingManagerSet
-  basePoseTopicName: /hrc/poses/waist
-  poseExpirationDuration: 3.0 # [s]
-  targetDistThre: 2.0 # [m]
-  targetVelThre: 0.5
+  humanWaistPoseTopicName: /hrc/poses/waist
   pointMarkerSize: 0.15
-  baseMarkerSize: [0.4, 0.5] # [m]
   phaseMarkerPoseOffset:
     translation: [0.0, 0.0, 1.0]
-  RetargetingManagerList:
-    - name: RetargetingManager
-      bodyPart: LeftElbow
-      targetPoseTopicName: /hrc/poses/left_elbow
+  ArmRetargetingManagerList:
+    Left:
+      humanElbowPoseTopicName: /hrc/poses/left_elbow
+      humanWristPoseTopicName: /hrc/poses/left_wrist
+      elbowBodyPart:: LeftElbow
+      wristBodyPart: LeftWrist
       stiffness: 10.0
-      pointMarkerSize: 0.15
-    - name: RetargetingManager
-      bodyPart: LeftHand
-      targetPoseTopicName: /hrc/poses/left_hand
+    Right:
+      humanElbowPoseTopicName: /hrc/poses/right_elbow
+      humanWristPoseTopicName: /hrc/poses/right_wrist
+      elbowBodyPart:: RightElbow
+      wristBodyPart: RightWrist
       stiffness: 10.0
-      pointMarkerSize: 0.15
 
 # OverwriteConfigKeys: [NoSensors]
 
@@ -297,21 +297,94 @@ robots:
         "Root",
         "WAIST_Y", # "WAIST_P", "WAIST_R",
         "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y"]
-      - bodyPart: LeftHand
+      - bodyPart: LeftWrist
         type: transform
-        frame: LeftHandFrame
+        frame: LeftWristFrame
         weight: 500.0
         dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
         activeJoints: [
         "Root",
         "WAIST_Y", # "WAIST_P", "WAIST_R",
         "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y", "L_ELBOW_P"]
+      - bodyPart: RightElbow
+        type: transform
+        frame: RightElbowFrame
+        weight: 500.0
+        dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+        activeJoints: [
+        "Root",
+        "WAIST_Y", # "WAIST_P", "WAIST_R",
+        "R_SHOULDER_P", "R_SHOULDER_R", "R_SHOULDER_Y"]
+      - bodyPart: RightWrist
+        type: transform
+        frame: RightWristFrame
+        weight: 500.0
+        dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+        activeJoints: [
+        "Root",
+        "WAIST_Y", # "WAIST_P", "WAIST_R",
+        "R_SHOULDER_P", "R_SHOULDER_R", "R_SHOULDER_Y", "R_ELBOW_P"]
 
     RetargetingManagerSet:
-      baseFrame: PELVIS_S
+      robotBaseLinkName: WAIST_R_S
       syncJoints: [
       "WAIST_Y", # "WAIST_P", "WAIST_R",
       "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y", "L_ELBOW_P"]
+      ArmRetargetingManagerList:
+        Left:
+          robotCalibPostures:
+            X:
+              L_SHOULDER_P: -1.5708
+              L_SHOULDER_R: 0.0
+              L_SHOULDER_Y: 0.0
+              L_ELBOW_P: 0.0
+              L_ELBOW_Y: 0.0
+              L_WRIST_R: 0.0
+              L_WRIST_Y: 0.0
+            Y:
+              L_SHOULDER_P: -1.5708
+              L_SHOULDER_R: 1.5708
+              L_SHOULDER_Y: 0.0
+              L_ELBOW_P: 0.0
+              L_ELBOW_Y: 0.0
+              L_WRIST_R: 0.0
+              L_WRIST_Y: 0.0
+            Z:
+              L_SHOULDER_P: -3.14159
+              L_SHOULDER_R: 0.0
+              L_SHOULDER_Y: 0.0
+              L_ELBOW_P: 0.0
+              L_ELBOW_Y: 0.0
+              L_WRIST_R: 0.0
+              L_WRIST_Y: 0.0
+          # calibResultConfig: {}
+        Right:
+          robotCalibPostures:
+            X:
+              R_SHOULDER_P: -1.5708
+              R_SHOULDER_R: 0.0
+              R_SHOULDER_Y: 0.0
+              R_ELBOW_P: 0.0
+              R_ELBOW_Y: 0.0
+              R_WRIST_R: 0.0
+              R_WRIST_Y: 0.0
+            Y:
+              R_SHOULDER_P: -1.5708
+              R_SHOULDER_R: -1.5708
+              R_SHOULDER_Y: 0.0
+              R_ELBOW_P: 0.0
+              R_ELBOW_Y: 0.0
+              R_WRIST_R: 0.0
+              R_WRIST_Y: 0.0
+            Z:
+              R_SHOULDER_P: -3.14159
+              R_SHOULDER_R: 0.0
+              R_SHOULDER_Y: 0.0
+              R_ELBOW_P: 0.0
+              R_ELBOW_Y: 0.0
+              R_WRIST_R: 0.0
+              R_WRIST_Y: 0.0
+          # calibResultConfig: {}
 
     frames:
       - name: LeftElbowFrame
@@ -319,8 +392,18 @@ robots:
         X_p_f:
           translation: [-0.021, 0.0, -0.309]
           rotation: [0.0, 1.4122, 0.0]
-      - name: LeftHandFrame
+      - name: LeftWristFrame
         parent: L_ELBOW_P_S
+        X_p_f:
+          translation: [0.0, 0.0, -0.239]
+          rotation: [0.0, 1.5555, 0.0]
+      - name: RightElbowFrame
+        parent: R_SHOULDER_Y_S
+        X_p_f:
+          translation: [-0.021, 0.0, -0.309]
+          rotation: [0.0, 1.4122, 0.0]
+      - name: RightWristFrame
+        parent: R_ELBOW_P_S
         X_p_f:
           translation: [0.0, 0.0, -0.239]
           rotation: [0.0, 1.5555, 0.0]

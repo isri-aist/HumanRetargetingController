@@ -1,22 +1,24 @@
 #pragma once
 
-#include <optional>
+#include <mc_rtc/gui/StateBuilder.h>
+#include <mc_rtc/log/Logger.h>
 
-#include <HumanRetargetingController/RetargetingManager.h>
-
-#include <geometry_msgs/PoseStamped.h>
 #include <ros/callback_queue.h>
 #include <ros/ros.h>
 
-#include <HumanRetargetingController/RetargetingPhase.h>
+#include <HumanRetargetingController/ArmSide.h>
 
 namespace HRC
 {
+class HumanRetargetingController;
+class ArmRetargetingManager;
+class RosPoseManager;
+
 /** \brief Set of RetargetingManager. */
-class RetargetingManagerSet : public std::unordered_map<std::string, std::shared_ptr<RetargetingManager>>
+class RetargetingManagerSet : public std::unordered_map<ArmSide, std::shared_ptr<ArmRetargetingManager>>
 {
-  // Allow access to protected members in RetargetingManagerSet from RetargetingManager
-  friend class RetargetingManager;
+  // Allow access to protected members
+  friend class ArmRetargetingManager;
 
   /** \brief Configuration. */
   struct Configuration
@@ -24,29 +26,17 @@ class RetargetingManagerSet : public std::unordered_map<std::string, std::shared
     //! Name
     std::string name = "RetargetingManagerSet";
 
-    //! Base frame name
-    std::string baseFrame = "base_frame";
+    //! Topic name of human waist pose
+    std::string humanWaistPoseTopicName;
 
-    //! Topic name of base pose
-    std::string basePoseTopicName = "/hrc/poses/base";
-
-    //! Expiration duration of pose [s]
-    double poseExpirationDuration = 3.0;
-
-    //! Distance threshold from base to target body part [m]
-    double targetDistThre = 2.0;
-
-    //! Velocity (difference from last pose) threshold of target body part
-    double targetVelThre = 0.5;
+    //! Name of the robot base link (link at the base of the shoulder)
+    std::string robotBaseLinkName;
 
     //! Joints that update the target position at the end of retargeting
     std::vector<std::string> syncJoints;
 
     //! Point marker size
     double pointMarkerSize = 0.15;
-
-    //! Base marker size (width, height) [m]
-    Eigen::Vector2d baseMarkerSize = Eigen::Vector2d(0.4, 0.5);
 
     //! Pose offset of phase marker
     sva::PTransformd phaseMarkerPoseOffset = sva::PTransformd(Eigen::Vector3d(0.0, 0.0, 1.0));
@@ -119,20 +109,24 @@ protected:
   /** \brief Disable retargeting. */
   void disable();
 
-  /** \brief Update the validity. */
-  void updateValidity();
+  /** \brief Update readiness. */
+  void updateReadiness();
 
-  /** \brief Update the phase. */
-  void updatePhase();
+  /** \brief Update enablement . */
+  void updateEnablement();
 
   /** \brief Update GUI. */
   void updateGUI();
 
-  /** \brief Get the marker color of retargeting phase. */
-  mc_rtc::gui::Color getRetargetingPhaseColor() const;
+public:
+  //! Whether it is ready for retargeting or not
+  bool isReady_ = false;
 
-  /** \brief ROS callback of base pose topic. */
-  void basePoseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg);
+  //! Whether retargeting is enabled or not
+  bool isEnabled_ = false;
+
+  //! ROS node handle
+  std::shared_ptr<ros::NodeHandle> nh_;
 
 protected:
   //! Configuration
@@ -141,28 +135,10 @@ protected:
   //! Pointer to controller
   HumanRetargetingController * ctlPtr_ = nullptr;
 
-  //! Whether it is ready for retargeting
-  bool isReady_ = false;
-
-  //! Retargeting phase
-  RetargetingPhase retargetingPhase_ = RetargetingPhase::Disabled;
-
-  //! Human base pose represented in world frame
-  std::optional<sva::PTransformd> humanBasePose_ = std::nullopt;
-
-  //! Robot base pose represented in world frame
-  sva::PTransformd robotBasePose_ = sva::PTransformd::Identity();
-
-  //! Time when the latest base pose was obtained
-  double basePoseLatestTime_ = -1;
-
-  //! ROS node handle
-  std::shared_ptr<ros::NodeHandle> nh_;
+  //! ROS pose manager for human waist pose
+  std::shared_ptr<RosPoseManager> humanWaistPoseManager_;
 
   //! ROS callback queue
   ros::CallbackQueue callbackQueue_;
-
-  //! ROS subscriber of base pose
-  ros::Subscriber basePoseSub_;
 };
 } // namespace HRC

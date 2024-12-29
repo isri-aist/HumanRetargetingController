@@ -1,5 +1,4 @@
 #include <functional>
-#include <optional>
 
 #include <mc_rtc/DataStore.h>
 
@@ -16,14 +15,12 @@ void ViveRosState::start(mc_control::fsm::Controller & _ctl)
   if(nh_)
   {
     mc_rtc::log::error("[ViveRosState] ROS node handle is already instantiated.");
+    nh_.reset();
   }
-  else
-  {
-    nh_ = std::make_shared<ros::NodeHandle>();
-  }
-
+  nh_ = std::make_shared<ros::NodeHandle>();
   // Use a dedicated queue so as not to call callbacks of other modules
   nh_->setCallbackQueue(&callbackQueue_);
+
   if(config_.has("configs") && config_("configs").has("joyTopics"))
   {
     for(const auto & joyConfig : config_("configs")("joyTopics"))

@@ -18,7 +18,7 @@ public:
   /** \brief Constructor.
       \param rm robot module
       \param dt control timestep
-      \param _config controller configuration
+      \param config controller configuration
       \param allowEmptyManager whether to allow the managers to be empty (assuming initialized in the parent class)
    */
   HumanRetargetingController(mc_rbdyn::RobotModulePtr rm,
@@ -48,7 +48,7 @@ public:
   //! Retargeting tasks
   std::unordered_map<std::string, std::shared_ptr<mc_tasks::TransformTask>> retargetingTasks_;
 
-  //! Manipulation manager
+  //! Retargeting manager set
   std::shared_ptr<RetargetingManagerSet> retargetingManagerSet_;
 };
 } // namespace HRC

@@ -19,7 +19,7 @@ jobs:
         catkin-build: [catkin, standalone]
         build-type: [RelWithDebInfo, Debug]
         mc-rtc-version: [head, stable]
-        motion-type: [UpperBodyRetargeting]
+        motion-type: [Default]
         exclude:
           - build-type: Debug
             mc-rtc-version: stable
@@ -46,7 +46,7 @@ jobs:
              [ "${{ matrix.catkin-build }}" == "catkin" ] && \
              [ "${{ matrix.build-type }}" == "RelWithDebInfo" ] && \
              [ "${{ matrix.mc-rtc-version }}" == "head" ] && \
-             [ "${{ matrix.motion-type }}" == "UpperBodyRetargeting" ] && \
+             [ "${{ matrix.motion-type }}" == "Default" ] && \
              [ "${{ github.repository_owner }}" == "isri-aist" ] && \
              [ "${{ github.ref }}" == "refs/heads/master" ]
           then

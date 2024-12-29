@@ -21,7 +21,7 @@ class PublishPoseViveTracker(object):
         self.device_sn_to_body_part_map = {
             "LHR-8C30BD01": "waist",
             "LHR-1FB29FC6": "left_elbow",
-            "LHR-301CBF17": "left_hand",
+            "LHR-301CBF17": "left_wrist",
         }
         if len(sys.argv) >= 2:
             import yaml

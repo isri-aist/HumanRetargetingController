@@ -5,7 +5,6 @@
 
 #include <BaselineWalkingController/CentroidalManager.h>
 #include <BaselineWalkingController/FootManager.h>
-#include <HumanRetargetingController/FootTypes.h>
 #include <HumanRetargetingController/HumanRetargetingController.h>
 #include <HumanRetargetingController/RetargetingManagerSet.h>
 #include <HumanRetargetingController/states/InitialState.h>
@@ -47,7 +46,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     ctl().solver().addTask(ctl().comTask_);
     ctl().baseOriTask_->reset();
     ctl().solver().addTask(ctl().baseOriTask_);
-    for(const auto & foot : Feet::Both)
+    for(const auto & foot : BWC::Feet::Both)
     {
       ctl().footTasks_.at(foot)->reset();
       ctl().solver().addTask(ctl().footTasks_.at(foot));
@@ -56,7 +55,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
     // Setup task stiffness interpolation
     comTaskStiffness_ = ctl().comTask_->dimStiffness();
     baseOriTaskStiffness_ = ctl().baseOriTask_->dimStiffness();
-    for(const auto & foot : Feet::Both)
+    for(const auto & foot : BWC::Feet::Both)
     {
       footTasksStiffness_.emplace(foot, ctl().footTasks_.at(foot)->dimStiffness());
     }
@@ -107,7 +106,7 @@ bool InitialState::run(mc_control::fsm::Controller &)
       double stiffnessRatio = (*stiffnessRatioFunc_)(ctl().t());
       ctl().comTask_->stiffness(stiffnessRatio * comTaskStiffness_);
       ctl().baseOriTask_->stiffness(stiffnessRatio * baseOriTaskStiffness_);
-      for(const auto & foot : Feet::Both)
+      for(const auto & foot : BWC::Feet::Both)
       {
         ctl().footTasks_.at(foot)->stiffness(stiffnessRatio * footTasksStiffness_.at(foot));
       }
