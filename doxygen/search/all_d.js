@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['phase_5f_43',['phase_',['../structHRC_1_1InitialState.html#acdcf301a4609ab3bfaf67f7cb62da7a4',1,'HRC::InitialState']]],
-  ['pointmarkersize_44',['pointMarkerSize',['../structHRC_1_1RetargetingManager_1_1Configuration.html#a9a8e5362617bcd09ef01d39a9a189790',1,'HRC::RetargetingManager::Configuration']]],
-  ['postupdate_45',['postUpdate',['../classHRC_1_1RetargetingManager.html#a2a03b0e773a4a965cc9ebd013b5f32fe',1,'HRC::RetargetingManager']]],
-  ['preupdate_46',['preUpdate',['../classHRC_1_1RetargetingManager.html#a6f9d9809b3be1ec99a63ea766edf4d95',1,'HRC::RetargetingManager']]]
+  ['phase_5f_63',['phase_',['../structHRC_1_1InitialState.html#acdcf301a4609ab3bfaf67f7cb62da7a4',1,'HRC::InitialState']]],
+  ['pose_64',['pose',['../classHRC_1_1RosPoseManager.html#a877c548d883c835ff51cfa12e92bc95a',1,'HRC::RosPoseManager']]],
+  ['posecallback_65',['poseCallback',['../classHRC_1_1RosPoseManager.html#aa1d671cfec8ba0a98c51077ff7c16e16',1,'HRC::RosPoseManager']]],
+  ['posesub_5f_66',['poseSub_',['../classHRC_1_1RosPoseManager.html#add3f3b8c0ee9f94db4348288b391b321',1,'HRC::RosPoseManager']]],
+  ['prevpose_5f_67',['prevPose_',['../classHRC_1_1RosPoseManager.html#ad820a243cb50ccf74bafcf3910fd3511',1,'HRC::RosPoseManager']]],
+  ['prevtime_5f_68',['prevTime_',['../classHRC_1_1RosPoseManager.html#aa1e0984adfec5e7a868e166c0d1c6d3a',1,'HRC::RosPoseManager']]]
 ];

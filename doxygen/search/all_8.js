@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['initialstate_31',['InitialState',['../structHRC_1_1InitialState.html',1,'HRC']]],
-  ['initialstate_2eh_32',['InitialState.h',['../InitialState_8h.html',1,'']]],
-  ['isready_5f_33',['isReady_',['../classHRC_1_1RetargetingManagerSet.html#af776af9d4759f5fc2e6f0714562eee2e',1,'HRC::RetargetingManagerSet']]]
+  ['joycallback_54',['joyCallback',['../structHRC_1_1ViveRosState.html#ae02950e5425c66dd472ae679833c6494',1,'HRC::ViveRosState']]],
+  ['joysublist_5f_55',['joySubList_',['../structHRC_1_1ViveRosState.html#a7eb9f9733ce721815a8a88ea776a60ef',1,'HRC::ViveRosState']]]
 ];

@@ -1,0 +1,5 @@
+<map id="HRC::RosPoseManager" name="HRC::RosPoseManager">
+<area shape="rect" id="node1" title="ROS pose manager." alt="" coords="43,171,213,197"/>
+<area shape="rect" id="node2" href="$structHRC_1_1HumanRetargetingController.html" title="Controller for retargeting the motion from human to humanoid robot." alt="" coords="5,81,251,108"/>
+<area shape="rect" id="node3" title=" " alt="" coords="11,5,245,32"/>
+</map>

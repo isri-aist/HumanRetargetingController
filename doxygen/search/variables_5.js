@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['joysublist_5f_157',['joySubList_',['../structHRC_1_1ViveRosState.html#a7eb9f9733ce721815a8a88ea776a60ef',1,'HRC::ViveRosState']]]
+  ['foottasksstiffness_5f_196',['footTasksStiffness_',['../structHRC_1_1InitialState.html#a4db208eaa207fd07d07486836d447757',1,'HRC::InitialState']]]
 ];

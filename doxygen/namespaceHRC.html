@@ -71,7 +71,8 @@ $(function() {
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">HRC Namespace Reference</div>  </div>
 </div><!--header-->
@@ -79,22 +80,25 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:namespaceHRC_1_1Feet"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceHRC_1_1Feet.html">Feet</a></td></tr>
+<tr class="memitem:namespaceHRC_1_1ArmSides"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceHRC_1_1ArmSides.html">ArmSides</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html">ArmRetargetingManager</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retargeting manager.  <a href="classHRC_1_1ArmRetargetingManager.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structHRC_1_1HumanRetargetingController.html">HumanRetargetingController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controller for retargeting the motion from human to humanoid robot.  <a href="structHRC_1_1HumanRetargetingController.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structHRC_1_1InitialState.html">InitialState</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">FSM state to initialize.  <a href="structHRC_1_1InitialState.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1RetargetingManager.html">RetargetingManager</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retargeting manager.  <a href="classHRC_1_1RetargetingManager.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1RetargetingManagerSet.html">RetargetingManagerSet</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set of <a class="el" href="classHRC_1_1RetargetingManager.html" title="Retargeting manager.">RetargetingManager</a>.  <a href="classHRC_1_1RetargetingManagerSet.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set of RetargetingManager.  <a href="classHRC_1_1RetargetingManagerSet.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1RosPoseManager.html">RosPoseManager</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">ROS pose manager.  <a href="classHRC_1_1RosPoseManager.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structHRC_1_1State.html">State</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">FSM <a class="el" href="structHRC_1_1State.html" title="FSM State with utility functions.">State</a> with utility functions.  <a href="structHRC_1_1State.html#details">More...</a><br /></td></tr>
@@ -105,15 +109,27 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:af539d913bb41ac610bf9a3b2872ea4b9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceHRC.html#af539d913bb41ac610bf9a3b2872ea4b9">RetargetingPhase</a> { <a class="el" href="namespaceHRC.html#af539d913bb41ac610bf9a3b2872ea4b9ab9f5c797ebbf55adccdd8539a65a0241">RetargetingPhase::Disabled</a> = 0, 
-<a class="el" href="namespaceHRC.html#af539d913bb41ac610bf9a3b2872ea4b9a00d23a76e43b46dae9ec7aa9dcbebb32">RetargetingPhase::Enabled</a>
+<tr class="memitem:acbc3a954d0991a81b95df996cd6e7c4d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">ArmSide</a> { <a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4da945d5e233cf7d6240f6b783b36a374ff">ArmSide::Left</a> = 0, 
+<a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4da92b09c7c48c520c3c55e497875da437c">ArmSide::Right</a>
  }</td></tr>
-<tr class="memdesc:af539d913bb41ac610bf9a3b2872ea4b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retargeting phase.  <a href="namespaceHRC.html#af539d913bb41ac610bf9a3b2872ea4b9">More...</a><br /></td></tr>
-<tr class="separator:af539d913bb41ac610bf9a3b2872ea4b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:acbc3a954d0991a81b95df996cd6e7c4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Left/right side of the arm.  <a href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">More...</a><br /></td></tr>
+<tr class="separator:acbc3a954d0991a81b95df996cd6e7c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a16f24f973a7b5da768df97fc6102c433"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">ArmSide</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceHRC.html#a16f24f973a7b5da768df97fc6102c433">strToArmSide</a> (const std::string &amp;armSideStr)</td></tr>
+<tr class="memdesc:a16f24f973a7b5da768df97fc6102c433"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert string to arm side.  <a href="namespaceHRC.html#a16f24f973a7b5da768df97fc6102c433">More...</a><br /></td></tr>
+<tr class="separator:a16f24f973a7b5da768df97fc6102c433"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b004183a4c4ac799ca581ab7964cafc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">ArmSide</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceHRC.html#a1b004183a4c4ac799ca581ab7964cafc">opposite</a> (const <a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">ArmSide</a> &amp;armSide)</td></tr>
+<tr class="memdesc:a1b004183a4c4ac799ca581ab7964cafc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the opposite arm side.  <a href="namespaceHRC.html#a1b004183a4c4ac799ca581ab7964cafc">More...</a><br /></td></tr>
+<tr class="separator:a1b004183a4c4ac799ca581ab7964cafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d480bfaf27c5438412ae524ced67795"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceHRC.html#a7d480bfaf27c5438412ae524ced67795">sign</a> (const <a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">ArmSide</a> &amp;armSide)</td></tr>
+<tr class="memdesc:a7d480bfaf27c5438412ae524ced67795"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the sign of arm side.  <a href="namespaceHRC.html#a7d480bfaf27c5438412ae524ced67795">More...</a><br /></td></tr>
+<tr class="separator:a7d480bfaf27c5438412ae524ced67795"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="af539d913bb41ac610bf9a3b2872ea4b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af539d913bb41ac610bf9a3b2872ea4b9">&#9670;&nbsp;</a></span>RetargetingPhase</h2>
+<a id="acbc3a954d0991a81b95df996cd6e7c4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbc3a954d0991a81b95df996cd6e7c4d">&#9670;&nbsp;</a></span>ArmSide</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -122,7 +138,7 @@ Enumerations</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="namespaceHRC.html#af539d913bb41ac610bf9a3b2872ea4b9">HRC::RetargetingPhase</a></td>
+          <td class="memname">enum <a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">HRC::ArmSide</a></td>
         </tr>
       </table>
   </td>
@@ -132,15 +148,77 @@ Enumerations</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Retargeting phase. </p>
+<p>Left/right side of the arm. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af539d913bb41ac610bf9a3b2872ea4b9ab9f5c797ebbf55adccdd8539a65a0241"></a>Disabled&#160;</td><td class="fielddoc"><p>Retargeting task disabled. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="acbc3a954d0991a81b95df996cd6e7c4da945d5e233cf7d6240f6b783b36a374ff"></a>Left&#160;</td><td class="fielddoc"><p>Left arm. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="af539d913bb41ac610bf9a3b2872ea4b9a00d23a76e43b46dae9ec7aa9dcbebb32"></a>Enabled&#160;</td><td class="fielddoc"><p>Retargeting task enabled. </p>
+<tr><td class="fieldname"><a id="acbc3a954d0991a81b95df996cd6e7c4da92b09c7c48c520c3c55e497875da437c"></a>Right&#160;</td><td class="fielddoc"><p>Right arm. </p>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingPhase_8h_source.html#l00008">8</a> of file <a class="el" href="RetargetingPhase_8h_source.html">RetargetingPhase.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmSide_8h_source.html#l00008">8</a> of file <a class="el" href="ArmSide_8h_source.html">ArmSide.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a1b004183a4c4ac799ca581ab7964cafc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b004183a4c4ac799ca581ab7964cafc">&#9670;&nbsp;</a></span>opposite()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">ArmSide</a> HRC::opposite </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">ArmSide</a> &amp;&#160;</td>
+          <td class="paramname"><em>armSide</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the opposite arm side. </p>
+
+</div>
+</div>
+<a id="a7d480bfaf27c5438412ae524ced67795"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d480bfaf27c5438412ae524ced67795">&#9670;&nbsp;</a></span>sign()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int HRC::sign </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">ArmSide</a> &amp;&#160;</td>
+          <td class="paramname"><em>armSide</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the sign of arm side. </p>
+<p>Positive for left arm side, negative for right arm side. </p>
+
+</div>
+</div>
+<a id="a16f24f973a7b5da768df97fc6102c433"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16f24f973a7b5da768df97fc6102c433">&#9670;&nbsp;</a></span>strToArmSide()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceHRC.html#acbc3a954d0991a81b95df996cd6e7c4d">ArmSide</a> HRC::strToArmSide </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>armSideStr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert string to arm side. </p>
 
 </div>
 </div>

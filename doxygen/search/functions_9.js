@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['nh_122',['nh',['../classHRC_1_1RetargetingManager.html#a1ff77cde24f2977ff252038a979c7c18',1,'HRC::RetargetingManager']]]
+  ['pose_156',['pose',['../classHRC_1_1RosPoseManager.html#a877c548d883c835ff51cfa12e92bc95a',1,'HRC::RosPoseManager']]],
+  ['posecallback_157',['poseCallback',['../classHRC_1_1RosPoseManager.html#aa1d671cfec8ba0a98c51077ff7c16e16',1,'HRC::RosPoseManager']]]
 ];

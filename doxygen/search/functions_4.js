@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['enable_115',['enable',['../classHRC_1_1RetargetingManager.html#a63ce70cffdabea149aef9d51cff45171',1,'HRC::RetargetingManager::enable()'],['../classHRC_1_1RetargetingManagerSet.html#a446af4a2536291a78d95abe63f7a3c76',1,'HRC::RetargetingManagerSet::enable()']]]
+  ['humanretargetingcontroller_150',['HumanRetargetingController',['../structHRC_1_1HumanRetargetingController.html#afef3ef742a2f30e43dfbdbd797186497',1,'HRC::HumanRetargetingController']]],
+  ['humanwaistposemanager_151',['humanWaistPoseManager',['../classHRC_1_1ArmRetargetingManager.html#ac09b5505655583bca00239cea09e5a68',1,'HRC::ArmRetargetingManager']]]
 ];

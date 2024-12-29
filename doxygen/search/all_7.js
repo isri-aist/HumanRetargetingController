@@ -1,12 +1,10 @@
 var searchData=
 [
-  ['feet_22',['Feet',['../namespaceHRC_1_1Feet.html',1,'HRC']]],
-  ['hrc_23',['HRC',['../namespaceHRC.html',1,'']]],
-  ['humanbasepose_24',['humanBasePose',['../classHRC_1_1RetargetingManager.html#a0d1240ef0b63f8bcf185eb831b3fd1cc',1,'HRC::RetargetingManager']]],
-  ['humanbasepose_5f_25',['humanBasePose_',['../classHRC_1_1RetargetingManagerSet.html#ac02af4fe2e2aca1ac3962af16c6d7e72',1,'HRC::RetargetingManagerSet']]],
-  ['humanretargetingcontroller_26',['HumanRetargetingController',['../structHRC_1_1HumanRetargetingController.html',1,'HRC::HumanRetargetingController'],['../structHRC_1_1HumanRetargetingController.html#afef3ef742a2f30e43dfbdbd797186497',1,'HRC::HumanRetargetingController::HumanRetargetingController()']]],
-  ['humanretargetingcontroller_2eh_27',['HumanRetargetingController.h',['../HumanRetargetingController_8h.html',1,'']]],
-  ['humantargetpose_5f_28',['humanTargetPose_',['../classHRC_1_1RetargetingManager.html#a664e6725cc283b0ffcf0c90db476df6f',1,'HRC::RetargetingManager']]],
-  ['humantargetposeprev_5f_29',['humanTargetPosePrev_',['../classHRC_1_1RetargetingManager.html#a572b220fa95d62716d95db451e0c58ee',1,'HRC::RetargetingManager']]],
-  ['humantargetposevel_30',['humanTargetPoseVel',['../classHRC_1_1RetargetingManager.html#aea5c176af9665021bc3c4905243e45da',1,'HRC::RetargetingManager']]]
+  ['initialstate_47',['InitialState',['../structHRC_1_1InitialState.html',1,'HRC']]],
+  ['initialstate_2eh_48',['InitialState.h',['../InitialState_8h.html',1,'']]],
+  ['invalidreasonstr_5f_49',['invalidReasonStr_',['../classHRC_1_1RosPoseManager.html#ad6c3632bd2d70fa6b0358953d2442cdd',1,'HRC::RosPoseManager']]],
+  ['isenabled_5f_50',['isEnabled_',['../classHRC_1_1RetargetingManagerSet.html#a68d88a975728c5664b92b0f467db5103',1,'HRC::RetargetingManagerSet']]],
+  ['isinitialized_51',['isInitialized',['../structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#aaae469d6e43a4c22e8c7093a21480f6b',1,'HRC::ArmRetargetingManager::CalibResult']]],
+  ['isready_5f_52',['isReady_',['../classHRC_1_1RetargetingManagerSet.html#af776af9d4759f5fc2e6f0714562eee2e',1,'HRC::RetargetingManagerSet']]],
+  ['isvalid_53',['isValid',['../classHRC_1_1RosPoseManager.html#a34182eb8fb4ba3da1d4e97fd26570dea',1,'HRC::RosPoseManager']]]
 ];

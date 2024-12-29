@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['disable_15',['disable',['../classHRC_1_1RetargetingManager.html#acd009ebfd2f1655beafaf1a9deb3e7e0',1,'HRC::RetargetingManager::disable()'],['../classHRC_1_1RetargetingManagerSet.html#a5219d2253380a8eab4d71194639acfd6',1,'HRC::RetargetingManagerSet::disable()']]],
-  ['disabled_16',['Disabled',['../namespaceHRC.html#af539d913bb41ac610bf9a3b2872ea4b9ab9f5c797ebbf55adccdd8539a65a0241',1,'HRC']]]
+  ['disable_25',['disable',['../classHRC_1_1ArmRetargetingManager.html#a1249f2b8e9d237b6b9330ec846b9219a',1,'HRC::ArmRetargetingManager::disable()'],['../classHRC_1_1RetargetingManagerSet.html#a5219d2253380a8eab4d71194639acfd6',1,'HRC::RetargetingManagerSet::disable()']]],
+  ['distorigin_5f_26',['distOrigin_',['../classHRC_1_1RosPoseManager.html#ac4493f06dc44195f2be978bcb81f654f',1,'HRC::RosPoseManager']]],
+  ['distthre_5f_27',['distThre_',['../classHRC_1_1RosPoseManager.html#af4afe6d575dc417a0193ccf32d05c410',1,'HRC::RosPoseManager']]],
+  ['dump_28',['dump',['../structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#a762bf6c21ab33f51d854e51fc72233c7',1,'HRC::ArmRetargetingManager::CalibResult']]]
 ];

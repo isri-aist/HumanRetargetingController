@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['joycallback_120',['joyCallback',['../structHRC_1_1ViveRosState.html#ae02950e5425c66dd472ae679833c6494',1,'HRC::ViveRosState']]]
+  ['load_154',['load',['../structHRC_1_1ArmRetargetingManager_1_1Configuration.html#a49ffb9decff574357350d2e9dff94953',1,'HRC::ArmRetargetingManager::Configuration::load()'],['../structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#abdf82c47d8709e1e77100a02bbd24268',1,'HRC::ArmRetargetingManager::CalibResult::load()']]]
 ];

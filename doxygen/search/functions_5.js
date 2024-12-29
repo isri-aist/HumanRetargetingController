@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getretargetingphasecolor_116',['getRetargetingPhaseColor',['../classHRC_1_1RetargetingManagerSet.html#a7567c971bf118694b44ff0e006fbe986',1,'HRC::RetargetingManagerSet']]]
+  ['isvalid_152',['isValid',['../classHRC_1_1RosPoseManager.html#a34182eb8fb4ba3da1d4e97fd26570dea',1,'HRC::RosPoseManager']]]
 ];

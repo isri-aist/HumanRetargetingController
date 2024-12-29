@@ -1,6 +1,0 @@
-<map id="HRC::RetargetingManager" name="HRC::RetargetingManager">
-<area shape="rect" id="node1" title="Retargeting manager." alt="" coords="47,185,237,212"/>
-<area shape="rect" id="node2" href="$structHRC_1_1RetargetingManager_1_1Configuration.html" title="Configuration." alt="" coords="5,81,196,123"/>
-<area shape="rect" id="node3" href="$structHRC_1_1HumanRetargetingController.html" title="Controller for retargeting the motion from human to humanoid robot." alt="" coords="221,89,466,115"/>
-<area shape="rect" id="node4" title=" " alt="" coords="226,5,461,32"/>
-</map>

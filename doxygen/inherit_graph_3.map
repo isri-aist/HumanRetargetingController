@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,129,32"/>
-<area shape="rect" id="node2" href="$classHRC_1_1RetargetingManagerSet.html" title="Set of RetargetingManager." alt="" coords="177,5,389,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,200,32"/>
+<area shape="rect" id="node2" href="$structHRC_1_1HumanRetargetingController.html" title="Controller for retargeting the motion from human to humanoid robot." alt="" coords="248,5,493,32"/>
 </map>

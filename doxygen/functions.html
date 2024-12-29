@@ -72,12 +72,19 @@ $(function() {
 
 <h3><a id="index_a"></a>- a -</h3><ul>
 <li>addToGUI()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a3d635454b22a8ba50a27ab70733baa1f">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a9ef6ee9861af9d2627088ebfb39ea6fd">HRC::ArmRetargetingManager</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a1860f174a46f751c0aa3b6f57459a5a9">HRC::RetargetingManagerSet</a>
 </li>
 <li>addToLogger()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a6369a9f0f6d4cdc898fc62c1c3c2cdf5">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#ae8d9e8b70c32b90f24394c81e5fd4b0a">HRC::ArmRetargetingManager</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#aaacd58b59b6c4dd7df65150d5e7bc5e7">HRC::RetargetingManagerSet</a>
+</li>
+<li>ArmRetargetingManager()
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a86cf71e53ba414d7fc61f93f670e53dd">HRC::ArmRetargetingManager</a>
+, <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a22390074f527ef609860419e50f6b8ef">HRC::RetargetingManagerSet</a>
+</li>
+<li>armSide
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1Configuration.html#a0d4985b9be16e690323f76a81dd8b54c">HRC::ArmRetargetingManager::Configuration</a>
 </li>
 </ul>
 
@@ -86,25 +93,40 @@ $(function() {
 <li>baseOriTaskStiffness_
 : <a class="el" href="structHRC_1_1InitialState.html#a9306ced6895c0872a304db81e92ba2b9">HRC::InitialState</a>
 </li>
-<li>basePoseCallback()
-: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a627b7fbe54af7c594c244ac4cc57b5a3">HRC::RetargetingManagerSet</a>
-</li>
-<li>basePoseLatestTime_
-: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a0ff6c1451eefbf0f8811ee1a6b087ada">HRC::RetargetingManagerSet</a>
-</li>
-<li>basePoseSub_
-: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#aa8b6a4d5bdb23c790babc7a42e4d23a3">HRC::RetargetingManagerSet</a>
-</li>
-<li>bodyPart
-: <a class="el" href="structHRC_1_1RetargetingManager_1_1Configuration.html#a29b0316f1067d17f67fc6a4971fc6687">HRC::RetargetingManager::Configuration</a>
-</li>
 </ul>
 
 
 <h3><a id="index_c"></a>- c -</h3><ul>
+<li>calcLimbLengthsForCalib()
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a931b9e91971cc1cd32422d785f4285e6">HRC::ArmRetargetingManager</a>
+</li>
+<li>calcShoulderPoseForCalib()
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a79ed8277fd4a33bfd18b40ae0d9c5a6c">HRC::ArmRetargetingManager</a>
+</li>
+<li>CalibResult()
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#a0d3eac9d9503be754db3f7469dba557f">HRC::ArmRetargetingManager::CalibResult</a>
+</li>
+<li>calibResult_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a079e17da9367ee6b62681bc98e503c94">HRC::ArmRetargetingManager</a>
+</li>
+<li>calibResultConfig
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1Configuration.html#a7275b54b176b019d98832bf89ebc7952">HRC::ArmRetargetingManager::Configuration</a>
+</li>
+<li>calibRobots_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a183e6178c86657945b29ce5a3e28c3ed">HRC::ArmRetargetingManager</a>
+</li>
+<li>CalibSource
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a908a2bf36e70cc63b089fbe8dadf9d6a">HRC::ArmRetargetingManager</a>
+</li>
 <li>callbackQueue_
 : <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a7b9cb8510d91c973fc991b37c9f71196">HRC::RetargetingManagerSet</a>
 , <a class="el" href="structHRC_1_1ViveRosState.html#af0827cbd668f84d0ff47a524b3794545">HRC::ViveRosState</a>
+</li>
+<li>clearCalibRobot()
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a91fb567fbc39b36c832b65a7034c0aa4">HRC::ArmRetargetingManager</a>
+</li>
+<li>clearDistValidityCheck()
+: <a class="el" href="classHRC_1_1RosPoseManager.html#ae19ee154b045ebbb163b3233a5fee1f9">HRC::RosPoseManager</a>
 </li>
 <li>complete()
 : <a class="el" href="structHRC_1_1InitialState.html#a88264ce869163abf2bc56443e23984ab">HRC::InitialState</a>
@@ -113,21 +135,23 @@ $(function() {
 : <a class="el" href="structHRC_1_1InitialState.html#a16e39fce0b9b51dfb015cb4ccb3feb5e">HRC::InitialState</a>
 </li>
 <li>config()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a4162e7e984fca7f98afcaaed9120583e">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a120cfac0f3d03078858ef78d41c8d423">HRC::ArmRetargetingManager</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a7400e15cfe017dbb70f6587e8f910eac">HRC::RetargetingManagerSet</a>
 </li>
 <li>config_
-: <a class="el" href="classHRC_1_1RetargetingManager.html#af5c4c8cf5adb62721075bec78c6bdf2d">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a02e6a58851cc69ff2ef4211ad2b37019">HRC::ArmRetargetingManager</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a379658fb492a647ee526b477beac6c12">HRC::RetargetingManagerSet</a>
 </li>
 <li>ctl()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a10372fb7b850b858fb9b294c4dc4fc6a">HRC::RetargetingManager</a>
-, <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a788113c4e5e80076cefdb229fb8e3a80">HRC::RetargetingManagerSet</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#af69da8686becfe0665d0521303ce543a">HRC::ArmRetargetingManager</a>
+, <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a67cb80e168fea180517c7db836a49191">HRC::RetargetingManagerSet</a>
+, <a class="el" href="classHRC_1_1RosPoseManager.html#a37e26d8f72c74aaba8fcd1ce4948fed8">HRC::RosPoseManager</a>
 , <a class="el" href="structHRC_1_1State.html#a2b481a765cd110b55625de0b76ea82c0">HRC::State</a>
 </li>
 <li>ctlPtr_
-: <a class="el" href="classHRC_1_1RetargetingManager.html#afa1b0a65174b408c6d33f51d991c98c6">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a75df5598b96c01445330539189b3e3d9">HRC::ArmRetargetingManager</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a91589fcc26ceec3572b44815be23fad2">HRC::RetargetingManagerSet</a>
+, <a class="el" href="classHRC_1_1RosPoseManager.html#abcdf4feb43e744252c5ded9bda6bc140">HRC::RosPoseManager</a>
 , <a class="el" href="structHRC_1_1State.html#af2b67dcbdd2737bd3ac6f8b1b2dfbe8e">HRC::State</a>
 </li>
 </ul>
@@ -135,15 +159,36 @@ $(function() {
 
 <h3><a id="index_d"></a>- d -</h3><ul>
 <li>disable()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#acd009ebfd2f1655beafaf1a9deb3e7e0">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a1249f2b8e9d237b6b9330ec846b9219a">HRC::ArmRetargetingManager</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a5219d2253380a8eab4d71194639acfd6">HRC::RetargetingManagerSet</a>
+</li>
+<li>distOrigin_
+: <a class="el" href="classHRC_1_1RosPoseManager.html#ac4493f06dc44195f2be978bcb81f654f">HRC::RosPoseManager</a>
+</li>
+<li>distThre_
+: <a class="el" href="classHRC_1_1RosPoseManager.html#af4afe6d575dc417a0193ccf32d05c410">HRC::RosPoseManager</a>
+</li>
+<li>dump()
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#a762bf6c21ab33f51d854e51fc72233c7">HRC::ArmRetargetingManager::CalibResult</a>
 </li>
 </ul>
 
 
 <h3><a id="index_e"></a>- e -</h3><ul>
+<li>elbowBodyPart
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1Configuration.html#a6a7354621fcc033e61f9c6680669441c">HRC::ArmRetargetingManager::Configuration</a>
+</li>
+<li>elbowRotTransFromHumanToRobot
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#a75be1ee07d9d75913109cc5b468a5a82">HRC::ArmRetargetingManager::CalibResult</a>
+</li>
+<li>elbowScale
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#a4a421c9709e699777866c9ef0a34ac87">HRC::ArmRetargetingManager::CalibResult</a>
+</li>
+<li>elbowTask_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#afce300c30d5c6026266405dd0c6b23d4">HRC::ArmRetargetingManager</a>
+</li>
 <li>enable()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a63ce70cffdabea149aef9d51cff45171">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a81cb9628a013ca5a6dcd7990cfef1731">HRC::ArmRetargetingManager</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a446af4a2536291a78d95abe63f7a3c76">HRC::RetargetingManagerSet</a>
 </li>
 </ul>
@@ -151,43 +196,57 @@ $(function() {
 
 <h3><a id="index_f"></a>- f -</h3><ul>
 <li>footTasksStiffness_
-: <a class="el" href="structHRC_1_1InitialState.html#a45a3201b176f397f1f8fac29d5f90f71">HRC::InitialState</a>
-</li>
-</ul>
-
-
-<h3><a id="index_g"></a>- g -</h3><ul>
-<li>getRetargetingPhaseColor()
-: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a7567c971bf118694b44ff0e006fbe986">HRC::RetargetingManagerSet</a>
+: <a class="el" href="structHRC_1_1InitialState.html#a4db208eaa207fd07d07486836d447757">HRC::InitialState</a>
 </li>
 </ul>
 
 
 <h3><a id="index_h"></a>- h -</h3><ul>
-<li>humanBasePose()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a0d1240ef0b63f8bcf185eb831b3fd1cc">HRC::RetargetingManager</a>
+<li>humanCalibSource_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a78611f6e454789fc4af7e48f661f5919">HRC::ArmRetargetingManager</a>
 </li>
-<li>humanBasePose_
-: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#ac02af4fe2e2aca1ac3962af16c6d7e72">HRC::RetargetingManagerSet</a>
+<li>humanElbowPoseManager_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#afd1bd0141bce88b48b018c321de0f3d3">HRC::ArmRetargetingManager</a>
+</li>
+<li>humanElbowPoseTopicName
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1Configuration.html#a25968a748a65f732e3b05ed43e57a190">HRC::ArmRetargetingManager::Configuration</a>
 </li>
 <li>HumanRetargetingController()
 : <a class="el" href="structHRC_1_1HumanRetargetingController.html#afef3ef742a2f30e43dfbdbd797186497">HRC::HumanRetargetingController</a>
 </li>
-<li>humanTargetPose_
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a664e6725cc283b0ffcf0c90db476df6f">HRC::RetargetingManager</a>
+<li>humanTransFromBaseToShoulder
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#a637c351e4fee8a2a8bc1915c2943d974">HRC::ArmRetargetingManager::CalibResult</a>
 </li>
-<li>humanTargetPosePrev_
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a572b220fa95d62716d95db451e0c58ee">HRC::RetargetingManager</a>
+<li>humanWaistPoseManager()
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#ac09b5505655583bca00239cea09e5a68">HRC::ArmRetargetingManager</a>
 </li>
-<li>humanTargetPoseVel()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#aea5c176af9665021bc3c4905243e45da">HRC::RetargetingManager</a>
+<li>humanWaistPoseManager_
+: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a19d208114be080b9c6c07e7fd3541e3f">HRC::RetargetingManagerSet</a>
+</li>
+<li>humanWristPoseManager_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a53d5699e48e3f472f0daad18494c5c0d">HRC::ArmRetargetingManager</a>
+</li>
+<li>humanWristPoseTopicName
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1Configuration.html#aedb92beb5e0a41ac247777449e2de249">HRC::ArmRetargetingManager::Configuration</a>
 </li>
 </ul>
 
 
 <h3><a id="index_i"></a>- i -</h3><ul>
+<li>invalidReasonStr_
+: <a class="el" href="classHRC_1_1RosPoseManager.html#ad6c3632bd2d70fa6b0358953d2442cdd">HRC::RosPoseManager</a>
+</li>
+<li>isEnabled_
+: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a68d88a975728c5664b92b0f467db5103">HRC::RetargetingManagerSet</a>
+</li>
+<li>isInitialized
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#aaae469d6e43a4c22e8c7093a21480f6b">HRC::ArmRetargetingManager::CalibResult</a>
+</li>
 <li>isReady_
 : <a class="el" href="classHRC_1_1RetargetingManagerSet.html#af776af9d4759f5fc2e6f0714562eee2e">HRC::RetargetingManagerSet</a>
+</li>
+<li>isValid()
+: <a class="el" href="classHRC_1_1RosPoseManager.html#a34182eb8fb4ba3da1d4e97fd26570dea">HRC::RosPoseManager</a>
 </li>
 </ul>
 
@@ -203,19 +262,20 @@ $(function() {
 
 
 <h3><a id="index_l"></a>- l -</h3><ul>
+<li>latestPose_
+: <a class="el" href="classHRC_1_1RosPoseManager.html#a8ec9cbfc0c1b2c214445273b63f8bb22">HRC::RosPoseManager</a>
+</li>
+<li>latestTime_
+: <a class="el" href="classHRC_1_1RosPoseManager.html#a4675f38b5b4e4bdd699fcc74e83f69f0">HRC::RosPoseManager</a>
+</li>
 <li>load()
-: <a class="el" href="structHRC_1_1RetargetingManager_1_1Configuration.html#ad00d754df8651905990d65b5abf9c2f8">HRC::RetargetingManager::Configuration</a>
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#abdf82c47d8709e1e77100a02bbd24268">HRC::ArmRetargetingManager::CalibResult</a>
+, <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1Configuration.html#a49ffb9decff574357350d2e9dff94953">HRC::ArmRetargetingManager::Configuration</a>
 </li>
 </ul>
 
 
 <h3><a id="index_n"></a>- n -</h3><ul>
-<li>name
-: <a class="el" href="structHRC_1_1RetargetingManager_1_1Configuration.html#acc48e6859c6211d4b2a026fadd8df677">HRC::RetargetingManager::Configuration</a>
-</li>
-<li>nh()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a1ff77cde24f2977ff252038a979c7c18">HRC::RetargetingManager</a>
-</li>
 <li>nh_
 : <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a9cef642364af5c1ee632c5ceaba7b52a">HRC::RetargetingManagerSet</a>
 , <a class="el" href="structHRC_1_1ViveRosState.html#a744460be5d208d7c77529fc568d6a91b">HRC::ViveRosState</a>
@@ -227,64 +287,69 @@ $(function() {
 <li>phase_
 : <a class="el" href="structHRC_1_1InitialState.html#acdcf301a4609ab3bfaf67f7cb62da7a4">HRC::InitialState</a>
 </li>
-<li>pointMarkerSize
-: <a class="el" href="structHRC_1_1RetargetingManager_1_1Configuration.html#a9a8e5362617bcd09ef01d39a9a189790">HRC::RetargetingManager::Configuration</a>
+<li>pose()
+: <a class="el" href="classHRC_1_1RosPoseManager.html#a877c548d883c835ff51cfa12e92bc95a">HRC::RosPoseManager</a>
 </li>
-<li>postUpdate()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a2a03b0e773a4a965cc9ebd013b5f32fe">HRC::RetargetingManager</a>
+<li>poseCallback()
+: <a class="el" href="classHRC_1_1RosPoseManager.html#aa1d671cfec8ba0a98c51077ff7c16e16">HRC::RosPoseManager</a>
 </li>
-<li>preUpdate()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a6f9d9809b3be1ec99a63ea766edf4d95">HRC::RetargetingManager</a>
+<li>poseSub_
+: <a class="el" href="classHRC_1_1RosPoseManager.html#add3f3b8c0ee9f94db4348288b391b321">HRC::RosPoseManager</a>
+</li>
+<li>prevPose_
+: <a class="el" href="classHRC_1_1RosPoseManager.html#ad820a243cb50ccf74bafcf3910fd3511">HRC::RosPoseManager</a>
+</li>
+<li>prevTime_
+: <a class="el" href="classHRC_1_1RosPoseManager.html#aa1e0984adfec5e7a868e166c0d1c6d3a">HRC::RosPoseManager</a>
 </li>
 </ul>
 
 
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>removeFromGUI()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a258523ff512882f243556c2ca10d727c">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#aa59204b95bccf6dcfb5bf398f2e0119b">HRC::ArmRetargetingManager</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a708cfcb38b84f119e87529757eb67210">HRC::RetargetingManagerSet</a>
 </li>
 <li>removeFromLogger()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a9850b580202f54614bb99bdb503b56e7">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a575d7cb26e2057f9a43ad3c057f1d180">HRC::ArmRetargetingManager</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a54a030247552a8583c1a40631db18a3d">HRC::RetargetingManagerSet</a>
 </li>
 <li>reset()
-: <a class="el" href="structHRC_1_1HumanRetargetingController.html#a5e305b0d6af91245197061ccb86780b3">HRC::HumanRetargetingController</a>
-, <a class="el" href="classHRC_1_1RetargetingManager.html#aff88845f4cb7c7e85f3f35b26e21b28c">HRC::RetargetingManager</a>
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#af659497ec31eb598be5f1a5d496c6f38">HRC::ArmRetargetingManager::CalibResult</a>
+, <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a2f0e4f2ee0c8dbf26f0a3bc17c3d197e">HRC::ArmRetargetingManager</a>
+, <a class="el" href="structHRC_1_1HumanRetargetingController.html#a5e305b0d6af91245197061ccb86780b3">HRC::HumanRetargetingController</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a55d3a54b2972f485f10c9c3aab6536f8">HRC::RetargetingManagerSet</a>
 </li>
-<li>retargetingImpTask()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#ac6305bc5fe348a1c4d06fb930ea0b1d8">HRC::RetargetingManager</a>
-</li>
-<li>RetargetingManager()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a44aa21cd22c5e952571a0943e60ed720">HRC::RetargetingManager</a>
-, <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a64034b004bea687a6d6e93ca52e1e955">HRC::RetargetingManagerSet</a>
-</li>
 <li>RetargetingManagerSet
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a633b3afbf73ba4f340d2c7e2fad4ba7e">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a633b3afbf73ba4f340d2c7e2fad4ba7e">HRC::ArmRetargetingManager</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a4a84c161174e316198f3b4ddbbd6f88f">HRC::RetargetingManagerSet</a>
 </li>
 <li>retargetingManagerSet_
 : <a class="el" href="structHRC_1_1HumanRetargetingController.html#a55d4b06708f6a3caf9eafda10f4c37c2">HRC::HumanRetargetingController</a>
 </li>
-<li>retargetingPhase_
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a737661feeb9603d0764b803900689fbc">HRC::RetargetingManager</a>
-, <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a30dc03b85b64f15fcbbc78138c839c1e">HRC::RetargetingManagerSet</a>
-</li>
-<li>retargetingTask()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a40631b4b0fc87a55cc73b6c176ad8fe1">HRC::RetargetingManager</a>
-</li>
 <li>retargetingTasks_
 : <a class="el" href="structHRC_1_1HumanRetargetingController.html#a80566a4035b768d631771b7d25ec6b09">HRC::HumanRetargetingController</a>
 </li>
-<li>robotBasePose()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#acd547efca0d6ae2f33a1cad9638c5ad3">HRC::RetargetingManager</a>
+<li>robotCalibPostures
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1Configuration.html#a8d53e4e9e28f91f430780e9b6fa113b3">HRC::ArmRetargetingManager::Configuration</a>
 </li>
-<li>robotBasePose_
-: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a0bdadeedf20d66e05358eeb853bcd5a5">HRC::RetargetingManagerSet</a>
+<li>robotCalibSource_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a97da09646276dd071f9d52a2c79c02bf">HRC::ArmRetargetingManager</a>
 </li>
-<li>robotTargetPose_
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a3d32b083d61b9fcb4878c9ae6e0b5800">HRC::RetargetingManager</a>
+<li>robotElbowPose_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a381109bc8aa7904e77ef905a50e4cf2f">HRC::ArmRetargetingManager</a>
+</li>
+<li>robotShoulderPose_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a16e3715a2dc169115e65ec88d8c2150b">HRC::ArmRetargetingManager</a>
+</li>
+<li>robotTransFromBaseToShoulder
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#afd1511242613a4a59ca8b2a924346994">HRC::ArmRetargetingManager::CalibResult</a>
+</li>
+<li>robotWristPose_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a7197818adf9db6b78585e6a7e752fcfe">HRC::ArmRetargetingManager</a>
+</li>
+<li>RosPoseManager()
+: <a class="el" href="classHRC_1_1RosPoseManager.html#aec82a2e36171b655587a67c7c558ff8b">HRC::RosPoseManager</a>
 </li>
 <li>run()
 : <a class="el" href="structHRC_1_1HumanRetargetingController.html#a4dd818a50895dee6764a5334499b5ddd">HRC::HumanRetargetingController</a>
@@ -298,39 +363,36 @@ $(function() {
 <li>setDatastore()
 : <a class="el" href="structHRC_1_1ViveRosState.html#a62599049860d789e9291eb26b80ba8ef">HRC::ViveRosState</a>
 </li>
+<li>setDistValidityCheck()
+: <a class="el" href="classHRC_1_1RosPoseManager.html#ad2bce60b44c9e4005fdcaedd832fb47b">HRC::RosPoseManager</a>
+</li>
+<li>setHumanCalibSource()
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a9aa8292b0df5416ab5bbcfd74305df4d">HRC::ArmRetargetingManager</a>
+</li>
+<li>setRobotCalibSource()
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a95afd3f2b813cca077bd3a2f24363f2f">HRC::ArmRetargetingManager</a>
+</li>
 <li>start()
 : <a class="el" href="structHRC_1_1InitialState.html#a70b0a2f9a27eec8a6566f1f1cb47ed69">HRC::InitialState</a>
 , <a class="el" href="structHRC_1_1State.html#a2f6aedefb1c8bb49000b49119616b8cd">HRC::State</a>
 , <a class="el" href="structHRC_1_1ViveRosState.html#a9b82f29494b1d33e0e09b0bc43694bd5">HRC::ViveRosState</a>
 </li>
 <li>stiffness
-: <a class="el" href="structHRC_1_1RetargetingManager_1_1Configuration.html#ab6b27675f9ccf007ca180ea771b1c0a3">HRC::RetargetingManager::Configuration</a>
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1Configuration.html#a43aabf3dab534856e6f143b9445bcb45">HRC::ArmRetargetingManager::Configuration</a>
 </li>
 <li>stiffnessRatioFunc_
-: <a class="el" href="structHRC_1_1InitialState.html#a53f0fc5489a68aa87e24e76d6727d5ab">HRC::InitialState</a>
-, <a class="el" href="classHRC_1_1RetargetingManager.html#aea1b27374a0a32771c1431201b078620">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#ad994a08c47990d53f9e76ae152385900">HRC::ArmRetargetingManager</a>
+, <a class="el" href="structHRC_1_1InitialState.html#a53f0fc5489a68aa87e24e76d6727d5ab">HRC::InitialState</a>
 </li>
 <li>stop()
-: <a class="el" href="structHRC_1_1HumanRetargetingController.html#a33d3111031452f12e382c19e9b2cdfc1">HRC::HumanRetargetingController</a>
-, <a class="el" href="classHRC_1_1RetargetingManager.html#a30a383a0431bba587b279955e046b3b1">HRC::RetargetingManager</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#aea508bc9ce6e07191c55590a4334d713">HRC::ArmRetargetingManager</a>
+, <a class="el" href="structHRC_1_1HumanRetargetingController.html#a33d3111031452f12e382c19e9b2cdfc1">HRC::HumanRetargetingController</a>
 , <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a0c05503024593a6059d1fd07a5f52783">HRC::RetargetingManagerSet</a>
 </li>
 </ul>
 
 
 <h3><a id="index_t"></a>- t -</h3><ul>
-<li>targetPoseCallback()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a219803ce02c945683315eb05ba7ab892">HRC::RetargetingManager</a>
-</li>
-<li>targetPoseLatestTime_
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a8a97e410328f6f7913980d1652de1af0">HRC::RetargetingManager</a>
-</li>
-<li>targetPoseSub_
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a4b16f41c7b28a26b234bf79ea743a12e">HRC::RetargetingManager</a>
-</li>
-<li>targetPoseTopicName
-: <a class="el" href="structHRC_1_1RetargetingManager_1_1Configuration.html#a22c7f3d83a165c5f88ccdc229bbfe193">HRC::RetargetingManager::Configuration</a>
-</li>
 <li>teardown()
 : <a class="el" href="structHRC_1_1InitialState.html#a22b143c3cac5ce06c02e5d6e1900824c">HRC::InitialState</a>
 , <a class="el" href="structHRC_1_1ViveRosState.html#ac4526dfead78d66c1da9c56593ba3081">HRC::ViveRosState</a>
@@ -340,17 +402,39 @@ $(function() {
 
 <h3><a id="index_u"></a>- u -</h3><ul>
 <li>update()
-: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a13af2848266f98380d4fb20432cac86b">HRC::RetargetingManagerSet</a>
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#ab60131950c2f851c708e4c627e5e99b2">HRC::ArmRetargetingManager</a>
+, <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a13af2848266f98380d4fb20432cac86b">HRC::RetargetingManagerSet</a>
+</li>
+<li>updateCalib()
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#a38c558361db8981288a68ee0a14d0ba5">HRC::ArmRetargetingManager</a>
+</li>
+<li>updateEnablement()
+: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#ae0666eb3a67fed14056befd193e0d183">HRC::RetargetingManagerSet</a>
 </li>
 <li>updateGUI()
 : <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a76cdda0d89c91a2697a56614a19ce459">HRC::RetargetingManagerSet</a>
 </li>
-<li>updatePhase()
-: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a8af32addaa293d8b94356df5c8ae672d">HRC::RetargetingManagerSet</a>
+<li>updateReadiness()
+: <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a096896ac3f704740152d6df2f8179abb">HRC::RetargetingManagerSet</a>
 </li>
-<li>updateValidity()
-: <a class="el" href="classHRC_1_1RetargetingManager.html#a5ab6d67d63fd70adbf3982c30520d0fb">HRC::RetargetingManager</a>
-, <a class="el" href="classHRC_1_1RetargetingManagerSet.html#a25dcf554dc1211e3195153b9592fe3b8">HRC::RetargetingManagerSet</a>
+<li>updateTaskTarget()
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#ae54e56656238936a4ebecab58e03acbf">HRC::ArmRetargetingManager</a>
+</li>
+</ul>
+
+
+<h3><a id="index_w"></a>- w -</h3><ul>
+<li>wristBodyPart
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1Configuration.html#a22b62f0c0ea019b2befc979c175cc449">HRC::ArmRetargetingManager::Configuration</a>
+</li>
+<li>wristRotTransFromHumanToRobot
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#a7ee3fc776c4fc6e3ca12e285ead279fd">HRC::ArmRetargetingManager::CalibResult</a>
+</li>
+<li>wristScale
+: <a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#a352c52e2ee88eb94c215e3558d553efe">HRC::ArmRetargetingManager::CalibResult</a>
+</li>
+<li>wristTask_
+: <a class="el" href="classHRC_1_1ArmRetargetingManager.html#ae8af21425f05c9f32f23068ebbee6c19">HRC::ArmRetargetingManager</a>
 </li>
 </ul>
 </div><!-- contents -->

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['configuration_86',['Configuration',['../structHRC_1_1RetargetingManager_1_1Configuration.html',1,'HRC::RetargetingManager']]]
+  ['armretargetingmanager_114',['ArmRetargetingManager',['../classHRC_1_1ArmRetargetingManager.html',1,'HRC']]]
 ];
