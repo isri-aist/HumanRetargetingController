@@ -8,7 +8,7 @@ Panels:
         - /Surface1/Namespaces1
         - /Vive1
       Splitter Ratio: 0.4228571355342865
-    Tree Height: 441
+    Tree Height: 461
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -69,374 +69,310 @@ Visualization Manager:
       Enabled: true
       Links:
         All Links Enabled: true
-        BODY:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        CHEST_P_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        CHEST_Y_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
-        HEAD_P_LINK:
+        L_ANKLE_P_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        HEAD_Y_LINK:
+        L_ANKLE_R_S:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        L_ELBOW_P_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-AI-base_LINK:
+        L_ELBOW_Y_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-AI-hinge_LINK:
+        L_HIP_P_S:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        L_HIP_R_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-AO-base_LINK:
+        L_HIP_Y_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-AO-hinge_LINK:
+        L_KNEE_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-CI-base_LINK:
+        L_LINDEX_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-CI-hinge_LINK:
+        L_LLITTLE_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-CO-base_LINK:
+        L_LTHUMB_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-CO-hinge_LINK:
+        L_SHOULDER_P_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-E-base_LINK:
+        L_SHOULDER_R_S:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        L_SHOULDER_Y_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-K-base_LINK:
+        L_UINDEX_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC-KD-base_LINK:
+        L_ULITTLE_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC_AI_LINK:
+        L_UTHUMB_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        LC_AO_LINK:
+        L_WRIST_R_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        LC_CI_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        LC_CO_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        LC_E_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        LC_KD_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        LC_K_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_ANKLE_P_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_ANKLE_R_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_CROTCH_P_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_CROTCH_R_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_CROTCH_Y_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_ELBOW_P_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_ELBOW_Y_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_HAND_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_KNEE_P_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_SHOULDER_P_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_SHOULDER_R_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_SHOULDER_Y_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_WRIST_P_LINK:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        L_WRIST_Y_LINK:
+        L_WRIST_Y_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
         Link Tree Style: Links in Alphabetic Order
-        RC-AI-base_LINK:
+        NECK_P_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC-AI-hinge_LINK:
+        NECK_R_S:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        NECK_Y_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC-AO-base_LINK:
+        PELVIS_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC-AO-hinge_LINK:
+        R_ANKLE_P_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC-CI-base_LINK:
+        R_ANKLE_R_S:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        R_ELBOW_P_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC-CI-hinge_LINK:
+        R_ELBOW_Y_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC-CO-base_LINK:
+        R_HIP_P_S:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        R_HIP_R_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC-CO-hinge_LINK:
+        R_HIP_Y_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC-E-base_LINK:
+        R_KNEE_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC-K-base_LINK:
+        R_LINDEX_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC-KD-base_LINK:
+        R_LLITTLE_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC_AI_LINK:
+        R_LTHUMB_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC_AO_LINK:
+        R_SHOULDER_P_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC_CI_LINK:
+        R_SHOULDER_R_S:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        R_SHOULDER_Y_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC_CO_LINK:
+        R_UINDEX_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC_E_LINK:
+        R_ULITTLE_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC_KD_LINK:
+        R_UTHUMB_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        RC_K_LINK:
+        R_WRIST_R_S:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        R_WRIST_Y_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        R_ANKLE_P_LINK:
+        WAIST_P_S:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        WAIST_R_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        R_ANKLE_R_LINK:
+        WAIST_Y_S:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        R_CROTCH_P_LINK:
+        base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_CROTCH_R_LINK:
+        dcamera:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_CROTCH_Y_LINK:
+        gsensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_ELBOW_P_LINK:
+        gyrometer:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_ELBOW_Y_LINK:
+        jvrc1_back_tactile_sensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_HAND_LINK:
+        jvrc1_left_foot_tactile_sensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_KNEE_P_LINK:
+        jvrc1_left_knee_tactile_sensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_SHOULDER_P_LINK:
+        jvrc1_left_thigh_tactile_sensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_SHOULDER_R_LINK:
+        jvrc1_right_elbow_tactile_sensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_SHOULDER_Y_LINK:
+        jvrc1_right_foot_tactile_sensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_WRIST_P_LINK:
+        jvrc1_right_thigh_tactile_sensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        R_WRIST_Y_LINK:
+        l_ankle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        l-one-finger-link:
+        l_wrist:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        r-one-finger-link:
+        lcamera:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        rhp7_left_thigh_tactile_sensor:
+        lfsensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        rhp7_right_elbow_tactile_sensor:
+        lhsensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        rhp7_right_thigh_tactile_sensor:
+        r_ankle:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        r_wrist:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ranger:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rcamera:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rfsensor:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rhsensor:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -459,6 +395,22 @@ Visualization Manager:
       Name: RealRobotModel
       Robot Description: /real/robot_description
       TF Prefix: real
+      Update Interval: 0
+      Value: false
+      Visual Enabled: true
+    - Alpha: 0.5
+      Class: rviz/RobotModel
+      Collision Enabled: false
+      Enabled: false
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+      Name: CalibRobotModel
+      Robot Description: /calib/robot_description
+      TF Prefix: calib
       Update Interval: 0
       Value: false
       Visual Enabled: true
@@ -492,8 +444,7 @@ Visualization Manager:
       Marker Topic: /mc_rtc_rviz
       Name: mc_rtc GUI markers
       Namespaces:
-        Collisions/rhp7/rhp7/Arrows/CHEST_P_LINK::L_SHOULDER_Y_LINK_arrow_arrow: true
-        Collisions/rhp7/rhp7/Arrows/CHEST_P_LINK::R_SHOULDER_Y_LINK_arrow_arrow: true
+        Collisions/jvrc1/jvrc1/Arrows/WAIST_R_S::R_SHOULDER_Y_S_arrow_arrow: true
         HRC/CentroidalManager/ForceMarker/Left_Force0_arrow_arrow: true
         HRC/CentroidalManager/ForceMarker/Left_Force1_arrow_arrow: true
         HRC/CentroidalManager/ForceMarker/Left_Force2_arrow_arrow: true
@@ -512,8 +463,15 @@ Visualization Manager:
         HRC/CentroidalManager/ForceMarker/Right_FricPyramid2_edges: true
         HRC/CentroidalManager/ForceMarker/Right_FricPyramid3_edges: true
         HRC/CentroidalManager/ForceMarker/Right_SurfaceRegion: true
-        HRC/RetargetingManagerSet/Marker/BaseToLeftShoulderArrow_arrow_arrow: true
-        HRC/RetargetingManagerSet/Marker/BaseToRightShoulderArrow_arrow_arrow: true
+        HRC/RetargetingManagerSet/Marker/HumanLeftElbowToWristArrow_arrow_arrow: true
+        HRC/RetargetingManagerSet/Marker/HumanLeftShoulderToElbowArrow_arrow_arrow: true
+        HRC/RetargetingManagerSet/Marker/HumanRightElbowToWristArrow_arrow_arrow: true
+        HRC/RetargetingManagerSet/Marker/HumanRightShoulderToElbowArrow_arrow_arrow: true
+        HRC/RetargetingManagerSet/Marker/Phase: true
+        HRC/RetargetingManagerSet/Marker/RobotLeftElbowToWristArrow_arrow_arrow: true
+        HRC/RetargetingManagerSet/Marker/RobotLeftShoulderToElbowArrow_arrow_arrow: true
+        HRC/RetargetingManagerSet/Marker/RobotRightElbowToWristArrow_arrow_arrow: true
+        HRC/RetargetingManagerSet/Marker/RobotRightShoulderToElbowArrow_arrow_arrow: true
       Queue Size: 100
       Value: true
     - Class: rviz/TF
@@ -590,12 +548,44 @@ Visualization Manager:
           Enabled: true
           Head Length: 0.30000001192092896
           Head Radius: 0.10000000149011612
-          Name: Vive/LeftHandPose
+          Name: Vive/LeftWristPose
           Queue Size: 10
           Shaft Length: 1
           Shaft Radius: 0.05000000074505806
           Shape: Axes
-          Topic: /hrc/poses/left_hand
+          Topic: /hrc/poses/left_wrist
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Axes Length: 0.15000000596046448
+          Axes Radius: 0.029999999329447746
+          Class: rviz/Pose
+          Color: 255; 25; 0
+          Enabled: true
+          Head Length: 0.30000001192092896
+          Head Radius: 0.10000000149011612
+          Name: Vive/RightElbowPose
+          Queue Size: 10
+          Shaft Length: 1
+          Shaft Radius: 0.05000000074505806
+          Shape: Axes
+          Topic: /hrc/poses/right_elbow
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Axes Length: 0.15000000596046448
+          Axes Radius: 0.029999999329447746
+          Class: rviz/Pose
+          Color: 255; 25; 0
+          Enabled: true
+          Head Length: 0.30000001192092896
+          Head Radius: 0.10000000149011612
+          Name: Vive/RightWristPose
+          Queue Size: 10
+          Shaft Length: 1
+          Shaft Radius: 0.05000000074505806
+          Shape: Axes
+          Topic: /hrc/poses/right_wrist
           Unreliable: false
           Value: true
       Enabled: false
@@ -628,7 +618,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.9631181955337524
+      Distance: 3.7299885749816895
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -636,17 +626,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.5775099396705627
-        Y: 0.1039738580584526
-        Z: 1.0262229442596436
+        X: 1.570784330368042
+        Y: -0.10924970358610153
+        Z: 0.7618588209152222
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.40152257680892944
+      Pitch: 1.016961932182312
       Target Frame: <Fixed Frame>
-      Yaw: 0.5476487278938293
+      Yaw: 6.2372846603393555
     Saved: ~
 Window Geometry:
   Displays:
@@ -654,7 +644,7 @@ Window Geometry:
   Height: 1672
   Hide Left Dock: false
   Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd0000000400000000000003e50000037afc0200000007fb0000001200530065006c0065006300740069006f006e00000001e10000009b000000b100fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000004bb000001df00000185000000b1fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000012e000004e9fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003a000004e90000013500fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b2000000000000000000000002000005f800000264fc0100000002fc00000000000005f8000001c400fffffffa000000010200000002fb00000018006d0063005f007200740063002000700061006e0065006c0100000000ffffffff000000d800fffffffb000000100044006900730070006c006100790073010000006f000002640000018400fffffffb0000000a00560069006500770073030000004e00000080000002e100000197000000030000078000000058fc0100000002fb0000000800540069006d00650000000000000007800000065900fffffffb0000000800540069006d00650100000000000004500000000000000000000005f80000037a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000003e50000037afc0200000007fb0000001200530065006c0065006300740069006f006e00000001e10000009b000000b100fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000004bb000001df00000185000000b1fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000012e000004e9fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003a000004e90000013500fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000bf000000278fc0100000002fc0000000000000bf0000001c400fffffffa000000000200000002fb00000018006d0063005f007200740063002000700061006e0065006c0100000000ffffffff000000d800fffffffb000000100044006900730070006c006100790073010000006f000002640000018400fffffffb0000000a00560069006500770073030000004e00000080000002e100000197000000030000078000000058fc0100000002fb0000000800540069006d00650000000000000007800000065900fffffffb0000000800540069006d0065010000000000000450000000000000000000000bf00000036600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -663,8 +653,8 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: true
-  Width: 1528
-  X: 1672
+  Width: 3056
+  X: 144
   Y: 54
   mc_rtc panel:
     collapsed: false

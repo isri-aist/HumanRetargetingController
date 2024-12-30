@@ -19,12 +19,12 @@ HumanRetargetingController::HumanRetargetingController(mc_rbdyn::RobotModulePtr 
   // Setup tasks
   if(config().has("RetargetingTaskList"))
   {
-    for(const auto & retargetingTaskConfig : config()("RetargetingTaskList"))
+    for(const auto & [taskName, retargetingTaskConfig] :
+        static_cast<std::map<std::string, mc_rtc::Configuration>>(config()("RetargetingTaskList")))
     {
-      std::string bodyPartName = retargetingTaskConfig("bodyPart");
       retargetingTasks_.emplace(
-          bodyPartName, mc_tasks::MetaTaskLoader::load<mc_tasks::TransformTask>(solver(), retargetingTaskConfig));
-      retargetingTasks_.at(bodyPartName)->name("RetargetingTask_" + bodyPartName);
+          taskName, mc_tasks::MetaTaskLoader::load<mc_tasks::TransformTask>(solver(), retargetingTaskConfig));
+      retargetingTasks_.at(taskName)->name("RetargetingTask_" + taskName);
     }
   }
   else

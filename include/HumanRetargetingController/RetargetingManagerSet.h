@@ -35,6 +35,9 @@ class RetargetingManagerSet : public std::unordered_map<ArmSide, std::shared_ptr
     //! Joints that update the target position at the end of retargeting
     std::vector<std::string> syncJoints;
 
+    //! Human waist pose from origin
+    sva::PTransformd humanWaistPoseFromOrigin = sva::PTransformd::Identity();
+
     //! Point marker size
     double pointMarkerSize = 0.15;
 
@@ -118,12 +121,21 @@ protected:
   /** \brief Update GUI. */
   void updateGUI();
 
+  /** \brief Make robot for calibration. */
+  void makeCalibRobot();
+
+  /** \brief Clear robot for calibration. */
+  void clearCalibRobot();
+
 public:
   //! Whether it is ready for retargeting or not
   bool isReady_ = false;
 
   //! Whether retargeting is enabled or not
   bool isEnabled_ = false;
+
+  //! Robot for calibration
+  std::shared_ptr<mc_rbdyn::Robots> calibRobots_;
 
   //! ROS node handle
   std::shared_ptr<ros::NodeHandle> nh_;

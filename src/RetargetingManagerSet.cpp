@@ -4,6 +4,8 @@
 #include <mc_rtc/gui/Ellipsoid.h>
 #include <mc_rtc/gui/Label.h>
 #include <mc_rtc/gui/Point3D.h>
+#include <mc_rtc/gui/Transform.h>
+#include <mc_rtc_ros/ros.h>
 
 #include <HumanRetargetingController/ArmRetargetingManager.h>
 #include <HumanRetargetingController/HumanRetargetingController.h>
@@ -23,6 +25,8 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
   robotBaseLinkName = static_cast<std::string>(mcRtcConfig("robotBaseLinkName"));
 
   mcRtcConfig("syncJoints", syncJoints);
+
+  mcRtcConfig("humanWaistPoseFromOrigin", humanWaistPoseFromOrigin);
 
   mcRtcConfig("pointMarkerSize", pointMarkerSize);
   mcRtcConfig("phaseMarkerPoseOffset", phaseMarkerPoseOffset);
@@ -59,6 +63,8 @@ void RetargetingManagerSet::reset()
 
   isReady_ = false;
   isEnabled_ = false;
+
+  calibRobots_.reset();
 
   for(const auto & armManagerKV : *this)
   {
@@ -97,6 +103,9 @@ void RetargetingManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
   gui.addElement({ctl().name(), config_.name, "Status"},
                  mc_rtc::gui::Label("isReady", [this]() { return isReady_ ? "Yes" : "No"; }),
                  mc_rtc::gui::Label("isEnabled", [this]() { return isEnabled_ ? "Yes" : "No"; }));
+
+  gui.addElement({ctl().name(), config_.name, "Calib"},
+                 mc_rtc::gui::Button("clearRobot", [this]() { clearCalibRobot(); }));
 
   for(const auto & armManagerKV : *this)
   {
@@ -225,8 +234,7 @@ void RetargetingManagerSet::updateReadiness()
       if(!poseManager->isValid())
       {
         isReady_ = false;
-        invalidReasonStr +=
-            "[" + std::to_string(armManagerKV.first) + poseName + "] " + humanWaistPoseManager_->invalidReasonStr_;
+        invalidReasonStr += "[" + std::to_string(armManagerKV.first) + poseName + "] " + poseManager->invalidReasonStr_;
       }
     }
   }
@@ -294,77 +302,127 @@ void RetargetingManagerSet::updateGUI()
   }
 
   // Add pose markers
-  auto getRobotPose = [](const std::shared_ptr<ArmRetargetingManager> & _armManager,
-                         const std::string & _poseName) -> std::optional<sva::PTransformd> {
-    if(_poseName == "Shoulder")
-    {
-      return _armManager->robotShoulderPose_;
-    }
-    else if(_poseName == "Elbow")
-    {
-      return _armManager->robotElbowPose_;
-    }
-    else if(_poseName == "Wrist")
-    {
-      return _armManager->robotWristPose_;
-    }
-    else
-    {
-      mc_rtc::log::error_and_throw("[RetargetingManagerSet] Invalid pose name: {}", _poseName);
-    }
-  };
-  mc_rtc::gui::Color pointColor = mc_rtc::gui::Color(0.0, 1.0, 0.0, 0.5);
-  mc_rtc::gui::Color arrowColor = mc_rtc::gui::Color(0.2, 0.4, 0.2, 0.6);
-
-  ctl().gui()->removeCategory({ctl().name(), config_.name, "Marker"});
-
-  for(const auto & [armSide, armManager] : *this)
   {
-    for(const auto & poseName : {"Shoulder", "Elbow", "Wrist"})
-    {
-      if(getRobotPose(armManager, poseName).has_value())
+    auto getPointColor = [](const std::string & _entityName) {
+      return _entityName == "Human" ? mc_rtc::gui::Color(1.0, 0.0, 0.0, 0.5) : mc_rtc::gui::Color(0.0, 1.0, 0.0, 0.5);
+    };
+    auto getArrowColor = [](const std::string & _entityName) {
+      return _entityName == "Human" ? mc_rtc::gui::Color(0.4, 0.2, 0.2, 0.6) : mc_rtc::gui::Color(0.2, 0.4, 0.2, 0.6);
+    };
+    auto getPose = [](const std::shared_ptr<ArmRetargetingManager> & _armManager, const std::string & _entityName,
+                      const std::string & _poseName) -> std::optional<sva::PTransformd> {
+      if(_poseName == "Shoulder")
       {
-        ctl().gui()->addElement(
-            {ctl().name(), config_.name, "Marker"},
-            mc_rtc::gui::Point3D(std::to_string(armSide) + poseName,
-                                 mc_rtc::gui::PointConfig(pointColor, config_.pointMarkerSize),
-                                 [=]() { return getRobotPose(armManager, poseName).value().translation(); }));
+        return _entityName == "Human" ? _armManager->humanShoulderPose_ : _armManager->robotShoulderPose_;
       }
-    }
-
-    for(const auto & [poseName1, poseName2] :
-        std::vector<std::pair<std::string, std::string>>{{"Shoulder", "Elbow"}, {"Elbow", "Wrist"}})
-    {
-      if(getRobotPose(armManager, poseName1).has_value() && getRobotPose(armManager, poseName2).has_value())
+      else if(_poseName == "Elbow")
       {
-        ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
-                                mc_rtc::gui::Arrow(
-                                    std::to_string(armSide) + poseName1 + "To" + poseName2, arrowColor,
-                                    [=]() { return getRobotPose(armManager, poseName1).value().translation(); },
-                                    [=]() { return getRobotPose(armManager, poseName2).value().translation(); }));
+        return _entityName == "Human" ? _armManager->humanElbowPose_ : _armManager->robotElbowPose_;
+      }
+      else if(_poseName == "Wrist")
+      {
+        return _entityName == "Human" ? _armManager->humanWristPose_ : _armManager->robotWristPose_;
+      }
+      else
+      {
+        mc_rtc::log::error_and_throw("[RetargetingManagerSet] Invalid pose name: {}", _poseName);
+      }
+    };
+
+    ctl().gui()->removeCategory({ctl().name(), config_.name, "Marker"});
+
+    for(const auto & [armSide, armManager] : *this)
+    {
+      for(const auto & poseName : {"Shoulder", "Elbow", "Wrist"})
+      {
+        for(const auto & entityName : {"Human", "Robot"})
+        {
+          if(getPose(armManager, entityName, poseName).has_value())
+          {
+            ctl().gui()->addElement(
+                {ctl().name(), config_.name, "Marker"},
+                mc_rtc::gui::Point3D(entityName + std::to_string(armSide) + poseName + "Point",
+                                     mc_rtc::gui::PointConfig(getPointColor(entityName), config_.pointMarkerSize),
+                                     [=]() { return getPose(armManager, entityName, poseName).value().translation(); }),
+                mc_rtc::gui::Transform(entityName + std::to_string(armSide) + poseName + "Transform",
+                                       [=]() { return getPose(armManager, entityName, poseName).value(); }));
+          }
+        }
+      }
+
+      for(const auto & [poseName1, poseName2] :
+          std::vector<std::pair<std::string, std::string>>{{"Shoulder", "Elbow"}, {"Elbow", "Wrist"}})
+      {
+        for(const auto & entityName : {"Human", "Robot"})
+        {
+          if(getPose(armManager, entityName, poseName1).has_value()
+             && getPose(armManager, entityName, poseName2).has_value())
+          {
+            ctl().gui()->addElement(
+                {ctl().name(), config_.name, "Marker"},
+                mc_rtc::gui::Arrow(
+                    entityName + std::to_string(armSide) + poseName1 + "To" + poseName2 + "Arrow",
+                    getArrowColor(entityName),
+                    [=]() { return getPose(armManager, entityName, poseName1).value().translation(); },
+                    [=]() { return getPose(armManager, entityName, poseName2).value().translation(); }));
+          }
+        }
       }
     }
   }
 
   // Add phase marker
-  auto getPhaseColor = [this]() -> mc_rtc::gui::Color {
-    return isEnabled_ ? mc_rtc::gui::Color(1.0, 0.0, 1.0, 0.5) : mc_rtc::gui::Color(0.0, 1.0, 1.0, 0.5);
-  };
+  {
+    auto getPose = [this]() -> sva::PTransformd {
+      return sva::PTransformd(config_.phaseMarkerPoseOffset.rotation(),
+                              ctl().robot().posW().translation() + config_.phaseMarkerPoseOffset.translation());
+    };
+    auto getColor = [this]() -> mc_rtc::gui::Color {
+      return isEnabled_ ? mc_rtc::gui::Color(1.0, 0.0, 1.0, 0.5) : mc_rtc::gui::Color(0.0, 1.0, 1.0, 0.5);
+    };
 
-  if(isReady_)
-  {
-    ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
-                            mc_rtc::gui::Ellipsoid(
-                                "Phase", {0.2, 0.2, 0.15},
-                                [this]() { return config_.phaseMarkerPoseOffset * ctl().robot().posW(); },
-                                [=]() { return getPhaseColor(); }));
+    if(isReady_)
+    {
+      ctl().gui()->addElement(
+          {ctl().name(), config_.name, "Marker"},
+          mc_rtc::gui::Ellipsoid(
+              "Phase", {0.2, 0.2, 0.15}, [=]() { return getPose(); }, [=]() { return getColor(); }));
+    }
+    else
+    {
+      ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
+                              mc_rtc::gui::Cylinder(
+                                  "Phase", {0.1, 0.01}, [=]() { return getPose(); }, [=]() { return getColor(); }));
+    }
   }
-  else
+
+  // Visualize robot for calibration
+  if(calibRobots_)
   {
-    ctl().gui()->addElement({ctl().name(), config_.name, "Marker"},
-                            mc_rtc::gui::Cylinder(
-                                "Phase", {0.1, 0.01},
-                                [this]() { return config_.phaseMarkerPoseOffset * ctl().robot().posW(); },
-                                [=]() { return getPhaseColor(); }));
+    mc_rtc::ROSBridge::update_robot_publisher("calib", ctl().dt(), calibRobots_->robot());
   }
+}
+
+void RetargetingManagerSet::makeCalibRobot()
+{
+  if(calibRobots_)
+  {
+    return;
+  }
+
+  calibRobots_ = mc_rbdyn::Robots::make();
+  ctl().robots().copy(*calibRobots_);
+  auto frames = ctl().config()("frames", std::vector<mc_rbdyn::RobotModule::FrameDescription>{});
+  calibRobots_->robot().makeFrames(frames);
+}
+
+void RetargetingManagerSet::clearCalibRobot()
+{
+  if(!calibRobots_)
+  {
+    return;
+  }
+
+  mc_rtc::ROSBridge::stop_robot_publisher("calib");
+  calibRobots_.reset();
 }

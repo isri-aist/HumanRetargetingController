@@ -12,11 +12,11 @@ from PublishManager import PublishManager
 class PublishPoseInteractiveMarker(object):
     def __init__(self):
         body_part_init_pos_map = {
-            "waist": [0.0, 0.0, 0.86],
-            "left_elbow": [0.0, 0.4, 1.0],
-            "left_wrist": [0.2, 0.4, 0.95],
-            "right_elbow": [0.0, -0.4, 1.0],
-            "right_wrist": [0.2, -0.4, 0.95],
+            "waist": [2.0, 0.0, 0.86],
+            "left_elbow": [2.2, 0.4, 1.0],
+            "left_wrist": [2.6, 0.4, 0.95],
+            "right_elbow": [2.2, -0.4, 1.0],
+            "right_wrist": [2.6, -0.4, 0.95],
         }
 
         self.im_server = InteractiveMarkerServer("im_server")

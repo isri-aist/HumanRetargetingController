@@ -94,6 +94,28 @@ FootTaskList:
     stiffness: 1000.0
     weight: 1000.0
 
+RetargetingTaskList:
+  LeftElbow:
+    type: transform
+    frame: LeftElbowFrame
+    weight: 500.0
+    dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+  LeftWrist:
+    type: transform
+    frame: LeftWristFrame
+    weight: 500.0
+    dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+  RightElbow:
+    type: transform
+    frame: RightElbowFrame
+    weight: 500.0
+    dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+  RightWrist:
+    type: transform
+    frame: RightWristFrame
+    weight: 500.0
+    dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+
 FootManager:
   name: FootManager
   footstepDuration: 0.8 # [sec]
@@ -199,6 +221,8 @@ CentroidalManager:
 RetargetingManagerSet:
   name: RetargetingManagerSet
   humanWaistPoseTopicName: /hrc/poses/waist
+  humanWaistPoseFromOrigin:
+    translation: [1.0, 0.0, 0.8]
   pointMarkerSize: 0.15
   phaseMarkerPoseOffset:
     translation: [0.0, 0.0, 1.0]
@@ -206,17 +230,17 @@ RetargetingManagerSet:
     Left:
       humanElbowPoseTopicName: /hrc/poses/left_elbow
       humanWristPoseTopicName: /hrc/poses/left_wrist
-      elbowBodyPart:: LeftElbow
-      wristBodyPart: LeftWrist
+      elbowTaskName: LeftElbow
+      wristTaskName: LeftWrist
       stiffness: 10.0
     Right:
       humanElbowPoseTopicName: /hrc/poses/right_elbow
       humanWristPoseTopicName: /hrc/poses/right_wrist
-      elbowBodyPart:: RightElbow
-      wristBodyPart: RightWrist
+      elbowTaskName: RightElbow
+      wristTaskName: RightWrist
       stiffness: 10.0
 
-# OverwriteConfigKeys: [NoSensors]
+OverwriteConfigKeys: [NoSensors]
 
 OverwriteConfigList:
   NoSensors:
@@ -288,38 +312,22 @@ robots:
       frame: WAIST_R_S
 
     RetargetingTaskList:
-      - bodyPart: LeftElbow
-        type: transform
-        frame: LeftElbowFrame
-        weight: 500.0
-        dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+      LeftElbow:
         activeJoints: [
         "Root",
         "WAIST_Y", # "WAIST_P", "WAIST_R",
         "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y"]
-      - bodyPart: LeftWrist
-        type: transform
-        frame: LeftWristFrame
-        weight: 500.0
-        dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+      LeftWrist:
         activeJoints: [
         "Root",
         "WAIST_Y", # "WAIST_P", "WAIST_R",
         "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y", "L_ELBOW_P"]
-      - bodyPart: RightElbow
-        type: transform
-        frame: RightElbowFrame
-        weight: 500.0
-        dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+      RightElbow:
         activeJoints: [
         "Root",
         "WAIST_Y", # "WAIST_P", "WAIST_R",
         "R_SHOULDER_P", "R_SHOULDER_R", "R_SHOULDER_Y"]
-      - bodyPart: RightWrist
-        type: transform
-        frame: RightWristFrame
-        weight: 500.0
-        dimWeight: [0.0, 0.0, 0.0, 1.0, 1.0, 1.0]
+      RightWrist:
         activeJoints: [
         "Root",
         "WAIST_Y", # "WAIST_P", "WAIST_R",
@@ -329,7 +337,8 @@ robots:
       robotBaseLinkName: WAIST_R_S
       syncJoints: [
       "WAIST_Y", # "WAIST_P", "WAIST_R",
-      "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y", "L_ELBOW_P"]
+      "L_SHOULDER_P", "L_SHOULDER_R", "L_SHOULDER_Y", "L_ELBOW_P",
+      "R_SHOULDER_P", "R_SHOULDER_R", "R_SHOULDER_Y", "R_ELBOW_P"]
       ArmRetargetingManagerList:
         Left:
           robotCalibPostures:
@@ -357,7 +366,21 @@ robots:
               L_ELBOW_Y: 0.0
               L_WRIST_R: 0.0
               L_WRIST_Y: 0.0
-          # calibResultConfig: {}
+          calibResultConfig:
+            humanTransFromBaseToShoulder:
+              translation: [0.0, 0.3, 0.3]
+              rotation: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+            robotTransFromBaseToShoulder:
+              translation: [0.03, 0.24, 0.28]
+              rotation: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+            elbowRotTransFromHumanToRobot:
+              translation: [0.0, 0.0, 0.0]
+              rotation: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+            wristRotTransFromHumanToRobot:
+              translation: [0.0, 0.0, 0.0]
+              rotation: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+            elbowScale: 0.8
+            wristScale: 0.8
         Right:
           robotCalibPostures:
             X:
@@ -384,7 +407,21 @@ robots:
               R_ELBOW_Y: 0.0
               R_WRIST_R: 0.0
               R_WRIST_Y: 0.0
-          # calibResultConfig: {}
+          calibResultConfig:
+            humanTransFromBaseToShoulder:
+              translation: [0.0, -0.3, 0.3]
+              rotation: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+            robotTransFromBaseToShoulder:
+              translation: [0.03, -0.24, 0.28]
+              rotation: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+            elbowRotTransFromHumanToRobot:
+              translation: [0.0, 0.0, 0.0]
+              rotation: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+            wristRotTransFromHumanToRobot:
+              translation: [0.0, 0.0, 0.0]
+              rotation: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+            elbowScale: 0.8
+            wristScale: 0.8
 
     frames:
       - name: LeftElbowFrame

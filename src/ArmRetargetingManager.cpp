@@ -2,7 +2,6 @@
 #include <mc_rtc/gui/Label.h>
 #include <mc_tasks/ImpedanceTask.h>
 #include <mc_tasks/TransformTask.h>
-#include <mc_rtc_ros/ros.h>
 
 #include <HumanRetargetingController/ArmRetargetingManager.h>
 #include <HumanRetargetingController/HumanRetargetingController.h>
@@ -18,8 +17,8 @@ void ArmRetargetingManager::Configuration::load(const mc_rtc::Configuration & mc
   humanElbowPoseTopicName = static_cast<std::string>(mcRtcConfig("humanElbowPoseTopicName"));
   humanWristPoseTopicName = static_cast<std::string>(mcRtcConfig("humanWristPoseTopicName"));
 
-  elbowBodyPart = static_cast<std::string>(mcRtcConfig("elbowBodyPart"));
-  wristBodyPart = static_cast<std::string>(mcRtcConfig("wristBodyPart"));
+  elbowTaskName = static_cast<std::string>(mcRtcConfig("elbowTaskName"));
+  wristTaskName = static_cast<std::string>(mcRtcConfig("wristTaskName"));
 
   if(mcRtcConfig.has("stiffness"))
   {
@@ -71,11 +70,11 @@ void ArmRetargetingManager::CalibResult::load(const mc_rtc::Configuration & mcRt
   wristScale = mcRtcConfig("wristScale");
 }
 
-void ArmRetargetingManager::CalibResult::dump() const
+std::string ArmRetargetingManager::CalibResult::dump() const
 {
   mc_rtc::Configuration mcRtcConfig;
 
-  auto calibConfig = mcRtcConfig.add("calibResult");
+  auto calibConfig = mcRtcConfig.add("calibResultConfig");
 
   calibConfig.add("humanTransFromBaseToShoulder", humanTransFromBaseToShoulder);
   calibConfig.add("robotTransFromBaseToShoulder", robotTransFromBaseToShoulder);
@@ -86,7 +85,7 @@ void ArmRetargetingManager::CalibResult::dump() const
   calibConfig.add("elbowScale", elbowScale);
   calibConfig.add("wristScale", wristScale);
 
-  std::cout << mcRtcConfig.dump(true, true) << std::endl;
+  return mcRtcConfig.dump(true, true);
 }
 
 ArmRetargetingManager::ArmRetargetingManager(HumanRetargetingController * ctlPtr,
@@ -101,12 +100,13 @@ void ArmRetargetingManager::reset()
   humanElbowPoseManager_ = std::make_shared<RosPoseManager>(ctlPtr_, config_.humanElbowPoseTopicName);
   humanWristPoseManager_ = std::make_shared<RosPoseManager>(ctlPtr_, config_.humanWristPoseTopicName);
 
+  humanShoulderPose_ = std::nullopt;
+  humanElbowPose_ = std::nullopt;
+  humanWristPose_ = std::nullopt;
+
   robotShoulderPose_ = std::nullopt;
   robotElbowPose_ = std::nullopt;
   robotWristPose_ = std::nullopt;
-
-  elbowTask_ = ctl().retargetingTasks_.at(config_.elbowBodyPart);
-  wristTask_ = ctl().retargetingTasks_.at(config_.wristBodyPart);
 
   stiffnessRatioFunc_ = nullptr;
 
@@ -117,8 +117,6 @@ void ArmRetargetingManager::reset()
   {
     calibResult_.load(config_.calibResultConfig);
   }
-
-  calibRobots_.reset();
 }
 
 void ArmRetargetingManager::update()
@@ -126,10 +124,15 @@ void ArmRetargetingManager::update()
   // Calculate robot pose
   if(calibResult_.isInitialized)
   {
+    humanShoulderPose_ = std::nullopt;
+    humanElbowPose_ = std::nullopt;
+    humanWristPose_ = std::nullopt;
+
     robotShoulderPose_ = calibResult_.robotTransFromBaseToShoulder
                          * ctl().robot().frame(ctl().retargetingManagerSet_->config().robotBaseLinkName).position();
     robotElbowPose_ = std::nullopt;
     robotWristPose_ = std::nullopt;
+
     if(humanWaistPoseManager()->isValid())
     {
       auto scalePose = [&](const sva::PTransformd & origPose, double scale) -> sva::PTransformd {
@@ -138,19 +141,26 @@ void ArmRetargetingManager::update()
         return newPose;
       };
 
-      sva::PTransformd humanShoulderPose = calibResult_.humanTransFromBaseToShoulder * humanWaistPoseManager()->pose();
+      const auto & humanWaistPoseFromOrigin = ctl().retargetingManagerSet_->config_.humanWaistPoseFromOrigin;
+      humanShoulderPose_ = calibResult_.humanTransFromBaseToShoulder * humanWaistPoseFromOrigin;
 
       if(humanElbowPoseManager_->isValid())
       {
-        robotElbowPose_ = calibResult_.elbowRotTransFromHumanToRobot
-                          * scalePose(humanElbowPoseManager_->pose() * humanShoulderPose.inv(), calibResult_.elbowScale)
-                          * robotShoulderPose_.value();
+        humanElbowPose_ =
+            humanElbowPoseManager_->pose() * humanWaistPoseManager()->pose().inv() * humanWaistPoseFromOrigin;
+        robotElbowPose_ =
+            calibResult_.elbowRotTransFromHumanToRobot
+            * scalePose(humanElbowPose_.value() * humanShoulderPose_.value().inv(), calibResult_.elbowScale)
+            * robotShoulderPose_.value();
       }
       if(humanWristPoseManager_->isValid())
       {
-        robotWristPose_ = calibResult_.wristRotTransFromHumanToRobot
-                          * scalePose(humanWristPoseManager_->pose() * humanShoulderPose.inv(), calibResult_.wristScale)
-                          * robotShoulderPose_.value();
+        humanWristPose_ =
+            humanWristPoseManager_->pose() * humanWaistPoseManager()->pose().inv() * humanWaistPoseFromOrigin;
+        robotWristPose_ =
+            calibResult_.wristRotTransFromHumanToRobot
+            * scalePose(humanWristPose_.value() * humanShoulderPose_.value().inv(), calibResult_.wristScale)
+            * robotShoulderPose_.value();
       }
     }
   }
@@ -158,8 +168,8 @@ void ArmRetargetingManager::update()
   // Update task target
   if(ctl().retargetingManagerSet_->isEnabled_)
   {
-    updateTaskTarget(elbowTask_, robotElbowPose_.value());
-    updateTaskTarget(wristTask_, robotWristPose_.value());
+    updateTaskTarget(elbowTask(), robotElbowPose_.value());
+    updateTaskTarget(wristTask(), robotWristPose_.value());
   }
 
   // Interpolate task stiffness
@@ -168,14 +178,14 @@ void ArmRetargetingManager::update()
     if(ctl().t() < stiffnessRatioFunc_->endTime())
     {
       double stiffnessRatio = (*stiffnessRatioFunc_)(ctl().t());
-      for(const auto & task : {elbowTask_, wristTask_})
+      for(const auto & task : {elbowTask(), wristTask()})
       {
         task->stiffness(stiffnessRatio * config_.stiffness);
       }
     }
     else
     {
-      for(const auto & task : {elbowTask_, wristTask_})
+      for(const auto & task : {elbowTask(), wristTask()})
       {
         task->stiffness(Eigen::VectorXd(config_.stiffness));
       }
@@ -186,7 +196,7 @@ void ArmRetargetingManager::update()
 
 void ArmRetargetingManager::stop()
 {
-  for(const auto & task : {elbowTask_, wristTask_})
+  for(const auto & task : {elbowTask(), wristTask()})
   {
     ctl().solver().removeTask(task);
   }
@@ -212,7 +222,6 @@ void ArmRetargetingManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
                  mc_rtc::gui::Button("setRobot-X", [this]() { setRobotCalibSource("X"); }),
                  mc_rtc::gui::Button("setRobot-Y", [this]() { setRobotCalibSource("Y"); }),
                  mc_rtc::gui::Button("setRobot-Z", [this]() { setRobotCalibSource("Z"); }));
-  gui.addElement(calibCategory, mc_rtc::gui::Button("clearRobot", [this]() { clearCalibRobot(); }));
 }
 
 void ArmRetargetingManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
@@ -241,7 +250,7 @@ void ArmRetargetingManager::removeFromLogger(mc_rtc::Logger & logger)
 
 void ArmRetargetingManager::enable()
 {
-  for(const auto & task : {elbowTask_, wristTask_})
+  for(const auto & task : {elbowTask(), wristTask()})
   {
     task->reset();
     ctl().solver().addTask(task);
@@ -255,7 +264,7 @@ void ArmRetargetingManager::enable()
 
 void ArmRetargetingManager::disable()
 {
-  for(const auto & task : {elbowTask_, wristTask_})
+  for(const auto & task : {elbowTask(), wristTask()})
   {
     ctl().solver().removeTask(task);
   }
@@ -266,6 +275,16 @@ void ArmRetargetingManager::disable()
 const std::shared_ptr<RosPoseManager> & ArmRetargetingManager::humanWaistPoseManager() const
 {
   return ctl().retargetingManagerSet_->humanWaistPoseManager_;
+}
+
+const std::shared_ptr<mc_tasks::TransformTask> & ArmRetargetingManager::elbowTask() const
+{
+  return ctl().retargetingTasks_.at(config_.elbowTaskName);
+}
+
+const std::shared_ptr<mc_tasks::TransformTask> & ArmRetargetingManager::wristTask() const
+{
+  return ctl().retargetingTasks_.at(config_.wristTaskName);
 }
 
 void ArmRetargetingManager::updateTaskTarget(const std::shared_ptr<mc_tasks::TransformTask> & task,
@@ -303,13 +322,9 @@ void ArmRetargetingManager::setHumanCalibSource(const std::string & axis)
 
 void ArmRetargetingManager::setRobotCalibSource(const std::string & axis)
 {
-  if(!calibRobots_)
-  {
-    calibRobots_ = mc_rbdyn::loadRobot(ctl().robot().module());
-    mc_rtc::ROSBridge::update_robot_publisher("calib", ctl().dt(), calibRobots_->robot());
-  }
+  ctl().retargetingManagerSet_->makeCalibRobot();
 
-  auto & calibRobot = calibRobots_->robot();
+  auto & calibRobot = ctl().retargetingManagerSet_->calibRobots_->robot();
   for(const auto & [jointName, jointPos] : config_.robotCalibPostures.at(axis))
   {
     calibRobot.q()[calibRobot.jointIndexByName(jointName)][0] = jointPos;
@@ -317,26 +332,15 @@ void ArmRetargetingManager::setRobotCalibSource(const std::string & axis)
   calibRobot.forwardKinematics();
 
   const auto & basePose = calibRobot.frame(ctl().retargetingManagerSet_->config().robotBaseLinkName).position();
-  const auto & elbowPose = calibRobot.frame(elbowTask_->frame().name()).position();
-  const auto & wristPose = calibRobot.frame(wristTask_->frame().name()).position();
+  const auto & elbowPose = calibRobot.frame(elbowTask()->frame().name()).position();
+  const auto & wristPose = calibRobot.frame(wristTask()->frame().name()).position();
   robotCalibSource_.emplace(axis,
                             std::array<sva::PTransformd, 2>{elbowPose * basePose.inv(), wristPose * basePose.inv()});
 }
 
-void ArmRetargetingManager::clearCalibRobot()
-{
-  if(!calibRobots_)
-  {
-    return;
-  }
-
-  mc_rtc::ROSBridge::stop_robot_publisher("calib");
-  calibRobots_.reset();
-}
-
 void ArmRetargetingManager::updateCalib()
 {
-  clearCalibRobot();
+  ctl().retargetingManagerSet_->clearCalibRobot();
 
   if(!(humanCalibSource_.count("X") && humanCalibSource_.count("Y") && humanCalibSource_.count("Z")
        && robotCalibSource_.count("X") && robotCalibSource_.count("Y") && robotCalibSource_.count("Z")))
@@ -366,8 +370,8 @@ void ArmRetargetingManager::updateCalib()
   calibResult_.elbowScale = robotElbowWristLengths[0] / humanElbowWristLengths[0];
   calibResult_.wristScale = robotElbowWristLengths[1] / humanElbowWristLengths[1];
 
-  mc_rtc::log::success("[ArmRetargetingManager({})] Calibration result:", std::to_string(config_.armSide));
-  calibResult_.dump();
+  mc_rtc::log::success("[ArmRetargetingManager({})] Calibration result:\n{}", std::to_string(config_.armSide),
+                       calibResult_.dump());
 }
 
 sva::PTransformd ArmRetargetingManager::calcShoulderPoseForCalib(const CalibSource & calibSource) const
@@ -380,6 +384,12 @@ sva::PTransformd ArmRetargetingManager::calcShoulderPoseForCalib(const CalibSour
   {
     posMat.col(i) = calibSource.at(axes[i])[0].translation();
     dirMat.col(i) = (calibSource.at(axes[i])[1].translation() - calibSource.at(axes[i])[0].translation()).normalized();
+
+    if(config_.armSide == ArmSide::Right && axes[i] == "Y")
+    {
+      posMat.col(i).y() *= -1.0;
+      dirMat.col(i).y() *= -1.0;
+    }
   }
 
   {

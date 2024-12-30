@@ -41,11 +41,11 @@ public:
     //! Topic name of human wrist pose
     std::string humanWristPoseTopicName;
 
-    //! Body part of elbow retargeting task
-    std::string elbowBodyPart;
+    //! Name of elbow retargeting task
+    std::string elbowTaskName;
 
-    //! Body part of wrist retargeting task
-    std::string wristBodyPart;
+    //! Name of wrist retargeting task
+    std::string wristTaskName;
 
     //! Retargeting task stiffness
     Eigen::Vector6d stiffness = Eigen::Vector6d::Constant(10);
@@ -103,8 +103,8 @@ public:
     */
     void load(const mc_rtc::Configuration & mcRtcConfig);
 
-    /** \brief Dump in YAML format. */
-    void dump() const;
+    /** \brief Get YAML format string. */
+    std::string dump() const;
   };
 
   /** \brief Calibration source.
@@ -180,6 +180,12 @@ protected:
   /** \brief Accessor to the ROS pose manager for human waist pose. */
   const std::shared_ptr<RosPoseManager> & humanWaistPoseManager() const;
 
+  /** \brief Accessor to the retargeting task of elbow. */
+  const std::shared_ptr<mc_tasks::TransformTask> & elbowTask() const;
+
+  /** \brief Accessor to the retargeting task of wrist. */
+  const std::shared_ptr<mc_tasks::TransformTask> & wristTask() const;
+
   /** \brief Update target of retargeting task. */
   void updateTaskTarget(const std::shared_ptr<mc_tasks::TransformTask> & task, const sva::PTransformd & pose);
 
@@ -188,9 +194,6 @@ protected:
 
   /** \brief Set robot data as calibration source. */
   void setRobotCalibSource(const std::string & axis);
-
-  /** \brief Clear robot for calibration. */
-  void clearCalibRobot();
 
   /** \brief Update calibration. */
   void updateCalib();
@@ -215,6 +218,15 @@ protected:
   //! ROS pose manager for human wrist pose
   std::shared_ptr<RosPoseManager> humanWristPoseManager_;
 
+  //! Measured pose of human shoulder (expressed relative to human origin)
+  std::optional<sva::PTransformd> humanShoulderPose_ = std::nullopt;
+
+  //! Measured pose of human elbow (expressed relative to human origin)
+  std::optional<sva::PTransformd> humanElbowPose_ = std::nullopt;
+
+  //! Measured pose of human wrist (expressed relative to human origin)
+  std::optional<sva::PTransformd> humanWristPose_ = std::nullopt;
+
   //! Target pose of robot shoulder
   std::optional<sva::PTransformd> robotShoulderPose_ = std::nullopt;
 
@@ -223,12 +235,6 @@ protected:
 
   //! Target pose of robot wrist
   std::optional<sva::PTransformd> robotWristPose_ = std::nullopt;
-
-  //! Retargeting task of elbow
-  std::shared_ptr<mc_tasks::TransformTask> elbowTask_;
-
-  //! Retargeting task of wrist
-  std::shared_ptr<mc_tasks::TransformTask> wristTask_;
 
   //! Function to interpolate task stiffness
   std::shared_ptr<TrajColl::CubicInterpolator<double>> stiffnessRatioFunc_;
@@ -241,8 +247,5 @@ protected:
 
   //! Calibration result
   CalibResult calibResult_;
-
-  //! Robot for calibration
-  std::shared_ptr<mc_rbdyn::Robots> calibRobots_;
 };
 } // namespace HRC
