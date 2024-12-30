@@ -149,6 +149,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a68d88a975728c5664b92b0f467db5103"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1RetargetingManagerSet.html#a68d88a975728c5664b92b0f467db5103">isEnabled_</a> = false</td></tr>
 <tr class="memdesc:a68d88a975728c5664b92b0f467db5103"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether retargeting is enabled or not.  <a href="classHRC_1_1RetargetingManagerSet.html#a68d88a975728c5664b92b0f467db5103">More...</a><br /></td></tr>
 <tr class="separator:a68d88a975728c5664b92b0f467db5103"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c4da8fd5ac6a3b5d36dca6776d31454"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; mc_rbdyn::Robots &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1RetargetingManagerSet.html#a5c4da8fd5ac6a3b5d36dca6776d31454">calibRobots_</a></td></tr>
+<tr class="memdesc:a5c4da8fd5ac6a3b5d36dca6776d31454"><td class="mdescLeft">&#160;</td><td class="mdescRight">Robot for calibration.  <a href="classHRC_1_1RetargetingManagerSet.html#a5c4da8fd5ac6a3b5d36dca6776d31454">More...</a><br /></td></tr>
+<tr class="separator:a5c4da8fd5ac6a3b5d36dca6776d31454"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cef642364af5c1ee632c5ceaba7b52a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; ros::NodeHandle &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1RetargetingManagerSet.html#a9cef642364af5c1ee632c5ceaba7b52a">nh_</a></td></tr>
 <tr class="memdesc:a9cef642364af5c1ee632c5ceaba7b52a"><td class="mdescLeft">&#160;</td><td class="mdescRight">ROS node handle.  <a href="classHRC_1_1RetargetingManagerSet.html#a9cef642364af5c1ee632c5ceaba7b52a">More...</a><br /></td></tr>
 <tr class="separator:a9cef642364af5c1ee632c5ceaba7b52a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,6 +179,12 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a76cdda0d89c91a2697a56614a19ce459"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1RetargetingManagerSet.html#a76cdda0d89c91a2697a56614a19ce459">updateGUI</a> ()</td></tr>
 <tr class="memdesc:a76cdda0d89c91a2697a56614a19ce459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update GUI.  <a href="classHRC_1_1RetargetingManagerSet.html#a76cdda0d89c91a2697a56614a19ce459">More...</a><br /></td></tr>
 <tr class="separator:a76cdda0d89c91a2697a56614a19ce459"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe39ef6c70b88f0cc05a860470877e45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1RetargetingManagerSet.html#abe39ef6c70b88f0cc05a860470877e45">makeCalibRobot</a> ()</td></tr>
+<tr class="memdesc:abe39ef6c70b88f0cc05a860470877e45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make robot for calibration.  <a href="classHRC_1_1RetargetingManagerSet.html#abe39ef6c70b88f0cc05a860470877e45">More...</a><br /></td></tr>
+<tr class="separator:abe39ef6c70b88f0cc05a860470877e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a333f639ab43231e394df29c258400cd0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1RetargetingManagerSet.html#a333f639ab43231e394df29c258400cd0">clearCalibRobot</a> ()</td></tr>
+<tr class="memdesc:a333f639ab43231e394df29c258400cd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear robot for calibration.  <a href="classHRC_1_1RetargetingManagerSet.html#a333f639ab43231e394df29c258400cd0">More...</a><br /></td></tr>
+<tr class="separator:a333f639ab43231e394df29c258400cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -280,6 +289,33 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a333f639ab43231e394df29c258400cd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a333f639ab43231e394df29c258400cd0">&#9670;&nbsp;</a></span>clearCalibRobot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HRC::RetargetingManagerSet::clearCalibRobot </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clear robot for calibration. </p>
+
+</div>
+</div>
 <a id="a7400e15cfe017dbb70f6587e8f910eac"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7400e15cfe017dbb70f6587e8f910eac">&#9670;&nbsp;</a></span>config()</h2>
 
@@ -305,7 +341,7 @@ Friends</h2></td></tr>
 
 <p>Const accessor to the configuration. </p>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00076">76</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00079">79</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -334,7 +370,7 @@ Friends</h2></td></tr>
 
 <p>Accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00101">101</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00104">104</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -363,7 +399,7 @@ Friends</h2></td></tr>
 
 <p>Const accessor to the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00095">95</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00098">98</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -418,6 +454,33 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Enable retargeting. </p>
+
+</div>
+</div>
+<a id="abe39ef6c70b88f0cc05a860470877e45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe39ef6c70b88f0cc05a860470877e45">&#9670;&nbsp;</a></span>makeCalibRobot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HRC::RetargetingManagerSet::makeCalibRobot </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Make robot for calibration. </p>
 
 </div>
 </div>
@@ -628,6 +691,24 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a5c4da8fd5ac6a3b5d36dca6776d31454"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c4da8fd5ac6a3b5d36dca6776d31454">&#9670;&nbsp;</a></span>calibRobots_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;mc_rbdyn::Robots&gt; HRC::RetargetingManagerSet::calibRobots_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Robot for calibration. </p>
+
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00138">138</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+
+</div>
+</div>
 <a id="a7b9cb8510d91c973fc991b37c9f71196"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7b9cb8510d91c973fc991b37c9f71196">&#9670;&nbsp;</a></span>callbackQueue_</h2>
 
@@ -650,7 +731,7 @@ Friends</h2></td></tr>
 
 <p>ROS callback queue. </p>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00142">142</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00154">154</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -676,7 +757,7 @@ Friends</h2></td></tr>
 
 <p>Configuration. </p>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00133">133</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00145">145</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -702,7 +783,7 @@ Friends</h2></td></tr>
 
 <p>Pointer to controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00136">136</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00148">148</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -728,7 +809,7 @@ Friends</h2></td></tr>
 
 <p>ROS pose manager for human waist pose. </p>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00139">139</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00151">151</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -746,7 +827,7 @@ Friends</h2></td></tr>
 
 <p>Whether retargeting is enabled or not. </p>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00126">126</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00135">135</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -764,7 +845,7 @@ Friends</h2></td></tr>
 
 <p>Whether it is ready for retargeting or not. </p>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00123">123</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00132">132</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
 
 </div>
 </div>
@@ -782,7 +863,7 @@ Friends</h2></td></tr>
 
 <p>ROS node handle. </p>
 
-<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00129">129</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RetargetingManagerSet_8h_source.html#l00141">141</a> of file <a class="el" href="RetargetingManagerSet_8h_source.html">RetargetingManagerSet.h</a>.</p>
 
 </div>
 </div>

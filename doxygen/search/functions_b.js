@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['setdatastore_164',['setDatastore',['../structHRC_1_1ViveRosState.html#a62599049860d789e9291eb26b80ba8ef',1,'HRC::ViveRosState']]],
-  ['setdistvaliditycheck_165',['setDistValidityCheck',['../classHRC_1_1RosPoseManager.html#ad2bce60b44c9e4005fdcaedd832fb47b',1,'HRC::RosPoseManager']]],
-  ['sethumancalibsource_166',['setHumanCalibSource',['../classHRC_1_1ArmRetargetingManager.html#a9aa8292b0df5416ab5bbcfd74305df4d',1,'HRC::ArmRetargetingManager']]],
-  ['setrobotcalibsource_167',['setRobotCalibSource',['../classHRC_1_1ArmRetargetingManager.html#a95afd3f2b813cca077bd3a2f24363f2f',1,'HRC::ArmRetargetingManager']]],
-  ['sign_168',['sign',['../namespaceHRC.html#a7d480bfaf27c5438412ae524ced67795',1,'HRC']]],
-  ['start_169',['start',['../structHRC_1_1State.html#a2f6aedefb1c8bb49000b49119616b8cd',1,'HRC::State::start()'],['../structHRC_1_1InitialState.html#a70b0a2f9a27eec8a6566f1f1cb47ed69',1,'HRC::InitialState::start()'],['../structHRC_1_1ViveRosState.html#a9b82f29494b1d33e0e09b0bc43694bd5',1,'HRC::ViveRosState::start()']]],
-  ['stop_170',['stop',['../classHRC_1_1ArmRetargetingManager.html#aea508bc9ce6e07191c55590a4334d713',1,'HRC::ArmRetargetingManager::stop()'],['../structHRC_1_1HumanRetargetingController.html#a33d3111031452f12e382c19e9b2cdfc1',1,'HRC::HumanRetargetingController::stop()'],['../classHRC_1_1RetargetingManagerSet.html#a0c05503024593a6059d1fd07a5f52783',1,'HRC::RetargetingManagerSet::stop()']]],
-  ['strtoarmside_171',['strToArmSide',['../namespaceHRC.html#a16f24f973a7b5da768df97fc6102c433',1,'HRC']]]
+  ['removefromgui_164',['removeFromGUI',['../classHRC_1_1ArmRetargetingManager.html#aa59204b95bccf6dcfb5bf398f2e0119b',1,'HRC::ArmRetargetingManager::removeFromGUI()'],['../classHRC_1_1RetargetingManagerSet.html#a708cfcb38b84f119e87529757eb67210',1,'HRC::RetargetingManagerSet::removeFromGUI()']]],
+  ['removefromlogger_165',['removeFromLogger',['../classHRC_1_1ArmRetargetingManager.html#a575d7cb26e2057f9a43ad3c057f1d180',1,'HRC::ArmRetargetingManager::removeFromLogger()'],['../classHRC_1_1RetargetingManagerSet.html#a54a030247552a8583c1a40631db18a3d',1,'HRC::RetargetingManagerSet::removeFromLogger()']]],
+  ['reset_166',['reset',['../structHRC_1_1ArmRetargetingManager_1_1CalibResult.html#af659497ec31eb598be5f1a5d496c6f38',1,'HRC::ArmRetargetingManager::CalibResult::reset()'],['../classHRC_1_1ArmRetargetingManager.html#a2f0e4f2ee0c8dbf26f0a3bc17c3d197e',1,'HRC::ArmRetargetingManager::reset()'],['../structHRC_1_1HumanRetargetingController.html#a5e305b0d6af91245197061ccb86780b3',1,'HRC::HumanRetargetingController::reset()'],['../classHRC_1_1RetargetingManagerSet.html#a55d3a54b2972f485f10c9c3aab6536f8',1,'HRC::RetargetingManagerSet::reset()']]],
+  ['retargetingmanagerset_167',['RetargetingManagerSet',['../classHRC_1_1RetargetingManagerSet.html#a4a84c161174e316198f3b4ddbbd6f88f',1,'HRC::RetargetingManagerSet']]],
+  ['rosposemanager_168',['RosPoseManager',['../classHRC_1_1RosPoseManager.html#aec82a2e36171b655587a67c7c558ff8b',1,'HRC::RosPoseManager']]],
+  ['run_169',['run',['../structHRC_1_1HumanRetargetingController.html#a4dd818a50895dee6764a5334499b5ddd',1,'HRC::HumanRetargetingController::run()'],['../structHRC_1_1InitialState.html#a76a25835fc8e84a1ad403023e7722340',1,'HRC::InitialState::run()'],['../structHRC_1_1ViveRosState.html#a99f9ee213ecfb8512c4eb41034e34ac2',1,'HRC::ViveRosState::run()']]]
 ];

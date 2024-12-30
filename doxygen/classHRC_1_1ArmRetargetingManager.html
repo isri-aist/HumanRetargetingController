@@ -164,6 +164,12 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ac09b5505655583bca00239cea09e5a68"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; <a class="el" href="classHRC_1_1RosPoseManager.html">RosPoseManager</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#ac09b5505655583bca00239cea09e5a68">humanWaistPoseManager</a> () const</td></tr>
 <tr class="memdesc:ac09b5505655583bca00239cea09e5a68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor to the ROS pose manager for human waist pose.  <a href="classHRC_1_1ArmRetargetingManager.html#ac09b5505655583bca00239cea09e5a68">More...</a><br /></td></tr>
 <tr class="separator:ac09b5505655583bca00239cea09e5a68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad20f061f4c5cc1a1d81c4200a1aceae2"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; mc_tasks::TransformTask &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#ad20f061f4c5cc1a1d81c4200a1aceae2">elbowTask</a> () const</td></tr>
+<tr class="memdesc:ad20f061f4c5cc1a1d81c4200a1aceae2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor to the retargeting task of elbow.  <a href="classHRC_1_1ArmRetargetingManager.html#ad20f061f4c5cc1a1d81c4200a1aceae2">More...</a><br /></td></tr>
+<tr class="separator:ad20f061f4c5cc1a1d81c4200a1aceae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a728637e65b244666af51720c0576a88c"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; mc_tasks::TransformTask &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#a728637e65b244666af51720c0576a88c">wristTask</a> () const</td></tr>
+<tr class="memdesc:a728637e65b244666af51720c0576a88c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor to the retargeting task of wrist.  <a href="classHRC_1_1ArmRetargetingManager.html#a728637e65b244666af51720c0576a88c">More...</a><br /></td></tr>
+<tr class="separator:a728637e65b244666af51720c0576a88c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae54e56656238936a4ebecab58e03acbf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#ae54e56656238936a4ebecab58e03acbf">updateTaskTarget</a> (const std::shared_ptr&lt; mc_tasks::TransformTask &gt; &amp;task, const sva::PTransformd &amp;pose)</td></tr>
 <tr class="memdesc:ae54e56656238936a4ebecab58e03acbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update target of retargeting task.  <a href="classHRC_1_1ArmRetargetingManager.html#ae54e56656238936a4ebecab58e03acbf">More...</a><br /></td></tr>
 <tr class="separator:ae54e56656238936a4ebecab58e03acbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,9 +179,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a95afd3f2b813cca077bd3a2f24363f2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#a95afd3f2b813cca077bd3a2f24363f2f">setRobotCalibSource</a> (const std::string &amp;axis)</td></tr>
 <tr class="memdesc:a95afd3f2b813cca077bd3a2f24363f2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set robot data as calibration source.  <a href="classHRC_1_1ArmRetargetingManager.html#a95afd3f2b813cca077bd3a2f24363f2f">More...</a><br /></td></tr>
 <tr class="separator:a95afd3f2b813cca077bd3a2f24363f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91fb567fbc39b36c832b65a7034c0aa4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#a91fb567fbc39b36c832b65a7034c0aa4">clearCalibRobot</a> ()</td></tr>
-<tr class="memdesc:a91fb567fbc39b36c832b65a7034c0aa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear robot for calibration.  <a href="classHRC_1_1ArmRetargetingManager.html#a91fb567fbc39b36c832b65a7034c0aa4">More...</a><br /></td></tr>
-<tr class="separator:a91fb567fbc39b36c832b65a7034c0aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38c558361db8981288a68ee0a14d0ba5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#a38c558361db8981288a68ee0a14d0ba5">updateCalib</a> ()</td></tr>
 <tr class="memdesc:a38c558361db8981288a68ee0a14d0ba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update calibration.  <a href="classHRC_1_1ArmRetargetingManager.html#a38c558361db8981288a68ee0a14d0ba5">More...</a><br /></td></tr>
 <tr class="separator:a38c558361db8981288a68ee0a14d0ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -200,6 +203,15 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a53d5699e48e3f472f0daad18494c5c0d"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classHRC_1_1RosPoseManager.html">RosPoseManager</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#a53d5699e48e3f472f0daad18494c5c0d">humanWristPoseManager_</a></td></tr>
 <tr class="memdesc:a53d5699e48e3f472f0daad18494c5c0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">ROS pose manager for human wrist pose.  <a href="classHRC_1_1ArmRetargetingManager.html#a53d5699e48e3f472f0daad18494c5c0d">More...</a><br /></td></tr>
 <tr class="separator:a53d5699e48e3f472f0daad18494c5c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d9ebf0eca83ad00267659d4ba0afdf9"><td class="memItemLeft" align="right" valign="top">std::optional&lt; sva::PTransformd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#a6d9ebf0eca83ad00267659d4ba0afdf9">humanShoulderPose_</a> = std::nullopt</td></tr>
+<tr class="memdesc:a6d9ebf0eca83ad00267659d4ba0afdf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measured pose of human shoulder (expressed relative to human origin)  <a href="classHRC_1_1ArmRetargetingManager.html#a6d9ebf0eca83ad00267659d4ba0afdf9">More...</a><br /></td></tr>
+<tr class="separator:a6d9ebf0eca83ad00267659d4ba0afdf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad8256a975c48b871e80a2e6c64f7d17"><td class="memItemLeft" align="right" valign="top">std::optional&lt; sva::PTransformd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#aad8256a975c48b871e80a2e6c64f7d17">humanElbowPose_</a> = std::nullopt</td></tr>
+<tr class="memdesc:aad8256a975c48b871e80a2e6c64f7d17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measured pose of human elbow (expressed relative to human origin)  <a href="classHRC_1_1ArmRetargetingManager.html#aad8256a975c48b871e80a2e6c64f7d17">More...</a><br /></td></tr>
+<tr class="separator:aad8256a975c48b871e80a2e6c64f7d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac519bf2c2168e29dc333a1e189de9d3f"><td class="memItemLeft" align="right" valign="top">std::optional&lt; sva::PTransformd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#ac519bf2c2168e29dc333a1e189de9d3f">humanWristPose_</a> = std::nullopt</td></tr>
+<tr class="memdesc:ac519bf2c2168e29dc333a1e189de9d3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Measured pose of human wrist (expressed relative to human origin)  <a href="classHRC_1_1ArmRetargetingManager.html#ac519bf2c2168e29dc333a1e189de9d3f">More...</a><br /></td></tr>
+<tr class="separator:ac519bf2c2168e29dc333a1e189de9d3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16e3715a2dc169115e65ec88d8c2150b"><td class="memItemLeft" align="right" valign="top">std::optional&lt; sva::PTransformd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#a16e3715a2dc169115e65ec88d8c2150b">robotShoulderPose_</a> = std::nullopt</td></tr>
 <tr class="memdesc:a16e3715a2dc169115e65ec88d8c2150b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Target pose of robot shoulder.  <a href="classHRC_1_1ArmRetargetingManager.html#a16e3715a2dc169115e65ec88d8c2150b">More...</a><br /></td></tr>
 <tr class="separator:a16e3715a2dc169115e65ec88d8c2150b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -209,12 +221,6 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a7197818adf9db6b78585e6a7e752fcfe"><td class="memItemLeft" align="right" valign="top">std::optional&lt; sva::PTransformd &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#a7197818adf9db6b78585e6a7e752fcfe">robotWristPose_</a> = std::nullopt</td></tr>
 <tr class="memdesc:a7197818adf9db6b78585e6a7e752fcfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Target pose of robot wrist.  <a href="classHRC_1_1ArmRetargetingManager.html#a7197818adf9db6b78585e6a7e752fcfe">More...</a><br /></td></tr>
 <tr class="separator:a7197818adf9db6b78585e6a7e752fcfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afce300c30d5c6026266405dd0c6b23d4"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; mc_tasks::TransformTask &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#afce300c30d5c6026266405dd0c6b23d4">elbowTask_</a></td></tr>
-<tr class="memdesc:afce300c30d5c6026266405dd0c6b23d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retargeting task of elbow.  <a href="classHRC_1_1ArmRetargetingManager.html#afce300c30d5c6026266405dd0c6b23d4">More...</a><br /></td></tr>
-<tr class="separator:afce300c30d5c6026266405dd0c6b23d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8af21425f05c9f32f23068ebbee6c19"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; mc_tasks::TransformTask &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#ae8af21425f05c9f32f23068ebbee6c19">wristTask_</a></td></tr>
-<tr class="memdesc:ae8af21425f05c9f32f23068ebbee6c19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retargeting task of wrist.  <a href="classHRC_1_1ArmRetargetingManager.html#ae8af21425f05c9f32f23068ebbee6c19">More...</a><br /></td></tr>
-<tr class="separator:ae8af21425f05c9f32f23068ebbee6c19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad994a08c47990d53f9e76ae152385900"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; TrajColl::CubicInterpolator&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#ad994a08c47990d53f9e76ae152385900">stiffnessRatioFunc_</a></td></tr>
 <tr class="memdesc:ad994a08c47990d53f9e76ae152385900"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to interpolate task stiffness.  <a href="classHRC_1_1ArmRetargetingManager.html#ad994a08c47990d53f9e76ae152385900">More...</a><br /></td></tr>
 <tr class="separator:ad994a08c47990d53f9e76ae152385900"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -227,9 +233,6 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a079e17da9367ee6b62681bc98e503c94"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structHRC_1_1ArmRetargetingManager_1_1CalibResult.html">CalibResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#a079e17da9367ee6b62681bc98e503c94">calibResult_</a></td></tr>
 <tr class="memdesc:a079e17da9367ee6b62681bc98e503c94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calibration result.  <a href="classHRC_1_1ArmRetargetingManager.html#a079e17da9367ee6b62681bc98e503c94">More...</a><br /></td></tr>
 <tr class="separator:a079e17da9367ee6b62681bc98e503c94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a183e6178c86657945b29ce5a3e28c3ed"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; mc_rbdyn::Robots &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHRC_1_1ArmRetargetingManager.html#a183e6178c86657945b29ce5a3e28c3ed">calibRobots_</a></td></tr>
-<tr class="memdesc:a183e6178c86657945b29ce5a3e28c3ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Robot for calibration.  <a href="classHRC_1_1ArmRetargetingManager.html#a183e6178c86657945b29ce5a3e28c3ed">More...</a><br /></td></tr>
-<tr class="separator:a183e6178c86657945b29ce5a3e28c3ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -406,33 +409,6 @@ Friends</h2></td></tr>
 
 </div>
 </div>
-<a id="a91fb567fbc39b36c832b65a7034c0aa4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91fb567fbc39b36c832b65a7034c0aa4">&#9670;&nbsp;</a></span>clearCalibRobot()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void HRC::ArmRetargetingManager::clearCalibRobot </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Clear robot for calibration. </p>
-
-</div>
-</div>
 <a id="a120cfac0f3d03078858ef78d41c8d423"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a120cfac0f3d03078858ef78d41c8d423">&#9670;&nbsp;</a></span>config()</h2>
 
@@ -544,6 +520,33 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Disable retargeting. </p>
+
+</div>
+</div>
+<a id="ad20f061f4c5cc1a1d81c4200a1aceae2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad20f061f4c5cc1a1d81c4200a1aceae2">&#9670;&nbsp;</a></span>elbowTask()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::shared_ptr&lt;mc_tasks::TransformTask&gt;&amp; HRC::ArmRetargetingManager::elbowTask </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accessor to the retargeting task of elbow. </p>
 
 </div>
 </div>
@@ -822,6 +825,33 @@ Friends</h2></td></tr>
 
 </div>
 </div>
+<a id="a728637e65b244666af51720c0576a88c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a728637e65b244666af51720c0576a88c">&#9670;&nbsp;</a></span>wristTask()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::shared_ptr&lt;mc_tasks::TransformTask&gt;&amp; HRC::ArmRetargetingManager::wristTask </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accessor to the retargeting task of wrist. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
 <a id="a633b3afbf73ba4f340d2c7e2fad4ba7e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a633b3afbf73ba4f340d2c7e2fad4ba7e">&#9670;&nbsp;</a></span>RetargetingManagerSet</h2>
@@ -870,33 +900,7 @@ Friends</h2></td></tr>
 
 <p>Calibration result. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00243">243</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
-
-</div>
-</div>
-<a id="a183e6178c86657945b29ce5a3e28c3ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a183e6178c86657945b29ce5a3e28c3ed">&#9670;&nbsp;</a></span>calibRobots_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;mc_rbdyn::Robots&gt; HRC::ArmRetargetingManager::calibRobots_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Robot for calibration. </p>
-
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00246">246</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00249">249</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>
@@ -922,7 +926,7 @@ Friends</h2></td></tr>
 
 <p><a class="el" href="structHRC_1_1ArmRetargetingManager_1_1Configuration.html" title="Configuration.">Configuration</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00207">207</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00210">210</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>
@@ -948,33 +952,7 @@ Friends</h2></td></tr>
 
 <p>Pointer to controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00210">210</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
-
-</div>
-</div>
-<a id="afce300c30d5c6026266405dd0c6b23d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afce300c30d5c6026266405dd0c6b23d4">&#9670;&nbsp;</a></span>elbowTask_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;mc_tasks::TransformTask&gt; HRC::ArmRetargetingManager::elbowTask_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retargeting task of elbow. </p>
-
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00228">228</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00213">213</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>
@@ -1000,7 +978,33 @@ Friends</h2></td></tr>
 
 <p>Human data as calibration source. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00237">237</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00243">243</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+
+</div>
+</div>
+<a id="aad8256a975c48b871e80a2e6c64f7d17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad8256a975c48b871e80a2e6c64f7d17">&#9670;&nbsp;</a></span>humanElbowPose_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;sva::PTransformd&gt; HRC::ArmRetargetingManager::humanElbowPose_ = std::nullopt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Measured pose of human elbow (expressed relative to human origin) </p>
+
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00225">225</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>
@@ -1026,7 +1030,59 @@ Friends</h2></td></tr>
 
 <p>ROS pose manager for human elbow pose. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00213">213</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00216">216</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+
+</div>
+</div>
+<a id="a6d9ebf0eca83ad00267659d4ba0afdf9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d9ebf0eca83ad00267659d4ba0afdf9">&#9670;&nbsp;</a></span>humanShoulderPose_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;sva::PTransformd&gt; HRC::ArmRetargetingManager::humanShoulderPose_ = std::nullopt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Measured pose of human shoulder (expressed relative to human origin) </p>
+
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00222">222</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+
+</div>
+</div>
+<a id="ac519bf2c2168e29dc333a1e189de9d3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac519bf2c2168e29dc333a1e189de9d3f">&#9670;&nbsp;</a></span>humanWristPose_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;sva::PTransformd&gt; HRC::ArmRetargetingManager::humanWristPose_ = std::nullopt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Measured pose of human wrist (expressed relative to human origin) </p>
+
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00228">228</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>
@@ -1052,7 +1108,7 @@ Friends</h2></td></tr>
 
 <p>ROS pose manager for human wrist pose. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00216">216</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00219">219</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>
@@ -1078,7 +1134,7 @@ Friends</h2></td></tr>
 
 <p>Robot data as calibration source. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00240">240</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00246">246</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>
@@ -1104,7 +1160,7 @@ Friends</h2></td></tr>
 
 <p>Target pose of robot elbow. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00222">222</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00234">234</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>
@@ -1130,7 +1186,7 @@ Friends</h2></td></tr>
 
 <p>Target pose of robot shoulder. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00219">219</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00231">231</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>
@@ -1156,7 +1212,7 @@ Friends</h2></td></tr>
 
 <p>Target pose of robot wrist. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00225">225</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00237">237</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>
@@ -1182,33 +1238,7 @@ Friends</h2></td></tr>
 
 <p>Function to interpolate task stiffness. </p>
 
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00234">234</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
-
-</div>
-</div>
-<a id="ae8af21425f05c9f32f23068ebbee6c19"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8af21425f05c9f32f23068ebbee6c19">&#9670;&nbsp;</a></span>wristTask_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::shared_ptr&lt;mc_tasks::TransformTask&gt; HRC::ArmRetargetingManager::wristTask_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retargeting task of wrist. </p>
-
-<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00231">231</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArmRetargetingManager_8h_source.html#l00240">240</a> of file <a class="el" href="ArmRetargetingManager_8h_source.html">ArmRetargetingManager.h</a>.</p>
 
 </div>
 </div>

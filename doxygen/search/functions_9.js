@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['pose_156',['pose',['../classHRC_1_1RosPoseManager.html#a877c548d883c835ff51cfa12e92bc95a',1,'HRC::RosPoseManager']]],
-  ['posecallback_157',['poseCallback',['../classHRC_1_1RosPoseManager.html#aa1d671cfec8ba0a98c51077ff7c16e16',1,'HRC::RosPoseManager']]]
+  ['opposite_161',['opposite',['../namespaceHRC.html#a1b004183a4c4ac799ca581ab7964cafc',1,'HRC']]]
 ];
