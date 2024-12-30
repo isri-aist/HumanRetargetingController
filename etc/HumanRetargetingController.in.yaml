@@ -242,7 +242,7 @@ RetargetingManagerSet:
       wristTaskName: RightWrist
       stiffness: 10.0
 
-OverwriteConfigKeys: [NoSensors]
+# OverwriteConfigKeys: [NoSensors]
 
 OverwriteConfigList:
   NoSensors:
