@@ -32,6 +32,9 @@ class RetargetingManagerSet : public std::unordered_map<ArmSide, std::shared_ptr
     //! Name of the robot base link (link at the base of the shoulder)
     std::string robotBaseLinkName;
 
+    //! Whether to use mirror ( left-right symmetrical) retargeting or not
+    bool mirrorRetargeting = false;
+
     //! Joints that update the target position at the end of retargeting
     std::vector<std::string> syncJoints;
 
@@ -120,6 +123,9 @@ protected:
 
   /** \brief Update GUI. */
   void updateGUI();
+
+  /** \brief Make robot poses mirrored. */
+  void makeRobotPosesMirrored();
 
   /** \brief Make robot for calibration. */
   void makeCalibRobot();

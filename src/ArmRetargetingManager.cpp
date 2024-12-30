@@ -119,9 +119,9 @@ void ArmRetargetingManager::reset()
   }
 }
 
-void ArmRetargetingManager::update()
+void ArmRetargetingManager::updatePre()
 {
-  // Calculate robot pose
+  // Calculate human and robot poses
   if(calibResult_.isInitialized)
   {
     humanShoulderPose_ = std::nullopt;
@@ -135,10 +135,8 @@ void ArmRetargetingManager::update()
 
     if(humanWaistPoseManager()->isValid())
     {
-      auto scalePose = [&](const sva::PTransformd & origPose, double scale) -> sva::PTransformd {
-        sva::PTransformd newPose = origPose;
-        newPose.translation() *= scale;
-        return newPose;
+      auto scalePose = [&](const sva::PTransformd & pose, double scale) -> sva::PTransformd {
+        return sva::PTransformd(pose.rotation(), scale * pose.translation());
       };
 
       const auto & humanWaistPoseFromOrigin = ctl().retargetingManagerSet_->config_.humanWaistPoseFromOrigin;
@@ -164,12 +162,15 @@ void ArmRetargetingManager::update()
       }
     }
   }
+}
 
-  // Update task target
+void ArmRetargetingManager::updatePost()
+{
+  // Set task target
   if(ctl().retargetingManagerSet_->isEnabled_)
   {
-    updateTaskTarget(elbowTask(), robotElbowPose_.value());
-    updateTaskTarget(wristTask(), robotWristPose_.value());
+    setTaskTarget(elbowTask(), robotElbowPose_.value());
+    setTaskTarget(wristTask(), robotWristPose_.value());
   }
 
   // Interpolate task stiffness
@@ -287,8 +288,8 @@ const std::shared_ptr<mc_tasks::TransformTask> & ArmRetargetingManager::wristTas
   return ctl().retargetingTasks_.at(config_.wristTaskName);
 }
 
-void ArmRetargetingManager::updateTaskTarget(const std::shared_ptr<mc_tasks::TransformTask> & task,
-                                             const sva::PTransformd & pose)
+void ArmRetargetingManager::setTaskTarget(const std::shared_ptr<mc_tasks::TransformTask> & task,
+                                          const sva::PTransformd & pose)
 {
   if(const auto & impTask = std::dynamic_pointer_cast<mc_tasks::force::ImpedanceTask>(task))
   {
@@ -318,6 +319,9 @@ void ArmRetargetingManager::setHumanCalibSource(const std::string & axis)
   const auto & wristPose = humanWristPoseManager_->pose();
   humanCalibSource_.emplace(axis,
                             std::array<sva::PTransformd, 2>{elbowPose * basePose.inv(), wristPose * basePose.inv()});
+
+  mc_rtc::log::success("[ArmRetargetingManager({})] setHumanCalibSource({}) succeeded.",
+                       std::to_string(config_.armSide), axis);
 }
 
 void ArmRetargetingManager::setRobotCalibSource(const std::string & axis)
@@ -336,6 +340,9 @@ void ArmRetargetingManager::setRobotCalibSource(const std::string & axis)
   const auto & wristPose = calibRobot.frame(wristTask()->frame().name()).position();
   robotCalibSource_.emplace(axis,
                             std::array<sva::PTransformd, 2>{elbowPose * basePose.inv(), wristPose * basePose.inv()});
+
+  mc_rtc::log::success("[ArmRetargetingManager({})] setRobotCalibSource({}) succeeded.",
+                       std::to_string(config_.armSide), axis);
 }
 
 void ArmRetargetingManager::updateCalib()

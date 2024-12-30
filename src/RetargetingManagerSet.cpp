@@ -24,6 +24,8 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
 
   robotBaseLinkName = static_cast<std::string>(mcRtcConfig("robotBaseLinkName"));
 
+  mcRtcConfig("mirrorRetargeting", mirrorRetargeting);
+
   mcRtcConfig("syncJoints", syncJoints);
 
   mcRtcConfig("humanWaistPoseFromOrigin", humanWaistPoseFromOrigin);
@@ -81,7 +83,17 @@ void RetargetingManagerSet::update()
 
   for(const auto & armManagerKV : *this)
   {
-    armManagerKV.second->update();
+    armManagerKV.second->updatePre();
+  }
+
+  if(config_.mirrorRetargeting)
+  {
+    makeRobotPosesMirrored();
+  }
+
+  for(const auto & armManagerKV : *this)
+  {
+    armManagerKV.second->updatePost();
   }
 
   updateGUI();
@@ -400,6 +412,56 @@ void RetargetingManagerSet::updateGUI()
   if(calibRobots_)
   {
     mc_rtc::ROSBridge::update_robot_publisher("calib", ctl().dt(), calibRobots_->robot());
+  }
+}
+
+void RetargetingManagerSet::makeRobotPosesMirrored()
+{
+  if(!(this->at(ArmSide::Left) && this->at(ArmSide::Right)))
+  {
+    return;
+  }
+
+  auto mirrorPose = [&](const sva::PTransformd & pose) -> sva::PTransformd {
+    const Eigen::Vector3d & rpy = mc_rbdyn::rpyFromMat(pose.rotation());
+    return sva::PTransformd(
+        mc_rbdyn::rpyToMat(-1.0 * rpy.x(), rpy.y(), -1.0 * rpy.z()),
+        Eigen::Vector3d(pose.translation().x(), -1.0 * pose.translation().y(), pose.translation().z()));
+  };
+
+  std::unordered_map<ArmSide, std::array<std::optional<sva::PTransformd>, 3>> mirroredRobotPosesMap;
+
+  for(const auto & armSide : ArmSides::Both)
+  {
+    mirroredRobotPosesMap[armSide].fill(std::nullopt);
+
+    mirroredRobotPosesMap.at(armSide)[0] = this->at(armSide)->robotShoulderPose_;
+
+    if(this->at(armSide)->robotShoulderPose_.has_value() && this->at(opposite(armSide))->robotShoulderPose_.has_value())
+    {
+      if(this->at(opposite(armSide))->robotElbowPose_.has_value())
+      {
+        mirroredRobotPosesMap.at(armSide)[1] =
+            mirrorPose(this->at(opposite(armSide))->robotElbowPose_.value()
+                       * this->at(opposite(armSide))->robotShoulderPose_.value().inv())
+            * this->at(armSide)->robotShoulderPose_.value();
+      }
+
+      if(this->at(opposite(armSide))->robotWristPose_.has_value())
+      {
+        mirroredRobotPosesMap.at(armSide)[2] =
+            mirrorPose(this->at(opposite(armSide))->robotWristPose_.value()
+                       * this->at(opposite(armSide))->robotShoulderPose_.value().inv())
+            * this->at(armSide)->robotShoulderPose_.value();
+      }
+    }
+  }
+
+  for(const auto & armSide : ArmSides::Both)
+  {
+    this->at(armSide)->robotShoulderPose_ = mirroredRobotPosesMap.at(armSide)[0];
+    this->at(armSide)->robotElbowPose_ = mirroredRobotPosesMap.at(armSide)[1];
+    this->at(armSide)->robotWristPose_ = mirroredRobotPosesMap.at(armSide)[2];
   }
 }
 

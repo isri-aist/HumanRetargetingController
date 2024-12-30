@@ -221,6 +221,7 @@ CentroidalManager:
 RetargetingManagerSet:
   name: RetargetingManagerSet
   humanWaistPoseTopicName: /hrc/poses/waist
+  mirrorRetargeting: false
   humanWaistPoseFromOrigin:
     translation: [1.0, 0.0, 0.8]
   pointMarkerSize: 0.15

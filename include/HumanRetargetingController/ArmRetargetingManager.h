@@ -128,11 +128,17 @@ public:
   */
   void reset();
 
-  /** \brief Update.
+  /** \brief Pre-update.
 
       This method should be called once every control cycle.
   */
-  void update();
+  void updatePre();
+
+  /** \brief Post-update.
+
+      This method should be called once every control cycle.
+  */
+  void updatePost();
 
   /** \brief Stop.
 
@@ -186,8 +192,8 @@ protected:
   /** \brief Accessor to the retargeting task of wrist. */
   const std::shared_ptr<mc_tasks::TransformTask> & wristTask() const;
 
-  /** \brief Update target of retargeting task. */
-  void updateTaskTarget(const std::shared_ptr<mc_tasks::TransformTask> & task, const sva::PTransformd & pose);
+  /** \brief Set target of retargeting task. */
+  void setTaskTarget(const std::shared_ptr<mc_tasks::TransformTask> & task, const sva::PTransformd & pose);
 
   /** \brief Set human data as calibration source. */
   void setHumanCalibSource(const std::string & axis);
