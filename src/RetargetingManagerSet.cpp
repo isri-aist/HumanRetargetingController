@@ -26,6 +26,8 @@ void RetargetingManagerSet::Configuration::load(const mc_rtc::Configuration & mc
 
   mcRtcConfig("mirrorRetargeting", mirrorRetargeting);
 
+  mcRtcConfig("enableGripper", enableGripper);
+
   mcRtcConfig("syncJoints", syncJoints);
 
   mcRtcConfig("humanWaistPoseFromOrigin", humanWaistPoseFromOrigin);
@@ -79,6 +81,7 @@ void RetargetingManagerSet::update()
   callbackQueue_.callAvailable(ros::WallDuration());
 
   updateReadiness();
+
   updateEnablement();
 
   for(const auto & armManagerKV : *this)
@@ -96,7 +99,14 @@ void RetargetingManagerSet::update()
     armManagerKV.second->updatePost();
   }
 
+  if(config_.enableGripper)
+  {
+    updateGripper();
+  }
+
   updateGUI();
+
+  clearJoyMsg();
 }
 
 void RetargetingManagerSet::stop()
@@ -272,8 +282,6 @@ void RetargetingManagerSet::updateEnablement()
     {
       disableFlag = true;
     }
-
-    ctl().datastore().remove("HRC::ViveRos::LeftHandJoyMsg");
   }
   if(ctl().datastore().has("HRC::ViveRos::RightHandJoyMsg"))
   {
@@ -283,8 +291,6 @@ void RetargetingManagerSet::updateEnablement()
     {
       enableFlag = true;
     }
-
-    ctl().datastore().remove("HRC::ViveRos::RightHandJoyMsg");
   }
 
   if(disableFlag)
@@ -294,6 +300,22 @@ void RetargetingManagerSet::updateEnablement()
   else if(enableFlag)
   {
     enable();
+  }
+}
+
+void RetargetingManagerSet::updateGripper()
+{
+  if(ctl().datastore().has("HRC::ViveRos::LeftHandJoyMsg"))
+  {
+    const sensor_msgs::Joy & leftHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::LeftHandJoyMsg");
+
+    ctl().robot().gripper("l_gripper").setTargetOpening(leftHandJoyMsg.axes[2]);
+  }
+  if(ctl().datastore().has("HRC::ViveRos::RightHandJoyMsg"))
+  {
+    const sensor_msgs::Joy & rightHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::RightHandJoyMsg");
+
+    ctl().robot().gripper("r_gripper").setTargetOpening(rightHandJoyMsg.axes[2]);
   }
 }
 
@@ -412,6 +434,19 @@ void RetargetingManagerSet::updateGUI()
   if(calibRobots_)
   {
     mc_rtc::ROSBridge::update_robot_publisher("calib", ctl().dt(), calibRobots_->robot());
+  }
+}
+
+void RetargetingManagerSet::clearJoyMsg()
+{
+  if(ctl().datastore().has("HRC::ViveRos::LeftHandJoyMsg"))
+  {
+    ctl().datastore().remove("HRC::ViveRos::LeftHandJoyMsg");
+  }
+
+  if(ctl().datastore().has("HRC::ViveRos::RightHandJoyMsg"))
+  {
+    ctl().datastore().remove("HRC::ViveRos::RightHandJoyMsg");
   }
 }
 

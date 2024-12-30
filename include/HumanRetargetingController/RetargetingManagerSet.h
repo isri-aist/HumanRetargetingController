@@ -35,6 +35,9 @@ class RetargetingManagerSet : public std::unordered_map<ArmSide, std::shared_ptr
     //! Whether to use mirror ( left-right symmetrical) retargeting or not
     bool mirrorRetargeting = false;
 
+    //! Whether to enable gripper control
+    bool enableGripper = true;
+
     //! Joints that update the target position at the end of retargeting
     std::vector<std::string> syncJoints;
 
@@ -121,8 +124,14 @@ protected:
   /** \brief Update enablement . */
   void updateEnablement();
 
+  /** \brief Update gripper. */
+  void updateGripper();
+
   /** \brief Update GUI. */
   void updateGUI();
+
+  /** \brief Clear joy message. */
+  void clearJoyMsg();
 
   /** \brief Make robot poses mirrored. */
   void makeRobotPosesMirrored();
