@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /TF1/Frames1
         - /Surface1/Namespaces1
-        - /Vive1
       Splitter Ratio: 0.4228571355342865
     Tree Height: 461
   - Class: rviz/Selection
@@ -444,6 +443,7 @@ Visualization Manager:
       Marker Topic: /mc_rtc_rviz
       Name: mc_rtc GUI markers
       Namespaces:
+        Collisions/jvrc1/jvrc1/Arrows/WAIST_R_S::L_SHOULDER_Y_S_arrow_arrow: true
         Collisions/jvrc1/jvrc1/Arrows/WAIST_R_S::R_SHOULDER_Y_S_arrow_arrow: true
         HRC/CentroidalManager/ForceMarker/Left_Force0_arrow_arrow: true
         HRC/CentroidalManager/ForceMarker/Left_Force1_arrow_arrow: true
@@ -516,7 +516,7 @@ Visualization Manager:
           Enabled: true
           Head Length: 0.30000001192092896
           Head Radius: 0.10000000149011612
-          Name: Vive/WaistPose
+          Name: Input/WaistPose
           Queue Size: 10
           Shaft Length: 1
           Shaft Radius: 0.05000000074505806
@@ -532,7 +532,7 @@ Visualization Manager:
           Enabled: true
           Head Length: 0.30000001192092896
           Head Radius: 0.10000000149011612
-          Name: Vive/LeftElbowPose
+          Name: Input/LeftElbowPose
           Queue Size: 10
           Shaft Length: 1
           Shaft Radius: 0.05000000074505806
@@ -548,7 +548,7 @@ Visualization Manager:
           Enabled: true
           Head Length: 0.30000001192092896
           Head Radius: 0.10000000149011612
-          Name: Vive/LeftWristPose
+          Name: Input/LeftWristPose
           Queue Size: 10
           Shaft Length: 1
           Shaft Radius: 0.05000000074505806
@@ -564,7 +564,7 @@ Visualization Manager:
           Enabled: true
           Head Length: 0.30000001192092896
           Head Radius: 0.10000000149011612
-          Name: Vive/RightElbowPose
+          Name: Input/RightElbowPose
           Queue Size: 10
           Shaft Length: 1
           Shaft Radius: 0.05000000074505806
@@ -580,7 +580,7 @@ Visualization Manager:
           Enabled: true
           Head Length: 0.30000001192092896
           Head Radius: 0.10000000149011612
-          Name: Vive/RightWristPose
+          Name: Input/RightWristPose
           Queue Size: 10
           Shaft Length: 1
           Shaft Radius: 0.05000000074505806
@@ -589,7 +589,7 @@ Visualization Manager:
           Unreliable: false
           Value: true
       Enabled: false
-      Name: Vive
+      Name: Input
   Enabled: true
   Global Options:
     Background Color: 255; 255; 255
@@ -618,7 +618,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.7299885749816895
+      Distance: 4.195661544799805
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -626,17 +626,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 1.570784330368042
-        Y: -0.10924970358610153
-        Z: 0.7618588209152222
+        X: 1.228353500366211
+        Y: 0.16421674191951752
+        Z: 0.7262051105499268
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.016961932182312
+      Pitch: 1.1126351356506348
       Target Frame: <Fixed Frame>
-      Yaw: 6.2372846603393555
+      Yaw: 0.2584249973297119
     Saved: ~
 Window Geometry:
   Displays:
