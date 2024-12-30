@@ -16,7 +16,13 @@ class PublishPoseViveTracker(object):
         self.vr_system = openvr.init(openvr.VRApplication_Other)
 
         self.root_mat = transformations.euler_matrix(0.5 * np.pi, 0.0, 0.0)
-        self.waist_offset_mat = transformations.euler_matrix(-0.5 * np.pi, 0.0, 0.5 * np.pi, "rxyz")
+        self.offset_mat_map = {
+            "waist": transformations.euler_matrix(-0.5 * np.pi, 0.0, 0.5 * np.pi, "rxyz"),
+            "left_elbow": transformations.translation_matrix([0.0, 0.0, 0.04]),
+            "left_wrist": transformations.translation_matrix([0.0, 0.0, 0.1]),
+            "right_elbow": transformations.translation_matrix([0.0, 0.0, 0.04]),
+            "right_wrist": transformations.translation_matrix([0.0, 0.0, 0.1]),
+        }
 
         self.device_sn_to_body_part_map = {
             "LHR-8C30BD01": "waist",
@@ -92,8 +98,8 @@ class PublishPoseViveTracker(object):
         pose_mat[0:3, 0:4] = device_pose_matrix.m
         pose_mat[-1, -1] = 1.0
         pose_mat = self.root_mat @ pose_mat
-        if body_part == "waist":
-            pose_mat = pose_mat @ self.waist_offset_mat
+        if body_part in self.offset_mat_map:
+            pose_mat = pose_mat @ self.offset_mat_map[body_part]
 
         pose_msg = PoseStamped()
         pose_msg.header.stamp = self.current_stamp
