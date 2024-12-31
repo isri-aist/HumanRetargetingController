@@ -41,9 +41,18 @@ states:
   HRC::GuiWalk_:
     base: BWC::GuiWalk
 
+  HRC::ViveRos_:
+    base: HRC::ViveRos
+    configs:
+      joyTopics:
+        - topicName: /hrc/joys/left_wrist
+          datastoreKey: HRC::ViveRos::LeftHandJoyMsg
+        - topicName: /hrc/joys/right_wrist
+          datastoreKey: HRC::ViveRos::RightHandJoyMsg
+
   HRC::Main_:
     base: Parallel
-    states: [HRC::GuiWalk_]
+    states: [HRC::GuiWalk_, HRC::ViveRos_]
 
 # Transitions map
 transitions:

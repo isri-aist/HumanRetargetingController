@@ -317,8 +317,7 @@ void ArmRetargetingManager::setHumanCalibSource(const std::string & axis)
   const auto & basePose = humanWaistPoseManager()->pose();
   const auto & elbowPose = humanElbowPoseManager_->pose();
   const auto & wristPose = humanWristPoseManager_->pose();
-  humanCalibSource_.emplace(axis,
-                            std::array<sva::PTransformd, 2>{elbowPose * basePose.inv(), wristPose * basePose.inv()});
+  humanCalibSource_[axis] = std::array<sva::PTransformd, 2>{elbowPose * basePose.inv(), wristPose * basePose.inv()};
 
   mc_rtc::log::success("[ArmRetargetingManager({})] setHumanCalibSource({}) succeeded.",
                        std::to_string(config_.armSide), axis);
@@ -338,8 +337,7 @@ void ArmRetargetingManager::setRobotCalibSource(const std::string & axis)
   const auto & basePose = calibRobot.frame(ctl().retargetingManagerSet_->config().robotBaseLinkName).position();
   const auto & elbowPose = calibRobot.frame(elbowTask()->frame().name()).position();
   const auto & wristPose = calibRobot.frame(wristTask()->frame().name()).position();
-  robotCalibSource_.emplace(axis,
-                            std::array<sva::PTransformd, 2>{elbowPose * basePose.inv(), wristPose * basePose.inv()});
+  robotCalibSource_[axis] = std::array<sva::PTransformd, 2>{elbowPose * basePose.inv(), wristPose * basePose.inv()};
 
   mc_rtc::log::success("[ArmRetargetingManager({})] setRobotCalibSource({}) succeeded.",
                        std::to_string(config_.armSide), axis);
