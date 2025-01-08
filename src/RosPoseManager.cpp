@@ -44,7 +44,7 @@ bool RosPoseManager::isValid()
     invalidReasonStr_ += "Too-old(" + oss.str() + "); ";
   }
 
-  constexpr double velThre = 5.0; // [m/s]
+  constexpr double velThre = 15.0; // [m/s]
   double vel = (latestPose_.translation() - prevPose_.translation()).norm() / (latestTime_ - prevTime_);
   if(vel > velThre)
   {
