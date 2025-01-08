@@ -19,9 +19,9 @@ class PublishPoseViveTracker(object):
         self.offset_mat_map = {
             "waist": transformations.euler_matrix(-0.5 * np.pi, 0.0, 0.5 * np.pi, "rxyz"),
             "left_elbow": transformations.translation_matrix([0.0, 0.0, 0.04]),
-            "left_wrist": transformations.translation_matrix([0.0, 0.0, 0.15]),
+            "left_wrist": transformations.translation_matrix([0.0, 0.0, 0.05]),
             "right_elbow": transformations.translation_matrix([0.0, 0.0, 0.04]),
-            "right_wrist": transformations.translation_matrix([0.0, 0.0, 0.15]),
+            "right_wrist": transformations.translation_matrix([0.0, 0.0, 0.05]),
         }
 
         self.device_sn_to_body_part_map = {
