@@ -208,21 +208,24 @@ void ArmRetargetingManager::stop()
 
 void ArmRetargetingManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
-  const std::vector<std::string> & calibCategory = {ctl().name(), ctl().retargetingManagerSet_->config_.name,
-                                                    std::to_string(config_.armSide), "Calib"};
+  if(!ctl().retargetingManagerSet_->config().mirrorRetargeting)
+  {
+    const std::vector<std::string> & calibCategory = {ctl().name(), ctl().retargetingManagerSet_->config_.name,
+                                                      std::to_string(config_.armSide), "Calib"};
 
-  gui.addElement(calibCategory,
-                 mc_rtc::gui::Label("isInitialized", [this]() { return calibResult_.isInitialized ? "Yes" : "No"; }),
-                 mc_rtc::gui::Button("reset", [this]() { calibResult_.reset(); }),
-                 mc_rtc::gui::Button("update", [this]() { updateCalib(); }));
-  gui.addElement(calibCategory, mc_rtc::gui::ElementsStacking::Horizontal,
-                 mc_rtc::gui::Button("setHuman-X", [this]() { setHumanCalibSource("X"); }),
-                 mc_rtc::gui::Button("setHuman-Y", [this]() { setHumanCalibSource("Y"); }),
-                 mc_rtc::gui::Button("setHuman-Z", [this]() { setHumanCalibSource("Z"); }));
-  gui.addElement(calibCategory, mc_rtc::gui::ElementsStacking::Horizontal,
-                 mc_rtc::gui::Button("setRobot-X", [this]() { setRobotCalibSource("X"); }),
-                 mc_rtc::gui::Button("setRobot-Y", [this]() { setRobotCalibSource("Y"); }),
-                 mc_rtc::gui::Button("setRobot-Z", [this]() { setRobotCalibSource("Z"); }));
+    gui.addElement(calibCategory,
+                   mc_rtc::gui::Label("isInitialized", [this]() { return calibResult_.isInitialized ? "Yes" : "No"; }),
+                   mc_rtc::gui::Button("reset", [this]() { calibResult_.reset(); }),
+                   mc_rtc::gui::Button("update", [this]() { updateCalib(); }));
+    gui.addElement(calibCategory, mc_rtc::gui::ElementsStacking::Horizontal,
+                   mc_rtc::gui::Button("setHuman-X", [this]() { setHumanCalibSource("X"); }),
+                   mc_rtc::gui::Button("setHuman-Y", [this]() { setHumanCalibSource("Y"); }),
+                   mc_rtc::gui::Button("setHuman-Z", [this]() { setHumanCalibSource("Z"); }));
+    gui.addElement(calibCategory, mc_rtc::gui::ElementsStacking::Horizontal,
+                   mc_rtc::gui::Button("setRobot-X", [this]() { setRobotCalibSource("X"); }),
+                   mc_rtc::gui::Button("setRobot-Y", [this]() { setRobotCalibSource("Y"); }),
+                   mc_rtc::gui::Button("setRobot-Z", [this]() { setRobotCalibSource("Z"); }));
+  }
 }
 
 void ArmRetargetingManager::removeFromGUI(mc_rtc::gui::StateBuilder & gui)

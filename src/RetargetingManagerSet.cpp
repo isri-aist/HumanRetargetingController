@@ -126,8 +126,11 @@ void RetargetingManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
                  mc_rtc::gui::Label("isReady", [this]() { return isReady_ ? "Yes" : "No"; }),
                  mc_rtc::gui::Label("isEnabled", [this]() { return isEnabled_ ? "Yes" : "No"; }));
 
-  gui.addElement({ctl().name(), config_.name, "Calib"},
-                 mc_rtc::gui::Button("clearRobot", [this]() { clearCalibRobot(); }));
+  if(!config_.mirrorRetargeting)
+  {
+    gui.addElement({ctl().name(), config_.name, "Calib"},
+                   mc_rtc::gui::Button("clearRobot", [this]() { clearCalibRobot(); }));
+  }
 
   for(const auto & armManagerKV : *this)
   {
