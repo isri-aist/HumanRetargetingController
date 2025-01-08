@@ -99,7 +99,7 @@ void RetargetingManagerSet::update()
     armManagerKV.second->updatePost();
   }
 
-  if(config_.enableGripper)
+  if(config_.enableGripper && isEnabled_)
   {
     updateGripper();
   }
@@ -309,13 +309,23 @@ void RetargetingManagerSet::updateGripper()
   {
     const sensor_msgs::Joy & leftHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::LeftHandJoyMsg");
 
-    ctl().robot().gripper("l_gripper").setTargetOpening(leftHandJoyMsg.axes[2]);
+    std::string gripperName = "l_gripper";
+    if(config_.mirrorRetargeting)
+    {
+      gripperName = "r_gripper";
+    }
+    ctl().robot().gripper(gripperName).setTargetOpening(leftHandJoyMsg.axes[2]);
   }
   if(ctl().datastore().has("HRC::ViveRos::RightHandJoyMsg"))
   {
     const sensor_msgs::Joy & rightHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::RightHandJoyMsg");
 
-    ctl().robot().gripper("r_gripper").setTargetOpening(rightHandJoyMsg.axes[2]);
+    std::string gripperName = "r_gripper";
+    if(config_.mirrorRetargeting)
+    {
+      gripperName = "l_gripper";
+    }
+    ctl().robot().gripper(gripperName).setTargetOpening(rightHandJoyMsg.axes[2]);
   }
 }
 
