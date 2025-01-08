@@ -296,11 +296,11 @@ void RetargetingManagerSet::updateEnablement()
     }
   }
 
-  if(disableFlag)
+  if(disableFlag && isEnabled_)
   {
     disable();
   }
-  else if(enableFlag)
+  else if(enableFlag && !isEnabled_)
   {
     enable();
   }
