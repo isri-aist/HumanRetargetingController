@@ -243,13 +243,13 @@ RetargetingManagerSet:
       humanWristPoseTopicName: /hrc/poses/left_wrist
       elbowTaskName: LeftElbow
       wristTaskName: LeftWrist
-      stiffness: 10.0
+      stiffness: 40.0
     Right:
       humanElbowPoseTopicName: /hrc/poses/right_elbow
       humanWristPoseTopicName: /hrc/poses/right_wrist
       elbowTaskName: RightElbow
       wristTaskName: RightWrist
-      stiffness: 10.0
+      stiffness: 40.0
 
 # OverwriteConfigKeys: [NoSensors]
 
