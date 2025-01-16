@@ -343,6 +343,7 @@ void RetargetingManagerSet::updateGUI()
   // Add buttons
   ctl().gui()->removeElement({ctl().name(), config_.name}, "EnableRetargeting");
   ctl().gui()->removeElement({ctl().name(), config_.name}, "DisableRetargeting");
+  ctl().gui()->removeElement({ctl().name(), config_.name}, "ResetPosture");
   if(isReady_ && !isEnabled_)
   {
     ctl().gui()->addElement({ctl().name(), config_.name},
@@ -352,6 +353,18 @@ void RetargetingManagerSet::updateGUI()
   {
     ctl().gui()->addElement({ctl().name(), config_.name},
                             mc_rtc::gui::Button("DisableRetargeting", [this]() { disable(); }));
+  }
+  if(!isEnabled_)
+  {
+    ctl().gui()->addElement({ctl().name(), config_.name}, mc_rtc::gui::Button("ResetPosture", [this]() {
+                              {
+                                if(ctl().config().has("PostureTask"))
+                                {
+                                  auto postureTask = ctl().getPostureTask(ctl().robot().name());
+                                  postureTask->load(ctl().solver(), ctl().config()("PostureTask"));
+                                }
+                              }
+                            }));
   }
 
   // Add pose markers
