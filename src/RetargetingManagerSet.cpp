@@ -317,7 +317,10 @@ void RetargetingManagerSet::updateGripper()
     {
       gripperName = "r_gripper";
     }
-    ctl().robot().gripper(gripperName).setTargetOpening(1.0 - leftHandJoyMsg.axes[2]);
+    if(leftHandJoyMsg.axes.size() > 2)
+    {
+      ctl().robot().gripper(gripperName).setTargetOpening(1.0 - leftHandJoyMsg.axes[2]);
+    }
   }
   if(ctl().datastore().has("HRC::ViveRos::RightHandJoyMsg"))
   {
@@ -328,7 +331,10 @@ void RetargetingManagerSet::updateGripper()
     {
       gripperName = "l_gripper";
     }
-    ctl().robot().gripper(gripperName).setTargetOpening(1.0 - rightHandJoyMsg.axes[2]);
+    if(rightHandJoyMsg.axes.size() > 2)
+    {
+      ctl().robot().gripper(gripperName).setTargetOpening(1.0 - rightHandJoyMsg.axes[2]);
+    }
   }
 }
 
