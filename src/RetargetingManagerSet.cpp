@@ -281,7 +281,7 @@ void RetargetingManagerSet::updateEnablement()
   {
     const sensor_msgs::Joy & leftHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::LeftHandJoyMsg");
 
-    if(leftHandJoyMsg.buttons[0])
+    if(leftHandJoyMsg.buttons.size() > 0 && leftHandJoyMsg.buttons[0])
     {
       disableFlag = true;
     }
@@ -290,7 +290,7 @@ void RetargetingManagerSet::updateEnablement()
   {
     const sensor_msgs::Joy & rightHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::RightHandJoyMsg");
 
-    if(rightHandJoyMsg.buttons[0])
+    if(rightHandJoyMsg.buttons.size() > 0 && rightHandJoyMsg.buttons[0])
     {
       enableFlag = true;
     }
