@@ -364,6 +364,13 @@ void RetargetingManagerSet::updateGUI()
                                   postureTask->load(ctl().solver(), ctl().config()("PostureTask"));
                                 }
                               }
+                              if(config_.enableGripper)
+                              {
+                                for(const auto & gripperName : std::set<std::string>{"l_gripper", "r_gripper"})
+                                {
+                                  ctl().robot().gripper(gripperName).setTargetOpening(1.0);
+                                }
+                              }
                             }));
   }
 
