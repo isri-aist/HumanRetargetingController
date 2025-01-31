@@ -122,6 +122,21 @@ void RetargetingManagerSet::stop()
 
 void RetargetingManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
 {
+  ctl().gui()->addElement({ctl().name()}, mc_rtc::gui::Button("ResetPosture", [this]() {
+                            if(ctl().config().has("PostureTask"))
+                            {
+                              auto postureTask = ctl().getPostureTask(ctl().robot().name());
+                              postureTask->load(ctl().solver(), ctl().config()("PostureTask"));
+                            }
+                            if(config_.enableGripper)
+                            {
+                              for(const auto & gripperName : std::set<std::string>{"l_gripper", "r_gripper"})
+                              {
+                                ctl().robot().gripper(gripperName).setTargetOpening(1.0);
+                              }
+                            }
+                          }));
+
   gui.addElement({ctl().name(), config_.name, "Status"},
                  mc_rtc::gui::Label("isReady", [this]() { return isReady_ ? "Yes" : "No"; }),
                  mc_rtc::gui::Label("isEnabled", [this]() { return isEnabled_ ? "Yes" : "No"; }));
@@ -140,6 +155,7 @@ void RetargetingManagerSet::addToGUI(mc_rtc::gui::StateBuilder & gui)
 
 void RetargetingManagerSet::removeFromGUI(mc_rtc::gui::StateBuilder & gui)
 {
+  gui.removeElement({ctl().name()}, "ResetPosture");
   gui.removeCategory({ctl().name(), config_.name});
 
   // GUI of each RetargetingManager is not removed here (removed via stop method)
@@ -343,7 +359,6 @@ void RetargetingManagerSet::updateGUI()
   // Add buttons
   ctl().gui()->removeElement({ctl().name(), config_.name}, "EnableRetargeting");
   ctl().gui()->removeElement({ctl().name(), config_.name}, "DisableRetargeting");
-  ctl().gui()->removeElement({ctl().name(), config_.name}, "ResetPosture");
   if(isReady_ && !isEnabled_)
   {
     ctl().gui()->addElement({ctl().name(), config_.name},
@@ -353,25 +368,6 @@ void RetargetingManagerSet::updateGUI()
   {
     ctl().gui()->addElement({ctl().name(), config_.name},
                             mc_rtc::gui::Button("DisableRetargeting", [this]() { disable(); }));
-  }
-  if(!isEnabled_)
-  {
-    ctl().gui()->addElement({ctl().name(), config_.name}, mc_rtc::gui::Button("ResetPosture", [this]() {
-                              {
-                                if(ctl().config().has("PostureTask"))
-                                {
-                                  auto postureTask = ctl().getPostureTask(ctl().robot().name());
-                                  postureTask->load(ctl().solver(), ctl().config()("PostureTask"));
-                                }
-                              }
-                              if(config_.enableGripper)
-                              {
-                                for(const auto & gripperName : std::set<std::string>{"l_gripper", "r_gripper"})
-                                {
-                                  ctl().robot().gripper(gripperName).setTargetOpening(1.0);
-                                }
-                              }
-                            }));
   }
 
   // Add pose markers
