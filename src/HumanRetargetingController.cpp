@@ -25,6 +25,9 @@ HumanRetargetingController::HumanRetargetingController(mc_rbdyn::RobotModulePtr 
       retargetingTasks_.emplace(
           taskName, mc_tasks::MetaTaskLoader::load<mc_tasks::TransformTask>(solver(), retargetingTaskConfig));
       retargetingTasks_.at(taskName)->name("RetargetingTask_" + taskName);
+
+      mc_rtc::log::success("[HumanRetargetingController] Construct retargeting task. {}: {}", taskName,
+                           retargetingTasks_.at(taskName)->type());
     }
   }
   else
