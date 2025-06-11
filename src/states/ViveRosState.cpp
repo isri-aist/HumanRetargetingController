@@ -1,9 +1,12 @@
+#include <chrono>
 #include <functional>
 
 #include <mc_rtc/DataStore.h>
 
 #include <HumanRetargetingController/HumanRetargetingController.h>
 #include <HumanRetargetingController/states/ViveRosState.h>
+#include <memory>
+#include <rclcpp/executors.hpp>
 
 using namespace HRC;
 
@@ -17,9 +20,10 @@ void ViveRosState::start(mc_control::fsm::Controller & _ctl)
     mc_rtc::log::error("[ViveRosState] ROS node handle is already instantiated.");
     nh_.reset();
   }
-  nh_ = std::make_shared<ros::NodeHandle>();
-  // Use a dedicated queue so as not to call callbacks of other modules
-  nh_->setCallbackQueue(&callbackQueue_);
+  nh_ = rclcpp::Node::make_shared("ViveRosState");
+
+  exectutor_ = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
+  exectutor_->add_node(nh_);
 
   if(config_.has("configs") && config_("configs").has("joyTopics"))
   {
@@ -29,8 +33,8 @@ void ViveRosState::start(mc_control::fsm::Controller & _ctl)
       std::string datastoreKey = joyConfig("datastoreKey");
       mc_rtc::log::info("[ViveRosState] Subscribe the {} topic and save it to the {} key in the datastore.", topicName,
                         datastoreKey);
-      joySubList_.push_back(nh_->subscribe<sensor_msgs::Joy>(
-          topicName, 1, std::bind(&ViveRosState::joyCallback, this, std::placeholders::_1, datastoreKey)));
+      // TODO fix this line 
+      //joySubList_.push_back(nh_->create_subscription<sensor_msgs::msg::Joy>(topicName, 1, std::bind(&ViveRosState::joyCallback, this, std::placeholders::_1, datastoreKey)));
     }
   }
 
@@ -40,7 +44,7 @@ void ViveRosState::start(mc_control::fsm::Controller & _ctl)
 bool ViveRosState::run(mc_control::fsm::Controller &)
 {
   // Call ROS callback
-  callbackQueue_.callAvailable(ros::WallDuration());
+  exectutor_->spin_some(std::chrono::nanoseconds(0));
 
   return false;
 }
@@ -49,15 +53,16 @@ void ViveRosState::teardown(mc_control::fsm::Controller &)
 {
   for(auto & joySub : joySubList_)
   {
-    joySub.shutdown();
+    // TODO check what is the correct thing to do here 
+    //joySub.shutdown();
   }
 
   nh_.reset();
 }
 
-void ViveRosState::joyCallback(const sensor_msgs::Joy::ConstPtr & joyMsg, const std::string & datastoreKey)
+void ViveRosState::joyCallback(const sensor_msgs::msg::Joy & joyMsg, const std::string & datastoreKey)
 {
-  setDatastore<sensor_msgs::Joy>(ctl().datastore(), datastoreKey, *joyMsg);
+  setDatastore<sensor_msgs::msg::Joy>(ctl().datastore(), datastoreKey, joyMsg);
 }
 
 template<class ValueType>
