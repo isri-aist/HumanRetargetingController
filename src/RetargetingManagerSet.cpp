@@ -12,7 +12,7 @@
 #include <HumanRetargetingController/RetargetingManagerSet.h>
 #include <HumanRetargetingController/RosPoseManager.h>
 
-#include <sensor_msgs/Joy.h>
+#include <sensor_msgs/msg/joy.hpp>
 
 using namespace HRC;
 
@@ -58,9 +58,12 @@ void RetargetingManagerSet::reset()
     mc_rtc::log::error("[RetargetingManagerSet] ROS node handle is already instantiated.");
     nh_.reset();
   }
-  nh_ = std::make_shared<ros::NodeHandle>();
+
+  rclcpp::NodeOptions node_options;
+  nh_= rclcpp::Node::make_shared("RetargetingManagerSet", node_options);
   // Use a dedicated queue so as not to call callbacks of other modules
-  nh_->setCallbackQueue(&callbackQueue_);
+  executor_ = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
+  executor_->add_node(nh_);
 
   // Note: ROS node handle must be instantiated first
   humanWaistPoseManager_ = std::make_shared<RosPoseManager>(ctlPtr_, config_.humanWaistPoseTopicName);
@@ -78,7 +81,7 @@ void RetargetingManagerSet::reset()
 
 void RetargetingManagerSet::update()
 {
-  callbackQueue_.callAvailable(ros::WallDuration());
+  executor_->spin_once(std::chrono::seconds(0));
 
   updateReadiness();
 
@@ -295,7 +298,7 @@ void RetargetingManagerSet::updateEnablement()
 
   if(ctl().datastore().has("HRC::ViveRos::LeftHandJoyMsg"))
   {
-    const sensor_msgs::Joy & leftHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::LeftHandJoyMsg");
+    const sensor_msgs::msg::Joy & leftHandJoyMsg = ctl().datastore().get<sensor_msgs::msg::Joy>("HRC::ViveRos::LeftHandJoyMsg");
 
     if(leftHandJoyMsg.buttons.size() > 0 && leftHandJoyMsg.buttons[0])
     {
@@ -304,7 +307,7 @@ void RetargetingManagerSet::updateEnablement()
   }
   if(ctl().datastore().has("HRC::ViveRos::RightHandJoyMsg"))
   {
-    const sensor_msgs::Joy & rightHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::RightHandJoyMsg");
+    const sensor_msgs::msg::Joy & rightHandJoyMsg = ctl().datastore().get<sensor_msgs::msg::Joy>("HRC::ViveRos::RightHandJoyMsg");
 
     if(rightHandJoyMsg.buttons.size() > 0 && rightHandJoyMsg.buttons[0])
     {
@@ -326,7 +329,7 @@ void RetargetingManagerSet::updateGripper()
 {
   if(ctl().datastore().has("HRC::ViveRos::LeftHandJoyMsg"))
   {
-    const sensor_msgs::Joy & leftHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::LeftHandJoyMsg");
+    const sensor_msgs::msg::Joy & leftHandJoyMsg = ctl().datastore().get<sensor_msgs::msg::Joy>("HRC::ViveRos::LeftHandJoyMsg");
 
     std::string gripperName = "l_gripper";
     if(config_.mirrorRetargeting)
@@ -340,7 +343,7 @@ void RetargetingManagerSet::updateGripper()
   }
   if(ctl().datastore().has("HRC::ViveRos::RightHandJoyMsg"))
   {
-    const sensor_msgs::Joy & rightHandJoyMsg = ctl().datastore().get<sensor_msgs::Joy>("HRC::ViveRos::RightHandJoyMsg");
+    const sensor_msgs::msg::Joy & rightHandJoyMsg = ctl().datastore().get<sensor_msgs::msg::Joy>("HRC::ViveRos::RightHandJoyMsg");
 
     std::string gripperName = "r_gripper";
     if(config_.mirrorRetargeting)

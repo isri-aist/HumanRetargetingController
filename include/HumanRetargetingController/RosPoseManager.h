@@ -2,8 +2,10 @@
 
 #include <SpaceVecAlg/SpaceVecAlg>
 
-#include <geometry_msgs/PoseStamped.h>
-#include <ros/ros.h>
+#include <geometry_msgs/msg/detail/pose_stamped__struct.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <rclcpp/subscription.hpp>
 
 namespace HRC
 {
@@ -42,7 +44,7 @@ public:
 
 protected:
   /** \brief ROS callback of pose topic. */
-  void poseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg);
+  void poseCallback(const geometry_msgs::msg::PoseStamped & poseStMsg);
 
 protected:
   /** \brief Const accessor to the controller. */
@@ -84,6 +86,6 @@ protected:
   double distThre_ = -1.0;
 
   //! ROS subscriber of pose topic
-  ros::Subscriber poseSub_;
+  rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr poseSub_;
 };
 } // namespace HRC

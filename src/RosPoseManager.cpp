@@ -1,3 +1,5 @@
+#include <geometry_msgs/msg/detail/pose_stamped__struct.hpp>
+#include <functional>
 #include <iomanip>
 #include <sstream>
 
@@ -11,7 +13,7 @@ RosPoseManager::RosPoseManager(HumanRetargetingController * ctlPtr, const std::s
 {
   // Setup ROS
   const auto & nh = ctl().retargetingManagerSet_->nh_;
-  poseSub_ = nh->subscribe<geometry_msgs::PoseStamped>(topicName, 1, &RosPoseManager::poseCallback, this);
+  poseSub_ = nh->create_subscription<geometry_msgs::msg::PoseStamped>(topicName, 1, std::bind(&RosPoseManager::poseCallback, this, std::placeholders::_1));
 }
 
 bool RosPoseManager::isValid()
@@ -83,13 +85,13 @@ void RosPoseManager::clearDistValidityCheck()
   distThre_ = -1.0;
 }
 
-void RosPoseManager::poseCallback(const geometry_msgs::PoseStamped::ConstPtr & poseStMsg)
+void RosPoseManager::poseCallback(const geometry_msgs::msg::PoseStamped & poseStMsg)
 {
   prevPose_ = latestPose_;
   prevTime_ = latestTime_;
 
-  const auto & oriMsg = poseStMsg->pose.orientation;
-  const auto & posMsg = poseStMsg->pose.position;
+  const auto & oriMsg = poseStMsg.pose.orientation;
+  const auto & posMsg = poseStMsg.pose.position;
   latestPose_ = sva::PTransformd(
       Eigen::Quaterniond(oriMsg.w, oriMsg.x, oriMsg.y, oriMsg.z).normalized().toRotationMatrix().transpose(),
       Eigen::Vector3d(posMsg.x, posMsg.y, posMsg.z));
