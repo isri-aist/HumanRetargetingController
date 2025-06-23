@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mc_control/api.h>
 #include <BaselineWalkingController/BaselineWalkingController.h>
 
 namespace mc_tasks
@@ -12,7 +13,7 @@ namespace HRC
 class RetargetingManagerSet;
 
 /** \brief Controller for retargeting the motion from human to humanoid robot. */
-struct HumanRetargetingController : public BWC::BaselineWalkingController
+struct MC_CONTROL_DLLAPI HumanRetargetingController : public BWC::BaselineWalkingController
 {
 public:
   /** \brief Constructor.

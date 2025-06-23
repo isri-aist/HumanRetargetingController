@@ -3,8 +3,7 @@
 #include <mc_rtc/gui/StateBuilder.h>
 #include <mc_rtc/log/Logger.h>
 
-#include <ros/callback_queue.h>
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
 
 #include <HumanRetargetingController/ArmSide.h>
 
@@ -153,7 +152,7 @@ public:
   std::shared_ptr<mc_rbdyn::Robots> calibRobots_;
 
   //! ROS node handle
-  std::shared_ptr<ros::NodeHandle> nh_;
+  rclcpp::Node::SharedPtr nh_;
 
 protected:
   //! Configuration
@@ -165,7 +164,7 @@ protected:
   //! ROS pose manager for human waist pose
   std::shared_ptr<RosPoseManager> humanWaistPoseManager_;
 
-  //! ROS callback queue
-  ros::CallbackQueue callbackQueue_;
+  //! ROS execuctor
+  rclcpp::Executor::SharedPtr executor_;
 };
 } // namespace HRC

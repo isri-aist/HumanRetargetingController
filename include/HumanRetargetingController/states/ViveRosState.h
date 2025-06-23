@@ -1,10 +1,13 @@
 #pragma once
 
+#include <mc_rtc/DataStore.h>
 #include <HumanRetargetingController/State.h>
 
-#include <ros/callback_queue.h>
-#include <ros/ros.h>
-#include <sensor_msgs/Joy.h>
+#include <rclcpp/executor.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <rclcpp/subscription.hpp>
+#include <sensor_msgs/msg/detail/joy__struct.hpp>
+#include <sensor_msgs/msg/joy.hpp>
 
 namespace HRC
 {
@@ -23,20 +26,31 @@ public:
 
 protected:
   /** \brief ROS callback of joy topic. */
-  void joyCallback(const sensor_msgs::Joy::ConstPtr & joyMsg, const std::string & datastoreKey);
+  void joyCallback(const sensor_msgs::msg::Joy & joyMsg, const std::string & datastoreKey);
 
   /** \brief Set datastore entry. */
   template<class ValueType>
-  void setDatastore(mc_rtc::DataStore & datastore, const std::string & key, const ValueType & value);
+  void setDatastore(mc_rtc::DataStore & datastore, const std::string & key, const ValueType & value)
+  {
+    if(datastore.has(key))
+    {
+      datastore.assign<ValueType>(key, value);
+    }
+    else
+    {
+      datastore.make<ValueType>(key, value);
+    }
+  }
+
 
 protected:
   //! ROS node handle
-  std::shared_ptr<ros::NodeHandle> nh_;
+  rclcpp::Node::SharedPtr nh_;
 
-  //! ROS callback queue
-  ros::CallbackQueue callbackQueue_;
+  //! ROS executor
+  rclcpp::Executor::SharedPtr exectutor_;
 
   //! ROS subscriber of joy topics
-  std::vector<ros::Subscriber> joySubList_;
+  std::vector<rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr> joySubList_;
 };
 } // namespace HRC
