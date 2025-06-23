@@ -33,7 +33,7 @@ void ViveRosState::start(mc_control::fsm::Controller & _ctl)
       std::string datastoreKey = joyConfig("datastoreKey");
       mc_rtc::log::info("[ViveRosState] Subscribe the {} topic and save it to the {} key in the datastore.", topicName,
                         datastoreKey);
-      // TODO fix this line 
+      // TODO fix this line
       //joySubList_.push_back(nh_->create_subscription<sensor_msgs::msg::Joy>(topicName, 1, std::bind(&ViveRosState::joyCallback, this, std::placeholders::_1, datastoreKey)));
     }
   }
@@ -53,7 +53,7 @@ void ViveRosState::teardown(mc_control::fsm::Controller &)
 {
   for(auto & joySub : joySubList_)
   {
-    // TODO check what is the correct thing to do here 
+    // TODO check what is the correct thing to do here
     //joySub.shutdown();
   }
 
@@ -63,19 +63,6 @@ void ViveRosState::teardown(mc_control::fsm::Controller &)
 void ViveRosState::joyCallback(const sensor_msgs::msg::Joy & joyMsg, const std::string & datastoreKey)
 {
   setDatastore<sensor_msgs::msg::Joy>(ctl().datastore(), datastoreKey, joyMsg);
-}
-
-template<class ValueType>
-void ViveRosState::setDatastore(mc_rtc::DataStore & datastore, const std::string & key, const ValueType & value)
-{
-  if(datastore.has(key))
-  {
-    datastore.assign<ValueType>(key, value);
-  }
-  else
-  {
-    datastore.make<ValueType>(key, value);
-  }
 }
 
 EXPORT_SINGLE_STATE("HRC::ViveRos", ViveRosState)

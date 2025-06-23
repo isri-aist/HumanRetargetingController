@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mc_rtc/DataStore.h>
 #include <HumanRetargetingController/State.h>
 
 #include <rclcpp/executor.hpp>
@@ -29,7 +30,18 @@ protected:
 
   /** \brief Set datastore entry. */
   template<class ValueType>
-  void setDatastore(mc_rtc::DataStore & datastore, const std::string & key, const ValueType & value);
+  void setDatastore(mc_rtc::DataStore & datastore, const std::string & key, const ValueType & value)
+  {
+    if(datastore.has(key))
+    {
+      datastore.assign<ValueType>(key, value);
+    }
+    else
+    {
+      datastore.make<ValueType>(key, value);
+    }
+  }
+
 
 protected:
   //! ROS node handle

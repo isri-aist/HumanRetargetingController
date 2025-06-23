@@ -9,13 +9,10 @@ add_library(${CONTROLLER_NAME} SHARED
   RetargetingManagerSet.cpp
 )
 
-target_link_libraries(${CONTROLLER_NAME} PUBLIC mc_rtc::mc_control_fsm mc_rtc::mc_rtc_ros)
-
-target_link_libraries(${CONTROLLER_NAME} PUBLIC
-  ${baseline_walking_controller_LIBRARIES}
-)
-
-target_include_directories(${CONTROLLER_NAME} PUBLIC ${baseline_walking_controller_INCLUDE_DIRS})
+target_link_libraries(${CONTROLLER_NAME} PUBLIC 
+  mc_rtc::mc_control_fsm
+  mc_rtc::mc_rtc_ros
+  baseline_walking_controller::BaselineWalkingController)
 
 install(TARGETS ${CONTROLLER_NAME} DESTINATION ${MC_RTC_LIBDIR} EXPORT ${TARGETS_EXPORT_NAME})
 

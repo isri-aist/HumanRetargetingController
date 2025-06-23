@@ -44,18 +44,3 @@ int HRC::sign(const ArmSide & armSide)
   }
 }
 
-std::string std::to_string(const ArmSide & armSide)
-{
-  if(armSide == ArmSide::Left)
-  {
-    return std::string("Left");
-  }
-  else if(armSide == ArmSide::Right)
-  {
-    return std::string("Right");
-  }
-  else
-  {
-    mc_rtc::log::error_and_throw("[to_string] Unsupported armSide: {}", static_cast<int>(armSide));
-  }
-}

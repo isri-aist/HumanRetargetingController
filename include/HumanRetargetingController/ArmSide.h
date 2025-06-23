@@ -1,6 +1,8 @@
 #pragma once
 
+#include <mc_rtc/logging.h>
 #include <set>
+#include <string>
 
 namespace HRC
 {
@@ -36,5 +38,19 @@ int sign(const ArmSide & armSide);
 namespace std
 {
 /** \brief Convert armSide to string. */
-std::string to_string(const HRC::ArmSide & armSide);
+inline string to_string(const HRC::ArmSide & armSide)
+{
+  if(armSide == HRC::ArmSide::Left)
+  {
+    return std::string("Left");
+  }
+  else if(armSide == HRC::ArmSide::Right)
+  {
+    return std::string("Right");
+  }
+  else
+  {
+    mc_rtc::log::error_and_throw("[to_string] Unsupported armSide: {}", static_cast<int>(armSide));
+  }
+}
 } // namespace std
