@@ -1,3 +1,5 @@
+This is the branch for ROS2; use the [ros1](https://github.com/isri-aist/HumanRetargetingController/tree/ros1) branch for ROS1.
+
 # [HumanRetargetingController](https://github.com/isri-aist/HumanRetargetingController)
 Controller for retargeting the motion from human to humanoid robot
 
